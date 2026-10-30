@@ -133,17 +133,25 @@ body {
   animation: flicker 1.2s ease-in-out infinite alternate;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 5px;
+/* Hide scrollbars while preserving smooth scrollability */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
 }
-::-webkit-scrollbar-track {
-  background: rgba(10, 7, 20, 0.4);
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+  width: 0px;
+  height: 0px;
 }
-::-webkit-scrollbar-thumb {
-  background: rgba(224, 169, 109, 0.3);
-  border-radius: 9999px;
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(224, 169, 109, 0.6);
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, Sparkles, ChevronLeft, ChevronRight, RotateCcw, Volume2, CheckCircle2 } from "lucide-react";
+import { Heart, ChevronLeft, ChevronRight, RotateCcw, Volume2, CheckCircle2 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { soundManager } from "@/utils/audioSynthesizer";
 
@@ -80,21 +80,52 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlayingVoiceNote, setIsPlayingVoiceNote] = useState(false);
 
-  // Progressive streaming typewriter effect (approx 20ms per character for smooth reading)
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const bottomAnchorRef = useRef<HTMLDivElement | null>(null);
+
+  // Auto-cycle background polaroid photos every 7 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % MEMORY_CAROUSEL.length);
+    }, 7000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Progressive streaming typewriter effect (approx 20ms per character)
   useEffect(() => {
     if (displayedLength < fullText.length) {
       const timer = setTimeout(() => {
         setDisplayedLength((prev) => prev + 1);
-      }, 18);
+      }, 20);
       return () => clearTimeout(timer);
     } else {
       setIsTypingComplete(true);
     }
   }, [displayedLength, fullText.length]);
 
+  // Automatic upward scrolling to keep the latest streaming text in focus!
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const el = scrollContainerRef.current;
+      // Smoothly autoscroll as new text is typed
+      el.scrollTo({
+        top: el.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [displayedLength]);
+
   const handleSkipTyping = () => {
     setDisplayedLength(fullText.length);
     setIsTypingComplete(true);
+    setTimeout(() => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTo({
+          top: scrollContainerRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }, 50);
   };
 
   const handleNextSlide = () => {
@@ -126,160 +157,145 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
   const displayedText = fullText.slice(0, displayedLength);
 
   return (
-    <div className="relative z-10 w-full min-h-[92vh] flex flex-col items-center px-4 py-8 max-w-2xl mx-auto">
-      {/* Title Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
-      >
-        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full glass-panel border border-[#e0a96d]/30 mb-3">
-          <Image src="/cake-icon.svg" alt="Cake" width={16} height={16} className="drop-shadow" />
-          <span className="text-xs uppercase tracking-widest text-[#ffe8d6] font-medium">
+    <div className="relative z-10 w-full h-[90vh] md:h-[92vh] max-w-3xl mx-auto flex flex-col justify-between items-center px-4 py-3 select-none overflow-hidden">
+      {/* BACKGROUND MEMORY CARD (Layered behind text) */}
+      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 0.38, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 1.4, ease: "easeInOut" }}
+            className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[480px] md:h-[480px] rounded-3xl overflow-hidden shadow-2xl border border-white/20 blur-[0.5px]"
+          >
+            <Image
+              src={MEMORY_CAROUSEL[currentSlide].url}
+              alt={MEMORY_CAROUSEL[currentSlide].title}
+              fill
+              sizes="(max-width: 640px) 320px, 480px"
+              className="object-cover"
+              priority
+            />
+            {/* Ambient vignette gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0714] via-[#0a0714]/40 to-[#0a0714]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0714] via-transparent to-[#0a0714]" />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* TOP HEADER */}
+      <div className="relative z-20 text-center shrink-0 pt-1">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full glass-panel border border-[#e0a96d]/30 mb-1.5 shadow">
+          <Image src="/cake-icon.svg" alt="Cake" width={14} height={14} className="drop-shadow" />
+          <span className="text-[11px] uppercase tracking-widest text-[#ffe8d6] font-medium">
             Act IV: The Love Letter
           </span>
-          <Image src="/cake-icon.svg" alt="Cake" width={16} height={16} className="drop-shadow" />
+          <Image src="/cake-icon.svg" alt="Cake" width={14} height={14} className="drop-shadow" />
         </div>
-        <h2 className="font-serif text-3xl md:text-4xl text-gold-gradient font-light">
+        <h2 className="font-serif text-2xl md:text-3xl text-gold-gradient font-light">
           From My Heart To Yours
         </h2>
-      </motion.div>
+      </div>
 
-      {/* Memory Carousel Showcase */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.2 }}
-        className="w-full max-w-md mx-auto mb-10"
-      >
-        <div className="relative bg-[#faf6f0] p-4 rounded-2xl shadow-2xl border-4 border-white/90 transform -rotate-1 hover:rotate-0 transition-transform duration-300">
-          <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-black/10 mb-3 shadow-inner">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentSlide}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="relative w-full h-full"
-              >
-                <Image
-                  src={MEMORY_CAROUSEL[currentSlide].url}
-                  alt={MEMORY_CAROUSEL[currentSlide].title}
-                  fill
-                  sizes="(max-width: 640px) 90vw, 420px"
-                  className="object-cover"
-                  priority
-                />
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Navigation Arrows */}
-            <button
-              onClick={handlePrevSlide}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-colors shadow cursor-pointer"
-              aria-label="Previous photo"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={handleNextSlide}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-colors shadow cursor-pointer"
-              aria-label="Next photo"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+      {/* FOREGROUND STREAMING LETTER (Fixed Viewport, Auto-Scrolls Upward) */}
+      <div className="relative z-20 w-full max-w-xl my-auto">
+        <div className="relative rounded-2xl glass-card border border-[#e0a96d]/40 shadow-[0_12px_45px_rgba(0,0,0,0.7)] backdrop-blur-xl overflow-hidden">
+          {/* Subtle Heart Watermark */}
+          <div className="absolute -top-10 -right-10 pointer-events-none opacity-10">
+            <Heart className="w-40 h-40 text-[#ffbe53]" />
           </div>
 
-          {/* Polaroid Caption */}
-          <div className="text-center px-2">
-            <h4 className="font-serif text-lg font-bold text-[#2a1b12]">
-              {MEMORY_CAROUSEL[currentSlide].title}
-            </h4>
-            <p className="font-serif text-xs text-[#5c493c] italic mt-0.5">
-              &ldquo;{MEMORY_CAROUSEL[currentSlide].caption}&rdquo;
-            </p>
-          </div>
+          {/* Sticky Header Inside Card */}
+          <div className="flex items-center justify-between px-5 py-2.5 border-b border-[#e0a96d]/20 bg-black/30 backdrop-blur-md">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#ffbe53] animate-ping" />
+              <span className="text-xs font-serif text-[#ffe8d6] tracking-wider uppercase font-semibold">
+                Vishal &amp; Nidhi
+              </span>
+            </div>
 
-          {/* Dots Indicator */}
-          <div className="flex justify-center gap-1.5 mt-3">
-            {MEMORY_CAROUSEL.map((_, idx) => (
+            {/* Background Photo Navigation Mini Controls */}
+            <div className="flex items-center gap-1.5">
               <button
-                key={idx}
-                onClick={() => {
-                  soundManager.playSwooshSound();
-                  setCurrentSlide(idx);
-                }}
-                className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
-                  currentSlide === idx ? "w-5 bg-[#c68953]" : "bg-[#d3c2b4]"
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
+                onClick={handlePrevSlide}
+                className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-[#ffe8d6] flex items-center justify-center text-xs transition cursor-pointer"
+                title="Previous photo in background"
+                aria-label="Previous photo"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
+              </button>
+              <span className="text-[10px] text-[#e0a96d] px-1 font-mono">
+                {currentSlide + 1}/{MEMORY_CAROUSEL.length}
+              </span>
+              <button
+                onClick={handleNextSlide}
+                className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-[#ffe8d6] flex items-center justify-center text-xs transition cursor-pointer"
+                title="Next photo in background"
+                aria-label="Next photo"
+              >
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
-        </div>
-      </motion.div>
 
-      {/* Streaming Love Letter Box */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="w-full rounded-2xl glass-card p-6 md:p-8 border border-[#e0a96d]/30 shadow-2xl relative overflow-hidden mb-8"
-      >
-        <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-          <Heart className="w-32 h-32 text-[#e0a96d]" />
-        </div>
+          {/* AUTO-SCROLLING TEXT BODY (Sticks in screen, autoscrolls up smoothly, hidden scrollbar) */}
+          <div
+            ref={scrollContainerRef}
+            className="h-[46vh] sm:h-[48vh] md:h-[50vh] overflow-y-auto no-scrollbar px-5 sm:px-6 py-5 font-serif text-base sm:text-lg text-[#fdf8f4] leading-relaxed whitespace-pre-line tracking-wide scroll-smooth"
+            style={{
+              scrollBehavior: "smooth",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            {displayedText}
 
-        {/* Letter Content with Typewriter */}
-        <div className="relative font-serif text-base md:text-lg text-[#f7ede2] leading-relaxed whitespace-pre-line tracking-wide">
-          {displayedText}
+            {!isTypingComplete && (
+              <span className="inline-block w-2 h-4 ml-1 bg-[#ffbe53] animate-pulse align-middle" />
+            )}
+
+            {/* Bottom Anchor */}
+            <div ref={bottomAnchorRef} className="h-4" />
+
+            {/* Sealed Stamp once typing is complete */}
+            {isTypingComplete && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="mt-6 pt-5 border-t border-[#e0a96d]/25 flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2 text-xs text-[#e0a96d]">
+                  <CheckCircle2 className="w-4 h-4 text-[#ffbe53]" />
+                  <span>Written with all my heart</span>
+                </div>
+                <div className="px-3 py-1 rounded-full bg-[#ffbe53]/15 border border-[#ffbe53]/50 text-xs text-[#ffbe53] font-serif tracking-widest uppercase shadow">
+                  Forever Yours
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Skip Button (Shown while typing) */}
           {!isTypingComplete && (
-            <span className="inline-block w-2 h-4 ml-1 bg-[#ffbe53] animate-pulse" />
+            <div className="px-5 py-2 bg-black/40 border-t border-[#e0a96d]/15 flex items-center justify-between">
+              <span className="text-[11px] text-[#e0a96d]/80 italic">Streaming letter...</span>
+              <button
+                onClick={handleSkipTyping}
+                className="text-xs text-[#ffe8d6] hover:text-[#ffbe53] underline transition-colors cursor-pointer"
+              >
+                Skip to read all
+              </button>
+            </div>
           )}
         </div>
+      </div>
 
-        {/* Skip button during typing */}
-        {!isTypingComplete && (
-          <div className="mt-4 flex justify-end">
-            <button
-              onClick={handleSkipTyping}
-              className="text-xs text-[#d1c4b9]/70 hover:text-[#ffbe53] transition-colors underline cursor-pointer"
-            >
-              Skip streaming &amp; read all
-            </button>
-          </div>
-        )}
-
-        {/* Sealed Stamp once typing is complete */}
-        {isTypingComplete && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mt-6 pt-6 border-t border-[#e0a96d]/20 flex items-center justify-between"
-          >
-            <div className="flex items-center gap-2 text-xs text-[#e0a96d]">
-              <CheckCircle2 className="w-4 h-4 text-[#ffbe53]" />
-              <span>Written with all my heart</span>
-            </div>
-
-            <div className="px-3 py-1 rounded-full bg-[#ffbe53]/10 border border-[#ffbe53]/40 text-xs text-[#ffbe53] font-serif tracking-widest uppercase">
-              Vishal &amp; Nidhi
-            </div>
-          </motion.div>
-        )}
-      </motion.div>
-
-      {/* Special Voice Note / Finale Action */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="w-full max-w-md flex flex-col gap-3 items-center text-center"
-      >
+      {/* BOTTOM ACTIONS (Fixed in view, never pushed offscreen) */}
+      <div className="relative z-20 w-full max-w-md flex flex-col gap-2 items-center text-center shrink-0 pb-1">
         <button
           onClick={handlePlayVoiceNote}
-          className="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] font-medium text-sm tracking-wide shadow-[0_0_30px_rgba(255,190,83,0.4)] hover:shadow-[0_0_45px_rgba(255,190,83,0.7)] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+          className="w-full py-3 px-5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] font-medium text-xs sm:text-sm tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.4)] hover:shadow-[0_0_35px_rgba(255,190,83,0.7)] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer active:scale-98"
         >
           <Volume2 className="w-4 h-4 fill-current" />
           <span>
@@ -287,18 +303,17 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
           </span>
         </button>
 
-        {/* Replay Entire Journey */}
         <button
           onClick={() => {
             soundManager.playSwooshSound();
             onRestart();
           }}
-          className="inline-flex items-center gap-1.5 text-xs text-[#a8998d] hover:text-[#ffe8d6] transition-colors py-2 cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-xs text-[#a8998d] hover:text-[#ffe8d6] transition-colors py-1 cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Relive the Birthday Journey From Act 1</span>
         </button>
-      </motion.div>
+      </div>
     </div>
   );
 }
