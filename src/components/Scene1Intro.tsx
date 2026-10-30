@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { soundManager } from "@/utils/audioSynthesizer";
 
 interface Scene1IntroProps {
@@ -41,11 +42,11 @@ export function Scene1Intro({ onComplete }: Scene1IntroProps) {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 mb-6"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#ffbe53]" />
+              <Image src="/cake-icon.svg" alt="Birthday Cake" width={18} height={18} className="drop-shadow" />
               <span className="text-xs uppercase tracking-[0.25em] text-[#ffe8d6]/90 font-medium">
                 A Birthday Surprise
               </span>
-              <Sparkles className="w-3.5 h-3.5 text-[#ffbe53]" />
+              <Image src="/cake-icon.svg" alt="Birthday Cake" width={18} height={18} className="drop-shadow" />
             </motion.div>
 
             {/* Glassmorphic Luxury Letter Envelope Card */}
@@ -61,7 +62,7 @@ export function Scene1Intro({ onComplete }: Scene1IntroProps) {
                   className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#8a4b2a] via-[#c68953] to-[#ffbe53] flex items-center justify-center shadow-lg border-2 border-[#ffe8cc]/60 relative"
                 >
                   <Heart className="w-7 h-7 text-[#2c1308] fill-[#2c1308]" />
-                  <span className="absolute -bottom-1 text-[9px] font-serif font-bold text-[#ffe8cc] tracking-widest uppercase">
+                  <span className="absolute -bottom--1 text-[15px] font-serif font-bold text-[#ffe8cc] tracking-widest uppercase">
                     N &amp; V
                   </span>
                 </motion.div>
@@ -83,10 +84,10 @@ export function Scene1Intro({ onComplete }: Scene1IntroProps) {
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleOpenGift}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] font-medium text-sm tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.35)] hover:shadow-[0_0_35px_rgba(255,190,83,0.55)] transition-all duration-300 flex items-center justify-center gap-2 mx-auto cursor-pointer"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] font-medium text-sm tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.35)] hover:shadow-[0_0_35px_rgba(255,190,83,0.55)] transition-all duration-300 flex items-center justify-center gap-2.5 mx-auto cursor-pointer"
               >
                 <span>Open My Gift</span>
-                <Sparkles className="w-4 h-4 fill-current" />
+                <Image src="/cake-icon.svg" alt="Birthday Cake" width={20} height={20} className="drop-shadow" />
               </motion.button>
             </div>
 

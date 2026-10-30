@@ -134,10 +134,11 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
         className="text-center mb-8"
       >
         <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full glass-panel border border-[#e0a96d]/30 mb-3">
-          <Sparkles className="w-3.5 h-3.5 text-[#ffbe53]" />
+          <Image src="/cake-icon.svg" alt="Cake" width={16} height={16} className="drop-shadow" />
           <span className="text-xs uppercase tracking-widest text-[#ffe8d6] font-medium">
             Act IV: The Love Letter
           </span>
+          <Image src="/cake-icon.svg" alt="Cake" width={16} height={16} className="drop-shadow" />
         </div>
         <h2 className="font-serif text-3xl md:text-4xl text-gold-gradient font-light">
           From My Heart To Yours

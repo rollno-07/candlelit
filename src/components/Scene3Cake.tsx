@@ -93,10 +93,11 @@ export function Scene3Cake({ onComplete }: Scene3CakeProps) {
           animate={{ opacity: 1, y: 0 }}
           className="inline-flex items-center gap-2 px-4 py-1 rounded-full glass-panel border border-[#e0a96d]/30 mb-2"
         >
-          <Sparkles className="w-3.5 h-3.5 text-[#ffbe53]" />
+          <Image src="/cake-icon.svg" alt="Cake" width={16} height={16} className="drop-shadow" />
           <span className="text-xs uppercase tracking-widest text-[#ffe8d6] font-medium">
             Act III: The Cake Ceremony
           </span>
+          <Image src="/cake-icon.svg" alt="Cake" width={16} height={16} className="drop-shadow" />
         </motion.div>
 
         <h2 className="font-serif text-2xl md:text-3xl text-gold-gradient font-light">

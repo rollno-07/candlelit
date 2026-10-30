@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BackgroundFX } from "@/components/BackgroundFX";
 import { MusicPlayer } from "@/components/MusicPlayer";
@@ -8,6 +8,7 @@ import { Scene1Intro } from "@/components/Scene1Intro";
 import { Scene2Balloons } from "@/components/Scene2Balloons";
 import { Scene3Cake } from "@/components/Scene3Cake";
 import { Scene4Letter } from "@/components/Scene4Letter";
+import { soundManager } from "@/utils/audioSynthesizer";
 
 type ActNumber = 1 | 2 | 3 | 4;
 
@@ -21,6 +22,31 @@ const ACTS_META = [
 export default function BirthdayPage() {
   const [currentAct, setCurrentAct] = useState<ActNumber>(1);
   const [maxUnlockedAct, setMaxUnlockedAct] = useState<ActNumber>(1);
+
+  // Auto-play song immediately on load or at the very first user tap/touch anywhere
+  useEffect(() => {
+    soundManager.unlockAudio();
+
+    const handleFirstInteraction = () => {
+      soundManager.unlockAudio();
+      window.removeEventListener("pointerdown", handleFirstInteraction);
+      window.removeEventListener("touchstart", handleFirstInteraction);
+      window.removeEventListener("click", handleFirstInteraction);
+      window.removeEventListener("keydown", handleFirstInteraction);
+    };
+
+    window.addEventListener("pointerdown", handleFirstInteraction);
+    window.addEventListener("touchstart", handleFirstInteraction);
+    window.addEventListener("click", handleFirstInteraction);
+    window.addEventListener("keydown", handleFirstInteraction);
+
+    return () => {
+      window.removeEventListener("pointerdown", handleFirstInteraction);
+      window.removeEventListener("touchstart", handleFirstInteraction);
+      window.removeEventListener("click", handleFirstInteraction);
+      window.removeEventListener("keydown", handleFirstInteraction);
+    };
+  }, []);
 
   const goToAct = (act: ActNumber) => {
     setCurrentAct(act);

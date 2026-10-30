@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="goldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe8a3"/>
+      <stop offset="50%" stop-color="#ffbe53"/>
+      <stop offset="100%" stop-color="#e0a96d"/>
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ff4500"/>
+      <stop offset="60%" stop-color="#ffbe53"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="frostingGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffccd5"/>
+      <stop offset="100%" stop-color="#ff7b90"/>
+    </linearGradient>
+    <linearGradient id="cakeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3d1e16"/>
+      <stop offset="100%" stop-color="#1e0c08"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Cake Stand / Base Platter -->
+  <ellipse cx="32" cy="58" rx="28" ry="4" fill="url(#goldGlow)"/>
+  <path d="M 28 58 L 26 61 L 38 61 L 36 58 Z" fill="#b37d36"/>
+
+  <!-- Bottom Cake Tier -->
+  <path d="M 10 40 Q 32 46 54 40 L 54 53 Q 32 60 10 53 Z" fill="url(#cakeGrad)"/>
+  <!-- Bottom Tier Frosting -->
+  <path d="M 10 40 Q 32 46 54 40 Q 50 48 45 44 Q 40 48 35 44 Q 30 49 25 44 Q 20 48 15 44 Q 12 47 10 40 Z" fill="url(#frostingGrad)"/>
+
+  <!-- Top Cake Tier -->
+  <path d="M 16 26 Q 32 31 48 26 L 48 37 Q 32 43 16 37 Z" fill="url(#cakeGrad)"/>
+  <!-- Top Tier Frosting -->
+  <path d="M 16 26 Q 32 31 48 26 Q 44 32 40 29 Q 36 33 32 29 Q 28 33 24 29 Q 20 33 16 26 Z" fill="url(#frostingGrad)"/>
+
+  <!-- Top Frosting Ellipse -->
+  <ellipse cx="32" cy="26" rx="16" ry="5" fill="#ffe5ec"/>
+
+  <!-- Strawberries / Cherries on Top -->
+  <circle cx="23" cy="25" r="2.5" fill="#e63946"/>
+  <circle cx="32" cy="27" r="2.5" fill="#e63946"/>
+  <circle cx="41" cy="25" r="2.5" fill="#e63946"/>
+
+  <!-- 3 Birthday Candles -->
+  <!-- Left Candle -->
+  <rect x="25" y="14" width="2" height="10" rx="1" fill="#ffffff"/>
+  <path d="M 25 16 L 27 18 M 25 19 L 27 21" stroke="#ffbe53" stroke-width="0.8"/>
+  <path d="M 26 8 Q 28 11 26 14 Q 24 11 26 8 Z" fill="url(#flameGrad)" filter="url(#glow)"/>
+
+  <!-- Center Candle (Taller) -->
+  <rect x="31" y="11" width="2" height="13" rx="1" fill="#ffffff"/>
+  <path d="M 31 14 L 33 16 M 31 18 L 33 20 M 31 22 L 33 24" stroke="#ffbe53" stroke-width="0.8"/>
+  <path d="M 32 5 Q 34.5 8.5 32 11 Q 29.5 8.5 32 5 Z" fill="url(#flameGrad)" filter="url(#glow)"/>
+
+  <!-- Right Candle -->
+  <rect x="37" y="14" width="2" height="10" rx="1" fill="#ffffff"/>
+  <path d="M 37 16 L 39 18 M 37 19 L 39 21" stroke="#ffbe53" stroke-width="0.8"/>
+  <path d="M 38 8 Q 40 11 38 14 Q 36 11 38 8 Z" fill="url(#flameGrad)" filter="url(#glow)"/>
+
+  <!-- Magical Sparkles -->
+  <polygon points="12,14 14,11 12,8 10,11" fill="url(#goldGlow)"/>
+  <polygon points="52,16 54,13 52,10 50,13" fill="url(#goldGlow)"/>
+  <polygon points="46,6 47.5,4 46,2 44.5,4" fill="url(#goldGlow)"/>
+</svg>

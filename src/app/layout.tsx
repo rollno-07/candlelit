@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   title: "Happy Birthday Nidhi ✨ | A Little World For You",
   description: "An interactive, romantic birthday experience designed just for Nidhi by Vishal.",
   keywords: ["birthday", "surprise", "romantic", "love letter"],
+  icons: {
+    icon: "/cake-icon.svg",
+    shortcut: "/cake-icon.svg",
+    apple: "/cake-icon.svg",
+  },
 };
 
 export const viewport: Viewport = {
