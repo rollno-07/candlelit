@@ -107,7 +107,6 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
   useEffect(() => {
     if (scrollContainerRef.current) {
       const el = scrollContainerRef.current;
-      // Smoothly autoscroll as new text is typed
       el.scrollTo({
         top: el.scrollHeight,
         behavior: "smooth",
@@ -157,92 +156,95 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
   const displayedText = fullText.slice(0, displayedLength);
 
   return (
-    <div className="relative z-10 w-full h-[90vh] md:h-[92vh] max-w-3xl mx-auto flex flex-col justify-between items-center px-4 py-3 select-none overflow-hidden">
-      {/* BACKGROUND MEMORY CARD (Layered behind text) */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden">
+    <div className="relative z-10 w-full h-[90vh] md:h-[92vh] max-w-4xl mx-auto flex flex-col justify-between items-center px-3 py-2 select-none overflow-hidden">
+      {/* CINEMATIC FRAMING CARD (Prominently visible in background) */}
+      <div className="absolute inset-x-2 sm:inset-x-8 top-14 bottom-16 z-0 flex items-center justify-center pointer-events-none">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 0.38, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
-            transition={{ duration: 1.4, ease: "easeInOut" }}
-            className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[480px] md:h-[480px] rounded-3xl overflow-hidden shadow-2xl border border-white/20 blur-[0.5px]"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.04 }}
+            transition={{ duration: 1.0, ease: "easeInOut" }}
+            className="relative w-full h-full max-w-2xl rounded-3xl overflow-hidden border-2 border-[#e0a96d]/70 shadow-[0_0_50px_rgba(224,169,109,0.4)] bg-[#120a1c]"
           >
             <Image
               src={MEMORY_CAROUSEL[currentSlide].url}
               alt={MEMORY_CAROUSEL[currentSlide].title}
               fill
-              sizes="(max-width: 640px) 320px, 480px"
-              className="object-cover"
+              sizes="(max-width: 768px) 95vw, 680px"
+              className="object-cover object-center"
               priority
             />
-            {/* Ambient vignette gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0714] via-[#0a0714]/40 to-[#0a0714]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0714] via-transparent to-[#0a0714]" />
+
+            {/* Polaroid Memory Label in background frame */}
+            <div className="absolute top-3 left-4 px-3.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-[#e0a96d]/50 text-xs text-[#ffe8d6] font-serif tracking-wider flex items-center gap-1.5 shadow-lg">
+              <span>📸</span>
+              <span>{MEMORY_CAROUSEL[currentSlide].title}</span>
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>
 
       {/* TOP HEADER */}
       <div className="relative z-20 text-center shrink-0 pt-1">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full glass-panel border border-[#e0a96d]/30 mb-1.5 shadow">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full glass-panel border border-[#e0a96d]/30 mb-1 shadow">
           <Image src="/cake-icon.svg" alt="Cake" width={14} height={14} className="drop-shadow" />
           <span className="text-[11px] uppercase tracking-widest text-[#ffe8d6] font-medium">
             Act IV: The Love Letter
           </span>
           <Image src="/cake-icon.svg" alt="Cake" width={14} height={14} className="drop-shadow" />
         </div>
-        <h2 className="font-serif text-2xl md:text-3xl text-gold-gradient font-light">
+        <h2 className="font-serif text-2xl md:text-3xl text-gold-gradient font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
           From My Heart To Yours
         </h2>
       </div>
 
-      {/* FOREGROUND STREAMING LETTER (Fixed Viewport, Auto-Scrolls Upward) */}
-      <div className="relative z-20 w-full max-w-xl my-auto">
-        <div className="relative rounded-2xl glass-card border border-[#e0a96d]/40 shadow-[0_12px_45px_rgba(0,0,0,0.7)] backdrop-blur-xl overflow-hidden">
+      {/* FOREGROUND STREAMING LETTER (Ultra-Transparent Crystal Glass, Photo Clearly Visible Behind) */}
+      <div className="relative z-20 w-full max-w-xl my-auto px-2">
+        <div className="relative rounded-2xl bg-black/25 backdrop-blur-[2px] border border-[#ffbe53]/50 shadow-[0_12px_40px_rgba(0,0,0,0.6)] overflow-hidden">
           {/* Subtle Heart Watermark */}
           <div className="absolute -top-10 -right-10 pointer-events-none opacity-10">
             <Heart className="w-40 h-40 text-[#ffbe53]" />
           </div>
 
           {/* Sticky Header Inside Card */}
-          <div className="flex items-center justify-between px-5 py-2.5 border-b border-[#e0a96d]/20 bg-black/30 backdrop-blur-md">
+          <div className="flex items-center justify-between px-5 py-2.5 border-b border-[#e0a96d]/25 bg-black/20">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#ffbe53] animate-ping" />
-              <span className="text-xs font-serif text-[#ffe8d6] tracking-wider uppercase font-semibold">
+              <span className="text-xs font-serif text-[#ffe8d6] tracking-wider uppercase font-semibold drop-shadow">
                 Vishal &amp; Nidhi
               </span>
             </div>
 
-            {/* Background Photo Navigation Mini Controls */}
-            <div className="flex items-center gap-1.5">
+            {/* Background Photo Navigation Controls */}
+            {/* <div className="flex items-center gap-1.5">
               <button
                 onClick={handlePrevSlide}
-                className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-[#ffe8d6] flex items-center justify-center text-xs transition cursor-pointer"
+                className="w-6 h-6 rounded-full bg-black/40 hover:bg-black/60 text-[#ffe8d6] flex items-center justify-center text-xs transition cursor-pointer active:scale-90 border border-white/20"
                 title="Previous photo in background"
                 aria-label="Previous photo"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
               </button>
-              <span className="text-[10px] text-[#e0a96d] px-1 font-mono">
+              <span className="text-[10px] text-[#ffbe53] px-1 font-mono font-semibold drop-shadow">
                 {currentSlide + 1}/{MEMORY_CAROUSEL.length}
               </span>
               <button
                 onClick={handleNextSlide}
-                className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-[#ffe8d6] flex items-center justify-center text-xs transition cursor-pointer"
+                className="w-6 h-6 rounded-full bg-black/40 hover:bg-black/60 text-[#ffe8d6] flex items-center justify-center text-xs transition cursor-pointer active:scale-90 border border-white/20"
                 title="Next photo in background"
                 aria-label="Next photo"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
-            </div>
+            </div> */}
           </div>
 
           {/* AUTO-SCROLLING TEXT BODY (Sticks in screen, autoscrolls up smoothly, hidden scrollbar) */}
           <div
             ref={scrollContainerRef}
-            className="h-[46vh] sm:h-[48vh] md:h-[50vh] overflow-y-auto no-scrollbar px-5 sm:px-6 py-5 font-serif text-base sm:text-lg text-[#fdf8f4] leading-relaxed whitespace-pre-line tracking-wide scroll-smooth"
+            className="h-[46vh] sm:h-[48vh] md:h-[50vh] overflow-y-auto no-scrollbar px-5 sm:px-6 py-5 font-serif text-base sm:text-lg text-[#ffffff] leading-relaxed whitespace-pre-line tracking-wide scroll-smooth [text-shadow:_0_1px_3px_rgb(0_0_0_/_95%),_0_2px_8px_rgb(0_0_0_/_90%),_0_0_15px_rgb(0_0_0_/_80%)]"
             style={{
               scrollBehavior: "smooth",
               scrollbarWidth: "none",
@@ -252,7 +254,7 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
             {displayedText}
 
             {!isTypingComplete && (
-              <span className="inline-block w-2 h-4 ml-1 bg-[#ffbe53] animate-pulse align-middle" />
+              <span className="inline-block w-2 h-4 ml-1 bg-[#ffbe53] animate-pulse align-middle shadow-[0_0_8px_#ffbe53]" />
             )}
 
             {/* Bottom Anchor */}
@@ -265,11 +267,11 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 className="mt-6 pt-5 border-t border-[#e0a96d]/25 flex items-center justify-between"
               >
-                <div className="flex items-center gap-2 text-xs text-[#e0a96d]">
+                <div className="flex items-center gap-2 text-xs text-[#ffe8d6] drop-shadow">
                   <CheckCircle2 className="w-4 h-4 text-[#ffbe53]" />
                   <span>Written with all my heart</span>
                 </div>
-                <div className="px-3 py-1 rounded-full bg-[#ffbe53]/15 border border-[#ffbe53]/50 text-xs text-[#ffbe53] font-serif tracking-widest uppercase shadow">
+                <div className="px-3 py-1 rounded-full bg-black/50 border border-[#ffbe53]/60 text-xs text-[#ffbe53] font-serif tracking-widest uppercase shadow">
                   Forever Yours
                 </div>
               </motion.div>
@@ -278,11 +280,11 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
 
           {/* Skip Button (Shown while typing) */}
           {!isTypingComplete && (
-            <div className="px-5 py-2 bg-black/40 border-t border-[#e0a96d]/15 flex items-center justify-between">
-              <span className="text-[11px] text-[#e0a96d]/80 italic">Streaming letter...</span>
+            <div className="px-5 py-2 bg-black/30 border-t border-[#e0a96d]/20 flex items-center justify-between">
+              <span className="text-[11px] text-[#ffe8d6]/90 italic drop-shadow">Streaming letter...</span>
               <button
                 onClick={handleSkipTyping}
-                className="text-xs text-[#ffe8d6] hover:text-[#ffbe53] underline transition-colors cursor-pointer"
+                className="text-xs text-[#ffbe53] hover:text-white underline transition-colors cursor-pointer drop-shadow font-medium"
               >
                 Skip to read all
               </button>

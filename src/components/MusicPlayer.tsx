@@ -31,34 +31,19 @@ export function MusicPlayer() {
 
   return (
     <motion.button
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.8, duration: 0.6 }}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.8, duration: 0.5 }}
       onClick={handleToggle}
-      className="fixed top-5 right-5 z-50 flex items-center gap-2 px-3.5 py-2 rounded-full glass-panel border border-[#e0a96d]/30 hover:border-[#ffbe53]/60 transition-all duration-300 text-sm text-[#ffe8d6] shadow-lg group cursor-pointer active:scale-95"
-      aria-label={isSilenced ? "Play romantic background music" : "Mute background music"}
-      title={isSilenced ? "Play Music" : "Mute Music"}
+      className="fixed bottom-5 right-5 z-50 w-12 h-12 flex items-center justify-center rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53]/80 bg-[#120c20]/80 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.5)] hover:shadow-[0_0_20px_rgba(255,190,83,0.35)] transition-all duration-300 cursor-pointer active:scale-90 group"
+      aria-label={isSilenced ? "Unmute background music" : "Mute background music"}
+      title={isSilenced ? "Unmute Music" : "Mute Music"}
     >
-      <div className="relative w-4 h-4 flex items-center justify-center">
-        {isSilenced ? (
-          <VolumeX className="w-4 h-4 text-[#ff7b90]" />
-        ) : (
-          <Volume2 className="w-4 h-4 text-[#ffbe53]" />
-        )}
-      </div>
-
-      <div className="flex items-center gap-0.5 h-3 px-0.5">
-        {!isSilenced ? (
-          <>
-            <span className="w-0.5 h-3 bg-[#ffbe53] rounded-full animate-pulse" />
-            <span className="w-0.5 h-2 bg-[#e0a96d] rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
-            <span className="w-0.5 h-3.5 bg-[#ff7b90] rounded-full animate-pulse" style={{ animationDelay: "0.4s" }} />
-            <span className="w-0.5 h-2 bg-[#ffbe53] rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
-          </>
-        ) : (
-          <span className="text-[11px] text-[#a8998d]">Music Off</span>
-        )}
-      </div>
+      {isSilenced ? (
+        <VolumeX className="w-5 h-5 text-[#ff7b90] transition-transform duration-300 group-hover:scale-110" />
+      ) : (
+        <Volume2 className="w-5 h-5 text-[#ffbe53] transition-transform duration-300 group-hover:scale-110" />
+      )}
     </motion.button>
   );
 }

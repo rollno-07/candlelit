@@ -23,6 +23,19 @@ export default function BirthdayPage() {
   const [currentAct, setCurrentAct] = useState<ActNumber>(1);
   const [maxUnlockedAct, setMaxUnlockedAct] = useState<ActNumber>(1);
 
+  // Allow deep linking via ?act=3 or #act-3 for seamless testing
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const actParam = params.get("act");
+      if (actParam && ["1", "2", "3", "4"].includes(actParam)) {
+        const a = parseInt(actParam, 10) as ActNumber;
+        setCurrentAct(a);
+        setMaxUnlockedAct((prev) => Math.max(prev, a) as ActNumber);
+      }
+    }
+  }, []);
+
   // Auto-play song immediately on load or at the very first user tap/touch anywhere
   useEffect(() => {
     soundManager.unlockAudio();
