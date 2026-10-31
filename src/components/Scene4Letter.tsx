@@ -35,50 +35,47 @@ const MEMORY_CAROUSEL = [
   },
 ];
 
-const LOVE_LETTER_PARAGRAPHS = [
-  "My Dearest Nidhi,",
-  "Happy Birthday to the Most Special Person in My Life ❤️🥹",
-  "Sometimes, I wonder how a person who came into my life recently could become so special to my heart. And then I remember all the little moments we have shared, and I realise that some people don’t need years to create a place in your heart. They just need a little understanding, a little care, and a beautiful heart like yours. ❤️",
-  "I still remember the first day we spoke over the phone. When I explained my mother’s condition to you, I didn’t know what you would think or whether you would want to continue talking to me. But you understood my situation, accepted everything, and chose to move forward with me. That day, you gave me something precious — the feeling that someone could understand my life without judging me. 🫶🏻",
-  "Then came the most difficult phase of my life, when I lost my mother. 💔 I lost the person who was my whole world. You couldn’t be physically beside me, but you were there emotionally, checking on me over calls, asking whether I was okay, and making sure I wasn’t going through everything alone. You may not realise how much those little things meant to me, but during those days, your care brought me comfort when I needed it the most.",
-  "I still remember the first time I saw you at the hotel. I had so many things running through my mind and so many things I wanted to tell you, but I couldn’t express them. I was wondering whether you would like me, whether you would feel the same way, and whether this beautiful beginning would turn into something meaningful. ❤️",
-  "And how can I ever forget that moment at the railway station when you were leaving for Hyderabad? We were waiting for your train, and you gently rested your head on my shoulder. 🥹❤️",
-  "I don’t know how to explain that feeling in words. For a few moments, everything felt so peaceful. I just wanted time to stop right there, because that little moment gave me a happiness I will always carry in my heart.",
-  "Then came those three beautiful days we spent together in Mumbai. Going to the mandir, shopping together, holding your bag while you were in the changing room, holding your hand at the mandir, and taking God’s blessings with you beside me. 🙏🏻❤️",
-  "These may seem like ordinary moments to the world, but for me, they are memories I will cherish forever. Because happiness isn’t always about expensive gifts or grand celebrations. Sometimes, happiness is simply walking beside the person you care about, holding their hand, and wishing that life gives you many more such moments together.",
-  "And you know what makes you even more special to me?\n\nWhen you ask me, “Where are you?” “Have you eaten?” “Office se aa gaye?” 🥹❤️\n\nThese little questions may sound simple, but they mean so much to me. They make me feel cared for. They make me feel that someone is waiting to know how my day went. After my mother’s love, experiencing this kind of care again means more to me than I can ever explain.",
-  "2026 has taken away the most precious person in my life — my mother, my whole world. 💔 There is an emptiness in my heart that no one can ever completely replace.",
-  "But somewhere in the middle of all this pain, God also brought you into my life. And I feel blessed that, after so much sadness, I have someone with whom I can share my thoughts, my happiness, my fears, and my future.",
-  "You can never replace my mother, and I would never expect you to. But the love, warmth, understanding, and care you have brought into my life have made my lonely days feel a little less lonely. And for that, I will always be grateful to you. ❤️🫂",
-  "Sometimes, I think about my mother and wonder how happy she would have been if she were here today to see you in my life. I imagine her smiling, knowing that someone is there to care for me, understand me, and walk beside me. I truly believe your presence would have brought so much happiness to her heart, too. ❤️🙏🏻",
-  "And today, on your birthday, I keep thinking that I should be the one giving you gifts, making you feel special, and bringing happiness to your face.",
-  "But the truth is, you have already given me so many beautiful gifts without even wrapping them.",
-  "You have given me your time, your understanding, your care, your hand to hold, your shoulder to lean on, and memories that I will treasure for the rest of my life. You have given me reasons to smile during a time when smiling wasn’t easy.",
-  "And these are gifts that no money in this world can buy. 🥹❤️",
-  "I don’t know what our future holds in every little detail, but I know what I wish for us. I wish to see you happy, to stand beside you in your difficult times the way you stood beside me in mine, to celebrate your successes, to hold your hand through life’s challenges, and to create countless beautiful memories together.",
-  "I want to be the person you can share everything with — your happiness, your worries, your dreams, and even your silence. I want us to look back years from now and smile at how beautifully our story began.",
-  "So, my future wife, my favourite person, and the one who has brought a little more light into my life — Happy Birthday! 🎂❤️😘",
-  "May God bless you with endless happiness, good health, success, peace, and all the beautiful things your heart wishes for. May your smile always remain the same, and may I get the privilege of being one of the reasons behind it.",
-  "Thank you for coming into my life. Thank you for understanding me. Thank you for being there when I needed someone. And thank you for giving me so many moments that have become precious parts of my life.",
-  "I may not always find the perfect words to express what I feel, but today I just want you to know one thing:",
-  "Your birthday is the day you came into this world, but your presence has made my world a little more beautiful. ❤️🫶🏻",
-  "Happy Birthday, my special one. May this be the first of many birthdays we celebrate together, with more love, more laughter, more memories, and a lifetime of togetherness.",
-  "I hope one day I can hold your hand, look into your eyes, and wish you a happy birthday in person — as your husband. 🥹❤️💍",
-  "Until then, sending you all my love, the warmest hugs, and the sweetest birthday wishes.",
-  "Happy Birthday, my future wife. You are already a beautiful part of my heart and my story. ❤️😘🎂",
-  "Forever and always yours,\nVishal ❤️",
+const DEFAULT_CELEBRATION_LETTER = [
+  "From the very first moment our paths crossed, you brought an impossible amount of light and joy into my world.",
+  "Your smile is my favorite comfort, your laughter my favorite melody, and every single second shared with you is a memory I treasure deeply.",
+  "On this special day, I want you to know how deeply you are appreciated, cherished, and loved.",
+  "May this new chapter of your life bring you endless happiness, boundless success, and every dream your heart has ever whispered.",
+  "Thank you for being the wonderful, extraordinary soul that you are. Today and every day, we celebrate you.",
+  "Forever and always, with all my heart ❤️"
 ];
 
 interface Scene4LetterProps {
   onRestart: () => void;
+  recipientName?: string;
+  senderName?: string;
+  letter?: string[];
+  photos?: { url: string; caption: string }[];
 }
 
-export function Scene4Letter({ onRestart }: Scene4LetterProps) {
-  const fullText = LOVE_LETTER_PARAGRAPHS.join("\n\n");
+export function Scene4Letter({
+  onRestart,
+  recipientName = "My Love",
+  senderName = "With Love",
+  letter,
+  photos,
+}: Scene4LetterProps) {
+  const paragraphs = letter && letter.length > 0 ? letter : DEFAULT_CELEBRATION_LETTER;
+  const fullText = paragraphs.join("\n\n");
   const [displayedLength, setDisplayedLength] = useState(0);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlayingVoiceNote, setIsPlayingVoiceNote] = useState(false);
+
+  const carouselItems = React.useMemo(() => {
+    if (photos && photos.length > 0) {
+      return photos.map((p, i) => ({
+        url: p.url,
+        title: `Memory ${i + 1}`,
+        caption: p.caption,
+      }));
+    }
+    return MEMORY_CAROUSEL;
+  }, [photos]);
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const bottomAnchorRef = useRef<HTMLDivElement | null>(null);
@@ -86,10 +83,10 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
   // Auto-cycle background polaroid photos every 7 seconds
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % MEMORY_CAROUSEL.length);
+      setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
     }, 7000);
     return () => clearInterval(timer);
-  }, []);
+  }, [carouselItems.length]);
 
   // Progressive streaming typewriter effect (approx 20ms per character)
   useEffect(() => {
@@ -129,12 +126,12 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
 
   const handleNextSlide = () => {
     soundManager.playSwooshSound();
-    setCurrentSlide((prev) => (prev + 1) % MEMORY_CAROUSEL.length);
+    setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
   };
 
   const handlePrevSlide = () => {
     soundManager.playSwooshSound();
-    setCurrentSlide((prev) => (prev - 1 + MEMORY_CAROUSEL.length) % MEMORY_CAROUSEL.length);
+    setCurrentSlide((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
   };
 
   const handlePlayVoiceNote = () => {
@@ -169,8 +166,8 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
             className="relative w-full h-full max-w-2xl rounded-3xl overflow-hidden border-2 border-[#e0a96d]/70 shadow-[0_0_50px_rgba(224,169,109,0.4)] bg-[#120a1c]"
           >
             <Image
-              src={MEMORY_CAROUSEL[currentSlide].url}
-              alt={MEMORY_CAROUSEL[currentSlide].title}
+              src={carouselItems[currentSlide]?.url || "/images/polaroids/photo_rooftop.jpg"}
+              alt={carouselItems[currentSlide]?.title || "Memory"}
               fill
               sizes="(max-width: 768px) 95vw, 680px"
               className="object-cover object-center"
@@ -180,7 +177,7 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
             {/* Polaroid Memory Label in background frame */}
             <div className="absolute top-3 left-4 px-3.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-[#e0a96d]/50 text-xs text-[#ffe8d6] font-serif tracking-wider flex items-center gap-1.5 shadow-lg">
               <span>📸</span>
-              <span>{MEMORY_CAROUSEL[currentSlide].title}</span>
+              <span>{carouselItems[currentSlide]?.title || "Our Memory"}</span>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -213,7 +210,7 @@ export function Scene4Letter({ onRestart }: Scene4LetterProps) {
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#ffbe53] animate-ping" />
               <span className="text-xs font-serif text-[#ffe8d6] tracking-wider uppercase font-semibold drop-shadow">
-                Vishal &amp; Nidhi
+                {senderName} &amp; {recipientName}
               </span>
             </div>
 

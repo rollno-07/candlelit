@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/lib/authContext";
 
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
@@ -16,9 +17,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Happy Birthday Nidhi ✨ | A Little World For You",
-  description: "An interactive, romantic birthday experience designed just for Nidhi by Vishal.",
-  keywords: ["birthday", "surprise", "romantic", "love letter"],
+  title: "Candlelit ✨ | Cinematic Digital Surprises for People You Love",
+  description: "Create unforgettable 4-act interactive digital celebrations, proposal portals, and romantic surprises in minutes.",
+  keywords: ["candlelit", "birthday surprise", "anniversary celebration", "proposal", "valentine", "digital gifts", "interactive celebration"],
   icons: {
     icon: "/cake-icon.svg",
     shortcut: "/cake-icon.svg",
@@ -45,7 +46,7 @@ export default function RootLayout({
       className={`${cormorantGaramond.variable} ${inter.variable} h-full bg-[#0a0714] text-[#fdf8f4] antialiased`}
     >
       <body className="min-h-full flex flex-col relative overflow-x-hidden selection:bg-[#e0a96d]/30 selection:text-[#ffbe53]">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

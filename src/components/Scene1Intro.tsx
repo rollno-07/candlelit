@@ -8,9 +8,15 @@ import { soundManager } from "@/utils/audioSynthesizer";
 
 interface Scene1IntroProps {
   onComplete: () => void;
+  recipientName?: string;
+  senderName?: string;
 }
 
-export function Scene1Intro({ onComplete }: Scene1IntroProps) {
+export function Scene1Intro({
+  onComplete,
+  recipientName = "My Love",
+  senderName = "With Love",
+}: Scene1IntroProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpenGift = () => {
@@ -63,14 +69,14 @@ export function Scene1Intro({ onComplete }: Scene1IntroProps) {
                 >
                   <Heart className="w-7 h-7 text-[#2c1308] fill-[#2c1308]" />
                   <span className="absolute -bottom--1 text-[15px] font-serif font-bold text-[#ffe8cc] tracking-widest uppercase">
-                    N &amp; V
+                    {(recipientName || "N")[0]} &amp; {(senderName || "V")[0]}
                   </span>
                 </motion.div>
               </div>
 
               {/* Salutation */}
               <h2 className="font-serif text-3xl md:text-4xl text-gold-gradient font-normal tracking-wide mb-3">
-                For My Dearest Nidhi
+                For My Dearest {recipientName}
               </h2>
 
               <div className="w-16 h-0.5 mx-auto bg-gradient-to-r from-transparent via-[#e0a96d] to-transparent mb-4" />

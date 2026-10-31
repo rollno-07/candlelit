@@ -75,7 +75,7 @@ const BALLOONS: BalloonData[] = [
     photoUrl: "/images/polaroids/photo_mountains.jpg",
     title: "Mountain Mist & Us",
     subtitle: "Adventures Side-by-Side",
-    note: "Through cloudy heights, windy roads, and every season of life, you are my steadfast adventure partner, my peace, and my future wife.",
+    note: "Through cloudy heights, windy roads, and every season of life, you are my steadfast adventure partner, my peace, and my greatest blessing.",
     xOffset: 90,
     floatDelay: 0.9,
     floatDuration: 5.2,
@@ -84,11 +84,24 @@ const BALLOONS: BalloonData[] = [
 
 interface Scene2BalloonsProps {
   onComplete: () => void;
+  photos?: { url: string; caption: string }[];
 }
 
-export function Scene2Balloons({ onComplete }: Scene2BalloonsProps) {
+export function Scene2Balloons({ onComplete, photos }: Scene2BalloonsProps) {
   const [poppedIds, setPoppedIds] = useState<number[]>([]);
   const [activeMemory, setActiveMemory] = useState<BalloonData | null>(null);
+
+  const balloonsList = React.useMemo(() => {
+    if (photos && photos.length > 0) {
+      return BALLOONS.slice(0, Math.min(BALLOONS.length, photos.length)).map((b, i) => ({
+        ...b,
+        photoUrl: photos[i].url,
+        title: photos[i].caption || b.title,
+        note: photos[i].caption || b.note,
+      }));
+    }
+    return BALLOONS;
+  }, [photos]);
 
   const handlePop = (balloon: BalloonData) => {
     if (poppedIds.includes(balloon.id)) return;
@@ -98,7 +111,7 @@ export function Scene2Balloons({ onComplete }: Scene2BalloonsProps) {
     setActiveMemory(balloon);
   };
 
-  const allPopped = poppedIds.length === BALLOONS.length;
+  const allPopped = poppedIds.length === balloonsList.length;
 
   return (
     <div className="relative z-10 w-full min-h-[90vh] flex flex-col items-center justify-between px-4 py-6 overflow-hidden">
@@ -125,9 +138,9 @@ export function Scene2Balloons({ onComplete }: Scene2BalloonsProps) {
           <span>Memories Revealed:</span>
           <span className="text-[#ffbe53] font-semibold">{poppedIds.length}</span>
           <span>/</span>
-          <span>{BALLOONS.length}</span>
+          <span>{balloonsList.length}</span>
           <div className="flex items-center gap-1 ml-2">
-            {BALLOONS.map((b) => (
+            {balloonsList.map((b) => (
               <span
                 key={b.id}
                 className={`inline-block w-2 h-2 rounded-full transition-all duration-300 ${
@@ -143,7 +156,7 @@ export function Scene2Balloons({ onComplete }: Scene2BalloonsProps) {
 
       {/* Balloon Sky Area */}
       <div className="relative w-full max-w-2xl h-[58vh] md:h-[62vh] my-auto">
-        {BALLOONS.map((balloon) => {
+        {balloonsList.map((balloon) => {
           const isPopped = poppedIds.includes(balloon.id);
 
           return (

@@ -11,6 +11,8 @@ import { useSliceGesture } from "@/hooks/useSliceGesture";
 
 interface Scene3CakeProps {
   onComplete: () => void;
+  recipientName?: string;
+  cakeOrObjectMessage?: string;
 }
 
 // Flame & Ember coordinates on the cake image (percentages)
@@ -22,7 +24,11 @@ const CANDLE_COORDINATES = [
   { id: 5, flameLeft: "69.8%", flameTop: "15.8%", wickTop: "18.8%" },
 ];
 
-export function Scene3Cake({ onComplete }: Scene3CakeProps) {
+export function Scene3Cake({
+  onComplete,
+  recipientName = "",
+  cakeOrObjectMessage,
+}: Scene3CakeProps) {
   const [candlesBlown, setCandlesBlown] = useState(false);
   const [isBlowingAnim, setIsBlowingAnim] = useState(false);
   const [isSliced, setIsSliced] = useState(false);
@@ -121,8 +127,8 @@ export function Scene3Cake({ onComplete }: Scene3CakeProps) {
           {!candlesBlown
             ? "Make a wish & blow out the candles 🎂"
             : !isSliced
-            ? "Slice your birthday cake, Nidhi 🍰"
-            : "Happy Birthday, My Queen Nidhi! 🎉"}
+            ? `Slice your cake, ${recipientName} 🍰`
+            : cakeOrObjectMessage || `Happy Celebration, My Queen ${recipientName}! 🎉`}
         </h2>
 
         <p className="text-xs text-[#d1c4b9] mt-1 max-w-xs mx-auto">
@@ -192,7 +198,7 @@ export function Scene3Cake({ onComplete }: Scene3CakeProps) {
               >
                 <Image
                   src="/images/real_birthday_cake.jpg"
-                  alt="Real birthday cake with Happy Birthday Nidhi and 5 lit candles"
+                  alt="Real celebration cake with Happy Birthday and 5 lit candles"
                   fill
                   sizes="(max-width: 640px) 340px, 420px"
                   className={`object-cover transition-transform duration-300 ${
