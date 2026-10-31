@@ -16,7 +16,7 @@ export function Footer() {
               <Sparkles className="w-3 h-3 text-[#ffbe53] fill-current" />
             </span>
             <span className="text-[10px] text-[#a8998d] block -mt-1">
-              candlelit.one7app.in
+              candleit.one7app.in
             </span>
           </div>
         </div>

@@ -94,7 +94,28 @@ export async function getSurpriseBySlug(slug: string): Promise<SurpriseData | nu
     return NIDHI_FLAGSHIP_SURPRISE;
   }
 
-  // Check if slug matches any registered template (e.g. birthday-surprise, anniversary, propose, etc.)
+  // 1. Check database if configured
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data } = await supabase
+        .from("surprises")
+        .select("data")
+        .eq("slug", slug)
+        .single();
+      if (data?.data) {
+        return data.data as SurpriseData;
+      }
+    } catch {
+      // Fallback to local
+    }
+  }
+
+  // 2. Check local storage for customized saved surprises
+  const locals = getLocalSurprises();
+  const match = locals.find((s) => s.slug.toLowerCase() === slug.toLowerCase());
+  if (match) return match;
+
+  // 3. Check exact template match (e.g. "birthday-surprise", "propose", "anniversary")
   const templateMatch = TEMPLATES.find(
     (t) => t.id === slug || `demo-${t.id}` === slug
   );
@@ -115,24 +136,35 @@ export async function getSurpriseBySlug(slug: string): Promise<SurpriseData | nu
     };
   }
 
-  if (isSupabaseConfigured && supabase) {
-    try {
-      const { data } = await supabase
-        .from("surprises")
-        .select("data")
-        .eq("slug", slug)
-        .single();
-      if (data?.data) {
-        return data.data as SurpriseData;
+  // 4. Dynamic pattern: {templateId}-{recipientName} (e.g. "propose-maya", "birthday-surprise-john")
+  for (const tmpl of TEMPLATES) {
+    const prefix = `${tmpl.id}-`;
+    if (slug.startsWith(prefix)) {
+      const rawName = slug.slice(prefix.length).trim();
+      if (rawName.length > 0) {
+        const recipient = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+        return {
+          id: `auto-${slug}`,
+          slug: slug,
+          templateId: tmpl.id,
+          recipientName: recipient,
+          senderName: "With Love",
+          occasionSubtitle: tmpl.defaultFields.occasionSubtitle,
+          cakeOrObjectMessage:
+            tmpl.id === "birthday-surprise"
+              ? `Happy Birthday ${recipient}`
+              : tmpl.defaultFields.cakeOrObjectMessage,
+          photos: tmpl.defaultFields.defaultPhotos,
+          letter: tmpl.defaultFields.defaultLetter,
+          musicUrl: tmpl.defaultFields.musicUrl,
+          musicTitle: tmpl.defaultFields.musicLabel,
+          createdAt: new Date().toISOString(),
+        };
       }
-    } catch {
-      // Fallback to local
     }
   }
 
-  const locals = getLocalSurprises();
-  const match = locals.find((s) => s.slug.toLowerCase() === slug.toLowerCase());
-  return match || null;
+  return null;
 }
 
 export async function getUserSurprises(userId?: string): Promise<SurpriseData[]> {
