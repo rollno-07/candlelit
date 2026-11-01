@@ -6,6 +6,7 @@ import { Navbar } from "@/components/landing/Navbar";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { TemplateGrid } from "@/components/landing/TemplateGrid";
 import { HowItWorks } from "@/components/landing/HowItWorks";
+import { FaqSection } from "@/components/landing/FaqSection";
 import { Footer } from "@/components/landing/Footer";
 import { BackgroundFX } from "@/components/BackgroundFX";
 
@@ -37,6 +38,7 @@ export default function HomePage() {
         <HeroSection />
         <TemplateGrid />
         <HowItWorks />
+        <FaqSection />
       </div>
 
       {/* Footer */}

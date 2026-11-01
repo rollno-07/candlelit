@@ -1,0 +1,40 @@
+# Candlelit (candleit.one7app.in)
+
+> Candlelit is an interactive digital surprise and celebration platform by one7app. It transforms milestones and personal celebrations into immersive 4-act cinematic web experiences featuring real microphone-activated candle blowing, floating memory balloons, romantic ambient audio synthesis, and streaming letters.
+
+## Key Information
+- **Domain:** candleit.one7app.in
+- **Parent Brand:** one7app.in
+- **Platform Type:** Interactive Web Application (Mobile, Tablet, Desktop)
+- **Pricing:** Free to create and share
+
+## The 4-Act Storyline Arc
+1. **Act I: The Royal Invitation** - Personalized wax seal envelope with monogram initials and gentle unlock animation.
+2. **Act II: Starlight Memories** - Floating balloons that pop to reveal cherished polaroid memories and captions.
+3. **Act III: Interactive Celebration / Cake Ceremony** - Photorealistic cake with 5 golden candles that extinguish when the user blows into their microphone. Confetti and cake slicing.
+4. **Act IV: Streaming Letter** - Romantic, emotional message streaming line-by-line over starry background and polaroid carousel.
+
+## Available Occasion Templates (11)
+- **Birthday Surprise (`birthday-surprise`)**: Real cake, blowable candles, party balloons, and celebration letter.
+- **Anniversary Celebration (`anniversary`)**: Crystal champagne flutes, golden timeline, and eternal vows.
+- **The Dream Proposal (`propose`)**: Velvet ring box, sparkling diamond solitaire, and "Will You Marry Me?".
+- **Valentine's Week Odyssey (`valentine`)**: Covers all 8 days of Valentine's week from Rose Day to Valentine's Day.
+- **Karwa Chauth Moonlit Vows (`karwa-chauth`)**: Ceremonial brass Channi, glowing Diya, and full moon viewing.
+- **Pregnancy Surprise Reveal (`pregnancy-reveal`)**: Audio heartbeat, scratch-card ultrasound reveal.
+- **Baby Shower Wonderland (`baby-shower`)**: Pastel clouds, teddy bears, and guestbook blessings.
+- **Retirement Odyssey & Tribute (`retirement`)**: Vintage compass, telescope, and lifetime achievement honor scroll.
+- **Mother's Day Sanctuary (`mothers-day`)**: Blooming peonies, teacup, and heartfelt tribute to Mom.
+- **Father's Day Hall of Fame (`fathers-day`)**: Chronograph watch, fountain pen, and anchor wisdom wall.
+- **International Women's Day (`womens-day`)**: Royal gold & amethyst tiara, mimosa flowers, and empowerment prose.
+
+## Share Link Format
+- **Public URL Format:** `candleit.one7app.in/{template}-{name}`
+- **Examples:**
+  - `candleit.one7app.in/birthday-surprise-sophia`
+  - `candleit.one7app.in/propose-maya`
+  - `candleit.one7app.in/anniversary-priya`
+
+## Technology & Audio
+- **Audio Synthesizer:** Built-in Web Audio API melodic ambient synthesizer (low-volume warm Rhodes piano & music box chimes).
+- **Audio Detection:** Web Audio API AnalyserNode analyzing microphone input frequency/RMS to detect physical breath.
+- **No App Installation:** Runs in any mobile or desktop web browser.

@@ -1,0 +1,71 @@
+# Candlelit — Complete Platform Documentation (llms-full.txt)
+Website: https://candleit.one7app.in
+Entity: Candlelit by one7app
+
+---
+
+### Executive Overview
+Candlelit is a cinematic celebration web platform engineered to replace generic flat e-cards with tactile, emotionally resonant digital ceremonies. Each experience is composed of four structured acts designed to build anticipation, evoke nostalgia, celebrate with interactive rituals, and conclude with lasting heartfelt words.
+
+### Technical Architecture
+- **Framework:** Next.js 16 App Router
+- **Styling:** Tailwind CSS v4, custom glassmorphism tokens, gold gradients, starry particle backdrops
+- **Audio Engine:** Custom Web Audio API dual-oscillator synthesizer producing Dmaj9 -> Bm7 -> Gmaj7 -> A7sus4 chord progressions at low volume (0.14 gain) without external MP3 asset dependency.
+- **Physical Breath Detection:** Web Audio API AnalyserNode calculating microphone RMS amplitude in the 100Hz–800Hz breath frequency band.
+- **Data Persistence:** Supabase PostgreSQL with transparent client-side fallback to LocalStorage.
+- **Routing:** Direct root slug routing (`/[slug]`) and `/experience/[slug]`.
+
+### Occasion Template Catalog
+
+1. **Birthday Surprise (`birthday-surprise`)**
+   - Theme: Midnight velvet, gold leaf, glowing candles
+   - Centerpiece: 3-tier chocolate cake with 5 golden candles
+   - Ritual: Make a wish, blow out candles with breath, cut slice, golden confetti
+
+2. **Anniversary Celebration (`anniversary`)**
+   - Theme: Champagne gold, ivory roses, candlelight
+   - Subtypes: Marriage Anniversary, Love Anniversary, First Date Milestone, Work Milestone
+   - Ritual: Golden timeline walk, virtual champagne toast
+
+3. **The Dream Proposal (`propose`)**
+   - Theme: Royal sapphire velvet, red rose petals, fairy lights
+   - Centerpiece: Solitaire diamond ring in velvet box
+   - Ritual: Tap to open ring box, golden sparkle burst, "Will You Marry Me?"
+
+4. **Valentine's Week Odyssey (`valentine`)**
+   - Theme: Crimson velvet, artisan chocolates, wax seal letter
+   - Covers: Rose Day, Propose Day, Chocolate Day, Teddy Day, Promise Day, Hug Day, Kiss Day, Valentine's Day
+
+5. **Karwa Chauth Moonlit Vows (`karwa-chauth`)**
+   - Theme: Deep crimson, brass diya, full moon night
+   - Centerpiece: Traditional brass Channi (sieve) & glowing clay diya
+   - Ritual: Sliding the sieve to reveal the full moon, ceremonial water offering
+
+6. **Pregnancy Surprise Reveal (`pregnancy-reveal`)**
+   - Theme: Warm oatmeal knit, eucalyptus leaves, wooden blocks
+   - Ritual: Audio heartbeat countdown, scratch-to-reveal ultrasound photo
+
+7. **Baby Shower Wonderland (`baby-shower`)**
+   - Theme: Pastel clouds, teddy bear plush, golden stars
+   - Ritual: Floating balloon cloud wishes, little footsteps countdown
+
+8. **Retirement Odyssey & Tribute (`retirement`)**
+   - Theme: Antique brass compass, telescope, leather journal
+   - Ritual: Unveiling lifetime achievement trophy & career milestones gallery
+
+9. **Mother's Day Sanctuary (`mothers-day`)**
+   - Theme: Pink peonies bouquet, morning tea, warm sunlight
+   - Ritual: Blooming garden of mom's superpowers & comfort recipes
+
+10. **Father's Day Hall of Fame (`fathers-day`)**
+    - Theme: Leather chronograph watch, fountain pen, coffee mug
+    - Ritual: Golden handshake, wisdom wall of Dad's advice
+
+11. **International Women's Day (`womens-day`)**
+    - Theme: Imperial purple velvet, gold & amethyst crystal crown, mimosa flowers
+    - Ritual: Crown of radiance, tribute to resilience, intellect, and grace
+
+### Share Link Protocol
+- Base Domain: `candleit.one7app.in`
+- Pattern: `candleit.one7app.in/{template}-{recipientName}`
+- Dynamic Resolution: Resolves automatically even before persistence, allowing zero-latency preview and sharing.

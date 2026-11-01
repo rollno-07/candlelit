@@ -31,6 +31,9 @@ export function Footer() {
           <Link href="/templates" className="hover:text-[#ffbe53] transition-colors">
             All Templates
           </Link>
+          <Link href="/#faq" className="hover:text-[#ffbe53] transition-colors">
+            FAQ
+          </Link>
           <Link href="/experience/birthday-surprise" className="hover:text-[#ffbe53] transition-colors">
             Live Demo
           </Link>

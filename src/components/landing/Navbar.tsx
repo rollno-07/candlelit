@@ -39,6 +39,9 @@ export function Navbar() {
             <Link href="/#how-it-works" className="hover:text-[#ffbe53] transition-colors">
               How It Works
             </Link>
+            <Link href="/#faq" className="hover:text-[#ffbe53] transition-colors">
+              FAQ
+            </Link>
             <Link
               href="/experience/birthday-surprise"
               className="text-[#ffbe53] hover:text-[#fff] flex items-center gap-1 transition-colors"
