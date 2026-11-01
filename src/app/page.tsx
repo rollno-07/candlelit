@@ -39,10 +39,11 @@ export default function HomePage() {
         <TemplateGrid />
         <HowItWorks />
         <FaqSection />
+        <Footer />
       </div>
 
-      {/* Footer */}
-      <Footer />
+
+
     </main>
   );
 }
