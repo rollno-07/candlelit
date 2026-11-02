@@ -30,23 +30,24 @@ export const NIDHI_FLAGSHIP_SURPRISE: SurpriseData = {
   createdAt: new Date().toISOString(),
 };
 
-const STORAGE_KEY = "candlelit_surprises_v1";
+const STORAGE_KEY = "candlelit_user_created_surprises_v2";
 
 function getLocalSurprises(): SurpriseData[] {
-  if (typeof window === "undefined") return [NIDHI_FLAGSHIP_SURPRISE];
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([NIDHI_FLAGSHIP_SURPRISE]));
-      return [NIDHI_FLAGSHIP_SURPRISE];
-    }
+    if (!raw) return [];
     const parsed = JSON.parse(raw);
-    if (!parsed.some((s: SurpriseData) => s.slug === "birthday-nidhi")) {
-      parsed.unshift(NIDHI_FLAGSHIP_SURPRISE);
-    }
-    return parsed;
+    if (!Array.isArray(parsed)) return [];
+    // Only return surprises actually created by the user (no demo/flagship presets)
+    return parsed.filter(
+      (s: SurpriseData) =>
+        s &&
+        s.id !== "flagship-birthday-nidhi" &&
+        s.slug !== "birthday-nidhi"
+    );
   } catch {
-    return [NIDHI_FLAGSHIP_SURPRISE];
+    return [];
   }
 }
 
@@ -66,18 +67,25 @@ function saveLocalSurprise(surprise: SurpriseData) {
   }
 }
 
-export async function saveSurprise(surprise: SurpriseData): Promise<string> {
+export async function saveSurprise(surprise: SurpriseData, userId?: string): Promise<string> {
   // Always save to local storage as fallback and immediate cache
   saveLocalSurprise(surprise);
 
   if (isSupabaseConfigured && supabase) {
     try {
+      let uid = userId;
+      if (!uid) {
+        const { data: { session } } = await supabase.auth.getSession();
+        uid = session?.user?.id;
+      }
+
       await supabase.from("surprises").upsert({
         id: surprise.id,
         slug: surprise.slug,
         template_id: surprise.templateId,
         recipient_name: surprise.recipientName,
         sender_name: surprise.senderName,
+        user_id: uid || null,
         data: surprise,
         created_at: surprise.createdAt,
       });
@@ -168,21 +176,31 @@ export async function getSurpriseBySlug(slug: string): Promise<SurpriseData | nu
 }
 
 export async function getUserSurprises(userId?: string): Promise<SurpriseData[]> {
-  const localList = getLocalSurprises();
-  if (isSupabaseConfigured && supabase && userId) {
+  if (isSupabaseConfigured && supabase) {
     try {
-      const { data } = await supabase
-        .from("surprises")
-        .select("data")
-        .eq("user_id", userId);
-      if (data && data.length > 0) {
-        return data.map((d) => d.data as SurpriseData);
+      let targetUid = userId;
+      if (!targetUid) {
+        const { data: { session } } = await supabase.auth.getSession();
+        targetUid = session?.user?.id;
+      }
+
+      if (targetUid) {
+        const { data, error } = await supabase
+          .from("surprises")
+          .select("data")
+          .eq("user_id", targetUid);
+
+        if (!error && data) {
+          return data.map((d) => d.data as SurpriseData);
+        }
       }
     } catch {
       // Fallback
     }
   }
-  return localList;
+
+  // Fallback to local storage (which only contains surprises the user explicitly created)
+  return getLocalSurprises();
 }
 
 /**

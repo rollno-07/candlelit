@@ -30,14 +30,14 @@ export default function AuthPage() {
         if (res.error) {
           setError(res.error);
         } else {
-          router.push("/dashboard");
+          router.push("/");
         }
       } else {
         const res = await signupWithEmail(email, password, name);
         if (res.error) {
           setError(res.error);
         } else {
-          router.push("/dashboard");
+          router.push("/");
         }
       }
     } catch {
@@ -51,7 +51,7 @@ export default function AuthPage() {
     setIsSubmitting(true);
     try {
       await loginWithGoogle();
-      router.push("/dashboard");
+      router.push("/");
     } catch {
       setError("Failed to sign in with Google.");
     } finally {

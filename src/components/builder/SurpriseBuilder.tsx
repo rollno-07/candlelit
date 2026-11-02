@@ -120,7 +120,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
         userId: user?.id,
       };
 
-      const slug = await saveSurprise(surpriseData);
+      const slug = await saveSurprise(surpriseData, user?.id);
       setCreatedSlug(slug);
     } catch (e) {
       console.error(e);
