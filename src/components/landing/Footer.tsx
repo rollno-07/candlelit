@@ -25,7 +25,7 @@ export function Footer() {
 
   return (
     <>
-      <footer className="border-t border-[#e0a96d]/15 bg-[#0a0714] text-[#d1c4b9] pt-16 pb-12 px-4 sm:px-6">
+      <footer className="relative z-10 w-full border-t border-[#e0a96d]/15 bg-[#0a0714] text-[#d1c4b9] pt-16 pb-12 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           {/* Main 5-Column Grid */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 pb-12">
