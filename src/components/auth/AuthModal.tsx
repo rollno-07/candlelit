@@ -88,14 +88,14 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-md rounded-2xl glass-panel border border-[#e0a96d]/40 bg-[#120c20]/95 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.9)] p-6 sm:p-8 overflow-hidden z-10"
+          className="relative w-full max-w-md max-h-[92vh] overflow-y-auto no-scrollbar rounded-2xl glass-panel border border-[#e0a96d]/40 bg-[#120c20]/95 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.9)] p-5 sm:p-8 z-10"
         >
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-1.5 rounded-full text-[#a8998d] hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            className="absolute top-3.5 right-3.5 p-2 rounded-full text-[#a8998d] hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-[#ffbe53]" />
           </button>
 
           {/* Header */}
@@ -192,7 +192,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Alex"
-                    className="w-full bg-black/50 border border-white/15 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#ffbe53] transition-colors"
+                    className="w-full bg-black/50 border border-white/15 rounded-xl pl-9 pr-3 py-2.5 sm:py-2 text-base sm:text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#ffbe53] transition-colors"
                   />
                 </div>
               </div>
@@ -210,7 +210,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@domain.com"
-                  className="w-full bg-black/50 border border-white/15 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#ffbe53] transition-colors"
+                  className="w-full bg-black/50 border border-white/15 rounded-xl pl-9 pr-3 py-2.5 sm:py-2 text-base sm:text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#ffbe53] transition-colors"
                 />
               </div>
             </div>
@@ -227,7 +227,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-black/50 border border-white/15 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#ffbe53] transition-colors"
+                  className="w-full bg-black/50 border border-white/15 rounded-xl pl-9 pr-3 py-2.5 sm:py-2 text-base sm:text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#ffbe53] transition-colors"
                 />
               </div>
             </div>

@@ -41,12 +41,12 @@ export function TemplateGrid() {
         </p>
 
         {/* Category Filters */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+        <div className="mt-8 flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 sm:pb-0 px-1">
           {categories.map((c) => (
             <button
               key={c.id}
               onClick={() => setActiveCategory(c.id)}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 activeCategory === c.id
                   ? "bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] font-semibold shadow-[0_0_15px_rgba(255,190,83,0.4)]"
                   : "glass-panel border border-white/10 text-[#d1c4b9] hover:text-white hover:border-[#ffbe53]/40"
@@ -88,8 +88,8 @@ export function TemplateGrid() {
               </div>
 
               {/* Content Info */}
-              <div className="p-6">
-                <h3 className="font-serif text-2xl text-white font-medium group-hover:text-[#ffbe53] transition-colors">
+              <div className="p-5 sm:p-6">
+                <h3 className="font-serif text-xl sm:text-2xl text-white font-medium group-hover:text-[#ffbe53] transition-colors">
                   {template.title}
                 </h3>
                 <p className="mt-2 text-xs text-[#a8998d] leading-relaxed line-clamp-2">
@@ -101,7 +101,7 @@ export function TemplateGrid() {
                   <span className="text-[10px] uppercase tracking-wider text-[#ffbe53] font-semibold block">
                     4-Act Journey:
                   </span>
-                  <div className="grid grid-cols-2 gap-1.5 text-[11px] text-[#d1c4b9]">
+                  <div className="grid grid-cols-1 xs:grid-cols-2 gap-1.5 text-[11px] text-[#d1c4b9]">
                     {template.acts.map((act) => (
                       <span key={act.actNumber} className="truncate flex items-center gap-1">
                         <span className="text-[#ffbe53] font-bold">Act {act.actNumber}:</span>
@@ -114,7 +114,7 @@ export function TemplateGrid() {
             </div>
 
             {/* Bottom Actions */}
-            <div className="p-6 pt-0 flex items-center gap-3">
+            <div className="p-5 sm:p-6 pt-0 flex items-center gap-2.5 sm:gap-3">
               <Link
                 href={`/create/${template.id}`}
                 className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-semibold tracking-wide shadow-[0_0_15px_rgba(255,190,83,0.25)] hover:shadow-[0_0_25px_rgba(255,190,83,0.45)] transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"

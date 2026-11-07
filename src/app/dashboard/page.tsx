@@ -69,7 +69,7 @@ export default function DashboardPage() {
 
           <Link
             href="/templates"
-            className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs font-semibold tracking-wide flex items-center gap-2 shadow-lg hover:shadow-xl transition-all cursor-pointer active:scale-95 w-fit"
+            className="w-full sm:w-fit px-5 py-2.5 rounded-full bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs font-semibold tracking-wide flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all cursor-pointer active:scale-95"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Create New Surprise</span>
@@ -82,7 +82,7 @@ export default function DashboardPage() {
             Loading your surprises...
           </div>
         ) : surprises.length === 0 ? (
-          <div className="py-16 text-center rounded-3xl glass-panel border border-[#e0a96d]/20 p-8 max-w-md mx-auto">
+          <div className="py-16 text-center rounded-3xl glass-panel border border-[#e0a96d]/20 p-6 sm:p-8 max-w-md mx-auto">
             <span className="text-4xl block mb-3">🕯️</span>
             <h3 className="font-serif text-xl text-white mb-2">No surprises yet</h3>
             <p className="text-xs text-[#a8998d] mb-6">
@@ -101,7 +101,7 @@ export default function DashboardPage() {
             {surprises.map((s) => (
               <div
                 key={s.id}
-                className="rounded-2xl glass-panel border border-[#e0a96d]/30 bg-[#120c20]/80 p-6 flex flex-col justify-between shadow-xl hover:border-[#ffbe53]/60 transition-all"
+                className="rounded-2xl glass-panel border border-[#e0a96d]/30 bg-[#120c20]/80 p-5 sm:p-6 flex flex-col justify-between shadow-xl hover:border-[#ffbe53]/60 transition-all"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
