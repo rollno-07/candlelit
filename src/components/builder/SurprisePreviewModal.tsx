@@ -70,6 +70,21 @@ export function SurprisePreviewModal({
     }
   }, [isOpen, musicUrl]);
 
+  // Ensure music is immediately stopped whenever modal closes or unmounts
+  useEffect(() => {
+    if (!isOpen) {
+      soundManager.stopBGM();
+    }
+    return () => {
+      soundManager.stopBGM();
+    };
+  }, [isOpen]);
+
+  const handleClose = () => {
+    soundManager.stopBGM();
+    onClose();
+  };
+
   const acts = [
     { num: 1 as ActNumber, label: "Act 1: Invitation", icon: Mail },
     { num: 2 as ActNumber, label: "Act 2: Memories", icon: PartyPopper },
@@ -95,13 +110,13 @@ export function SurprisePreviewModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute inset-0 bg-black/95 backdrop-blur-md"
         />
 
         {/* Unmissable Viewport-Level Return Button */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="fixed top-3 left-3 sm:top-4 sm:left-4 z-[100000] flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#180e2a] hover:bg-[#251540] border-2 border-[#ffbe53] text-[#ffbe53] hover:text-white text-xs sm:text-sm font-bold shadow-[0_4px_24px_rgba(0,0,0,0.95),0_0_20px_rgba(255,190,83,0.5)] backdrop-blur-xl active:scale-95 transition-all cursor-pointer"
           title="Return to Checkout"
         >
@@ -169,7 +184,7 @@ export function SurprisePreviewModal({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => {
-                  onClose();
+                  handleClose();
                   onProceedToPay();
                 }}
                 className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-bold shadow-[0_0_20px_rgba(255,190,83,0.35)] hover:shadow-[0_0_30px_rgba(255,190,83,0.5)] cursor-pointer active:scale-95 transition-all"
@@ -179,7 +194,7 @@ export function SurprisePreviewModal({
               </button>
 
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="p-2 rounded-full text-[#a8998d] hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                 title="Close Preview"
                 aria-label="Close preview"
@@ -351,7 +366,7 @@ export function SurprisePreviewModal({
             {/* Launch CTA */}
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="w-1/2 sm:w-auto px-5 py-2.5 rounded-full border border-[#e0a96d]/40 bg-black/50 hover:bg-[#ffbe53]/10 text-xs font-semibold text-[#ffbe53] hover:text-white flex items-center justify-center gap-1.5 cursor-pointer transition-colors active:scale-95 shadow-sm"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
@@ -360,7 +375,7 @@ export function SurprisePreviewModal({
 
               <button
                 onClick={() => {
-                  onClose();
+                  handleClose();
                   onProceedToPay();
                 }}
                 className="w-1/2 sm:w-auto px-6 py-2.5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-bold shadow-[0_0_20px_rgba(255,190,83,0.4)] hover:shadow-[0_0_30px_rgba(255,190,83,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all"

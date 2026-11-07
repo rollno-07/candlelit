@@ -104,6 +104,14 @@ class SoundManager {
   public unlockAudio() {
     this.initContext();
 
+    if (this.bgmGainNode && this.ctx) {
+      const targetVolume = this.isMuted ? 0.0001 : 0.14;
+      try {
+        this.bgmGainNode.gain.cancelScheduledValues(this.ctx.currentTime);
+        this.bgmGainNode.gain.setValueAtTime(targetVolume, this.ctx.currentTime);
+      } catch (e) {}
+    }
+
     if (this.customTrackUrl && this.customAudio) {
       this.isBgmPlaying = true;
       this.customAudio.volume = this.isMuted ? 0 : 0.5;
@@ -121,6 +129,37 @@ class SoundManager {
 
   public playBGM() {
     this.unlockAudio();
+  }
+
+  /**
+   * Stop background music playback completely (both synthesizer loop and custom audio)
+   */
+  public stopBGM() {
+    this.isBgmPlaying = false;
+
+    // 1. Clear ambient synthesizer loop interval
+    if (this.melodyIntervalId) {
+      clearInterval(this.melodyIntervalId);
+      this.melodyIntervalId = null;
+    }
+
+    // 2. Pause and reset custom audio
+    if (this.customAudio) {
+      try {
+        this.customAudio.pause();
+        this.customAudio.currentTime = 0;
+      } catch (e) {}
+    }
+
+    // 3. Immediately silence master BGM gain node
+    if (this.bgmGainNode && this.ctx) {
+      try {
+        this.bgmGainNode.gain.cancelScheduledValues(this.ctx.currentTime);
+        this.bgmGainNode.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+      } catch (e) {}
+    }
+
+    this.notify();
   }
 
   public toggleMute(): boolean {
@@ -165,6 +204,13 @@ class SoundManager {
     if (this.melodyIntervalId || typeof window === "undefined") return;
 
     this.isBgmPlaying = true;
+    if (this.bgmGainNode && this.ctx) {
+      const targetVolume = this.isMuted ? 0.0001 : 0.14;
+      try {
+        this.bgmGainNode.gain.cancelScheduledValues(this.ctx.currentTime);
+        this.bgmGainNode.gain.setValueAtTime(targetVolume, this.ctx.currentTime);
+      } catch (e) {}
+    }
     this.notify();
 
     // 4-Bar Romantic Chord Progression (Dmaj9 -> Bm7 -> Gmaj7 -> A7sus4)

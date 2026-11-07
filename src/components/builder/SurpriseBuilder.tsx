@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -73,6 +73,32 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
   const [isPlayingCustomAudio, setIsPlayingCustomAudio] = useState(false);
   const previewAudioRef = React.useRef<HTMLAudioElement | null>(null);
 
+  // Clean up any playing audio when entering or leaving checkout
+  useEffect(() => {
+    soundManager.stopBGM();
+    return () => {
+      soundManager.stopBGM();
+      if (previewAudioRef.current) {
+        previewAudioRef.current.pause();
+      }
+    };
+  }, []);
+
+  const handleOpenDemo = () => {
+    if (previewAudioRef.current) {
+      previewAudioRef.current.pause();
+      setIsPlayingCustomAudio(false);
+    }
+    soundManager.unlockAudio();
+    setShowPreviewModal(true);
+  };
+
+  const handleCloseDemo = () => {
+    soundManager.stopBGM();
+    setShowPreviewModal(false);
+    setCurrentStep(4);
+  };
+
   const handleAudioFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -119,6 +145,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
       previewAudioRef.current.pause();
       setIsPlayingCustomAudio(false);
     } else {
+      soundManager.stopBGM();
       previewAudioRef.current.play().catch(() => {});
       setIsPlayingCustomAudio(true);
     }
@@ -248,10 +275,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => {
-                soundManager.unlockAudio();
-                setShowPreviewModal(true);
-              }}
+              onClick={handleOpenDemo}
               className="px-3.5 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-[#ffbe53] text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-colors shadow"
               title="Test Demo Preview of your craft"
             >
@@ -776,10 +800,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                   <button
                     type="button"
-                    onClick={() => {
-                      soundManager.unlockAudio();
-                      setShowPreviewModal(true);
-                    }}
+                    onClick={handleOpenDemo}
                     className="w-full sm:w-auto px-5 py-3.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-[#ffbe53] text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-colors active:scale-95"
                   >
                     <Eye className="w-3.5 h-3.5 text-[#ffbe53]" />
@@ -804,10 +825,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
       {/* Test Demo / Surprise Craft Preview Modal over Checkout */}
       <SurprisePreviewModal
         isOpen={showPreviewModal}
-        onClose={() => {
-          setShowPreviewModal(false);
-          setCurrentStep(4);
-        }}
+        onClose={handleCloseDemo}
         recipientName={recipientName}
         senderName={senderName}
         templateId={template.id}

@@ -10,7 +10,7 @@ import { getUserSurprises, formatSurpriseShareUrl, formatSurpriseWebUrl } from "
 import { SurpriseData } from "@/types/candlelit";
 import { Sparkles, PlusCircle, ExternalLink, Copy, Check, Share2, Heart } from "lucide-react";
 
-export function DashboardPage() {
+export default function DashboardPage() {
   const { user } = useAuth();
   const [surprises, setSurprises] = useState<SurpriseData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -170,4 +170,4 @@ export function DashboardPage() {
   );
 }
 
-export default DashboardPage;
+

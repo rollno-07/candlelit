@@ -87,6 +87,7 @@ function ExperienceContent() {
       window.removeEventListener("touchstart", handleFirstInteraction);
       window.removeEventListener("click", handleFirstInteraction);
       window.removeEventListener("keydown", handleFirstInteraction);
+      soundManager.stopBGM();
     };
   }, []);
 
@@ -144,6 +145,9 @@ function ExperienceContent() {
       <div className="fixed top-4 left-4 z-50">
         <Link
           href={`/create/${surprise?.templateId || "birthday-surprise"}`}
+          onClick={() => {
+            soundManager.stopBGM();
+          }}
           className="px-3.5 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-lg bg-black/70 backdrop-blur-md active:scale-95"
         >
           <ArrowLeft className="w-3.5 h-3.5 text-[#ffbe53]" />
