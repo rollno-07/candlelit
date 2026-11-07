@@ -35,7 +35,7 @@ export function MusicPlayer() {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.8, duration: 0.5 }}
       onClick={handleToggle}
-      className="fixed bottom-5 right-5 z-50 w-12 h-12 flex items-center justify-center rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53]/80 bg-[#120c20]/80 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.5)] hover:shadow-[0_0_20px_rgba(255,190,83,0.35)] transition-all duration-300 cursor-pointer active:scale-90 group"
+      className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-3 sm:right-5 z-40 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53]/80 bg-[#120c20]/90 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.5)] hover:shadow-[0_0_20px_rgba(255,190,83,0.35)] transition-all duration-300 cursor-pointer active:scale-90 group"
       aria-label={isSilenced ? "Unmute background music" : "Mute background music"}
       title={isSilenced ? "Unmute Music" : "Mute Music"}
     >

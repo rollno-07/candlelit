@@ -49,7 +49,7 @@ export function Scene3Ceremony({
 
   // Route to the appropriate custom ritual for each template
   return (
-    <div className="relative z-10 w-full h-full min-h-[500px] flex flex-col items-center justify-center px-4 py-4 sm:py-6 overflow-hidden">
+    <div className="relative z-10 w-full h-full min-h-[460px] flex flex-col items-center justify-center px-3.5 sm:px-4 py-3 sm:py-6 overflow-hidden">
       {templateId === "propose" && (
         <ProposalCeremony
           recipientName={recipientName}

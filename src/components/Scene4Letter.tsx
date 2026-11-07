@@ -258,7 +258,7 @@ export function Scene4Letter({
           {/* AUTO-SCROLLING TEXT BODY (Sticks in screen, autoscrolls up smoothly, hidden scrollbar) */}
           <div
             ref={scrollContainerRef}
-            className="h-[46vh] sm:h-[48vh] md:h-[50vh] overflow-y-auto no-scrollbar px-5 sm:px-6 py-5 font-serif text-base sm:text-lg text-[#ffffff] leading-relaxed whitespace-pre-line tracking-wide scroll-smooth [text-shadow:_0_1px_3px_rgb(0_0_0_/_95%),_0_2px_8px_rgb(0_0_0_/_90%),_0_0_15px_rgb(0_0_0_/_80%)]"
+            className="h-[38vh] xs:h-[42vh] sm:h-[48vh] md:h-[50vh] overflow-y-auto no-scrollbar px-4 sm:px-6 py-4 sm:py-5 font-serif text-sm sm:text-base md:text-lg text-[#ffffff] leading-relaxed whitespace-pre-line tracking-wide scroll-smooth [text-shadow:_0_1px_3px_rgb(0_0_0_/_95%),_0_2px_8px_rgb(0_0_0_/_90%),_0_0_15px_rgb(0_0_0_/_80%)]"
             style={{
               scrollBehavior: "smooth",
               scrollbarWidth: "none",
@@ -279,7 +279,7 @@ export function Scene4Letter({
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="mt-6 pt-5 border-t border-[#e0a96d]/25 flex items-center justify-between"
+                className="mt-5 sm:mt-6 pt-4 sm:pt-5 border-t border-[#e0a96d]/25 flex items-center justify-between"
               >
                 <div className="flex items-center gap-2 text-xs text-[#ffe8d6] drop-shadow">
                   <CheckCircle2 className="w-4 h-4 text-[#ffbe53]" />
@@ -294,7 +294,7 @@ export function Scene4Letter({
 
           {/* Skip Button (Shown while typing) */}
           {!isTypingComplete && (
-            <div className="px-5 py-2 bg-black/30 border-t border-[#e0a96d]/20 flex items-center justify-between">
+            <div className="px-4 sm:px-5 py-2 bg-black/40 border-t border-[#e0a96d]/20 flex items-center justify-between">
               <span className="text-[11px] text-[#ffe8d6]/90 italic drop-shadow">Streaming letter...</span>
               <button
                 onClick={handleSkipTyping}
@@ -311,11 +311,11 @@ export function Scene4Letter({
       <div className="relative z-20 w-full max-w-md flex flex-col gap-2 items-center text-center shrink-0 pb-1">
         <button
           onClick={handlePlayVoiceNote}
-          className="w-full py-3 px-5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] font-medium text-xs sm:text-sm tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.4)] hover:shadow-[0_0_35px_rgba(255,190,83,0.7)] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+          className="w-full py-3 px-5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] font-semibold text-xs sm:text-sm tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.4)] hover:shadow-[0_0_35px_rgba(255,190,83,0.7)] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer active:scale-98"
         >
           <Volume2 className="w-4 h-4 fill-current" />
           <span>
-            {isPlayingVoiceNote ? "Playing Special Birthday Wish... ✨" : "A Special Birthday Whisper For You 💌"}
+            {isPlayingVoiceNote ? "Playing Special Whisper... ✨" : "A Special Whisper For You 💌"}
           </span>
         </button>
 
@@ -327,7 +327,7 @@ export function Scene4Letter({
           className="inline-flex items-center gap-1.5 text-xs text-[#a8998d] hover:text-[#ffe8d6] transition-colors py-1 cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5" />
-          <span>Relive the Birthday Journey From Act 1</span>
+          <span>Relive the Celebration From Act 1</span>
         </button>
       </div>
     </div>

@@ -142,13 +142,13 @@ function ExperienceContent() {
       <MusicPlayer />
 
       {/* Floating Back to Checkout button */}
-      <div className="fixed top-4 left-4 z-50">
+      <div className="fixed top-[max(0.75rem,env(safe-area-inset-top))] left-3 sm:left-4 z-50">
         <Link
           href={`/create/${surprise?.templateId || "birthday-surprise"}`}
           onClick={() => {
             soundManager.stopBGM();
           }}
-          className="px-3.5 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-lg bg-black/70 backdrop-blur-md active:scale-95"
+          className="px-3 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-lg bg-black/75 backdrop-blur-md active:scale-95"
         >
           <ArrowLeft className="w-3.5 h-3.5 text-[#ffbe53]" />
           <span>Back to Checkout</span>
@@ -238,7 +238,7 @@ function ExperienceContent() {
       {maxUnlockedAct > 1 && (
         <nav
           aria-label="Experience scenes"
-          className="relative z-30 w-full max-w-xs mx-auto pb-5 px-4 flex items-center justify-center gap-2"
+          className="relative z-30 w-full max-w-xs mx-auto pb-[max(1.25rem,env(safe-area-inset-bottom))] px-4 flex items-center justify-center gap-2"
         >
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass-panel border border-[#e0a96d]/25 shadow-lg">
             {ACTS_META.map((act) => {

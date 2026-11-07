@@ -253,14 +253,14 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0714] text-[#fdf8f4] pt-24 pb-16 px-4 sm:px-6">
+    <div className="min-h-screen bg-[#0a0714] text-[#fdf8f4] pt-20 sm:pt-24 pb-12 sm:pb-16 px-3.5 sm:px-6">
       <div className="max-w-4xl mx-auto">
         {/* Top Breadcrumb & Template Title */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[#e0a96d]/20">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8 pb-5 sm:pb-6 border-b border-[#e0a96d]/20">
           <div>
             <Link
               href="/templates"
-              className="inline-flex items-center gap-1.5 text-xs text-[#a8998d] hover:text-[#ffbe53] transition-colors mb-2"
+              className="inline-flex items-center gap-1.5 text-xs text-[#a8998d] hover:text-[#ffbe53] transition-colors mb-1.5"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to all templates</span>
@@ -276,7 +276,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
             <button
               type="button"
               onClick={handleOpenDemo}
-              className="px-3.5 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-[#ffbe53] text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-colors shadow"
+              className="px-3.5 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-[#ffbe53] text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm active:scale-95"
               title="Test Demo Preview of your craft"
             >
               <Eye className="w-3.5 h-3.5 text-[#ffbe53]" />
@@ -292,34 +292,58 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
         </div>
 
         {/* Step Indicator Tabs */}
-        <div className="grid grid-cols-4 gap-2 mb-8">
-          {[
-            { num: 1, label: "1. Details" },
-            { num: 2, label: "2. Memories" },
-            { num: 3, label: "3. Letter" },
-            { num: 4, label: "4. Music" },
-          ].map((tab) => (
-            <button
-              key={tab.num}
-              onClick={() => setCurrentStep(tab.num as any)}
-              className={`py-2.5 px-3 rounded-xl text-xs font-medium transition-all cursor-pointer text-center truncate ${
-                currentStep === tab.num
-                  ? "bg-gradient-to-r from-[#e0a96d]/30 to-[#ffbe53]/30 text-[#ffbe53] border border-[#ffbe53]/50 shadow-md"
-                  : "bg-white/5 border border-white/5 text-[#a8998d] hover:text-white"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        <div className="mb-6 sm:mb-8">
+          {/* Mobile Step Status Label */}
+          <div className="flex sm:hidden items-center justify-between px-1 mb-2">
+            <div className="flex items-center gap-1.5 text-xs text-[#ffbe53] font-medium">
+              <span className="w-2 h-2 rounded-full bg-[#ffbe53] animate-pulse" />
+              <span>Step {currentStep} of 4:</span>
+              <span className="text-white font-semibold">
+                {currentStep === 1 && "Details"}
+                {currentStep === 2 && "Memories & Photos"}
+                {currentStep === 3 && "Love Letter"}
+                {currentStep === 4 && "Music & Checkout"}
+              </span>
+            </div>
+            <span className="text-[10px] text-[#a8998d] font-mono">
+              {Math.round((currentStep / 4) * 100)}%
+            </span>
+          </div>
+
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+            {[
+              { num: 1, label: "Details" },
+              { num: 2, label: "Memories" },
+              { num: 3, label: "Letter" },
+              { num: 4, label: "Music" },
+            ].map((tab) => (
+              <button
+                key={tab.num}
+                onClick={() => setCurrentStep(tab.num as any)}
+                className={`py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl text-xs font-medium transition-all cursor-pointer text-center flex items-center justify-center gap-1.5 ${
+                  currentStep === tab.num
+                    ? "bg-gradient-to-r from-[#e0a96d]/30 to-[#ffbe53]/30 text-[#ffbe53] border border-[#ffbe53]/50 shadow-md font-semibold"
+                    : currentStep > tab.num
+                    ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-300"
+                    : "bg-white/5 border border-white/5 text-[#a8998d] hover:text-white"
+                }`}
+              >
+                <span className="w-4 h-4 rounded-full bg-black/40 text-[10px] flex items-center justify-center shrink-0">
+                  {currentStep > tab.num ? "✓" : tab.num}
+                </span>
+                <span className="hidden sm:inline">{tab.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Form Container */}
-        <div className="rounded-3xl glass-panel border border-[#e0a96d]/30 bg-[#120c20]/80 backdrop-blur-xl p-6 sm:p-8 shadow-2xl">
+        <div className="rounded-2xl sm:rounded-3xl glass-panel border border-[#e0a96d]/30 bg-[#120c20]/80 backdrop-blur-xl p-4 sm:p-6 md:p-8 shadow-2xl">
           {/* STEP 1: BASIC DETAILS */}
           {currentStep === 1 && (
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               <div>
-                <h3 className="font-serif text-xl text-white font-medium mb-1">
+                <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-1">
                   1. Who is this special surprise for?
                 </h3>
                 <p className="text-xs text-[#a8998d]">
@@ -338,7 +362,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                     value={recipientName}
                     onChange={(e) => setRecipientName(e.target.value)}
                     placeholder="e.g. Sophia"
-                    className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#ffbe53] transition-colors"
+                    className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-3.5 sm:px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#ffbe53] transition-colors"
                   />
                 </div>
 
@@ -351,7 +375,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                     value={senderName}
                     onChange={(e) => setSenderName(e.target.value)}
                     placeholder="e.g. Alex"
-                    className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#ffbe53] transition-colors"
+                    className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-3.5 sm:px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#ffbe53] transition-colors"
                   />
                 </div>
               </div>
@@ -365,7 +389,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                   <select
                     value={subtype}
                     onChange={(e) => setSubtype(e.target.value)}
-                    className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#ffbe53]"
+                    className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#ffbe53]"
                   >
                     {template.options.subtypes.map((sub) => (
                       <option key={sub} value={sub} className="bg-[#120c20]">
@@ -384,7 +408,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                   <select
                     value={subtype}
                     onChange={(e) => setSubtype(e.target.value)}
-                    className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#ffbe53]"
+                    className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-3.5 sm:px-4 py-3 text-sm text-white focus:outline-none focus:border-[#ffbe53]"
                   >
                     {template.options.days.map((day) => (
                       <option key={day} value={day} className="bg-[#120c20]">
@@ -404,14 +428,14 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                   value={cakeOrObjectMessage}
                   onChange={(e) => setCakeOrObjectMessage(e.target.value)}
                   placeholder={`e.g. Happy Birthday ${recipientName || "Sophia"}`}
-                  className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#ffbe53] transition-colors"
+                  className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-3.5 sm:px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#ffbe53] transition-colors"
                 />
               </div>
 
-              <div className="pt-4 flex justify-end">
+              <div className="pt-3 sm:pt-4 flex flex-col sm:flex-row justify-end">
                 <button
                   onClick={() => setCurrentStep(2)}
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs font-semibold tracking-wide flex items-center gap-2 cursor-pointer shadow-lg active:scale-95"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs sm:text-sm font-semibold tracking-wide flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-all"
                 >
                   <span>Next: Add Memories & Photos</span>
                   <ArrowRight className="w-4 h-4" />
@@ -422,10 +446,10 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
 
           {/* STEP 2: MEMORIES & PHOTOS */}
           {currentStep === 2 && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
+            <div className="space-y-5 sm:space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
-                  <h3 className="font-serif text-xl text-white font-medium mb-1">
+                  <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-1">
                     2. Cherished Memories & Photos
                   </h3>
                   <p className="text-xs text-[#a8998d]">
@@ -434,26 +458,44 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 </div>
                 <button
                   onClick={handleAddPhoto}
-                  className="px-3.5 py-1.5 rounded-full bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-medium text-[#ffbe53] flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+                  className="w-full sm:w-auto px-4 py-2 rounded-full bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-semibold text-[#ffbe53] flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all shrink-0"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Photo</span>
                 </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 {photos.map((photo, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col sm:flex-row items-center gap-4"
+                    className="p-3.5 sm:p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col sm:flex-row items-start sm:items-center gap-3.5"
                   >
-                    <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-black shrink-0 border border-white/10">
-                      <Image
-                        src={photo.url}
-                        alt={`Photo ${idx + 1}`}
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="flex items-center justify-between w-full sm:w-auto gap-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-black shrink-0 border border-white/15">
+                          <Image
+                            src={photo.url}
+                            alt={`Photo ${idx + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="sm:hidden text-xs text-[#d1c4b9]">
+                          <span className="font-semibold text-white block">Memory #{idx + 1}</span>
+                          <span className="text-[11px] text-[#a8998d]">Balloon reveal</span>
+                        </div>
+                      </div>
+
+                      {photos.length > 1 && (
+                        <button
+                          onClick={() => handleRemovePhoto(idx)}
+                          className="sm:hidden p-2 rounded-lg text-[#ff7b90] hover:bg-[#ff7b90]/10 transition-colors cursor-pointer"
+                          title="Remove photo"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
 
                     <div className="flex-1 w-full space-y-2">
@@ -462,21 +504,21 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                         value={photo.url}
                         onChange={(e) => handleUpdatePhoto(idx, "url", e.target.value)}
                         placeholder="Image URL or preset path"
-                        className="w-full bg-black/60 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#ffbe53]"
+                        className="w-full bg-black/60 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#ffbe53]"
                       />
                       <input
                         type="text"
                         value={photo.caption}
                         onChange={(e) => handleUpdatePhoto(idx, "caption", e.target.value)}
                         placeholder="Sweet caption (e.g. Under the stars with you ✨)"
-                        className="w-full bg-black/60 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-[#ffbe53] placeholder-white/30 focus:outline-none focus:border-[#ffbe53]"
+                        className="w-full bg-black/60 border border-white/10 rounded-lg px-3 py-2 text-xs text-[#ffbe53] placeholder-white/30 focus:outline-none focus:border-[#ffbe53]"
                       />
                     </div>
 
                     {photos.length > 1 && (
                       <button
                         onClick={() => handleRemovePhoto(idx)}
-                        className="p-2 rounded-lg text-[#ff7b90] hover:bg-[#ff7b90]/10 transition-colors shrink-0 cursor-pointer"
+                        className="hidden sm:block p-2 rounded-lg text-[#ff7b90] hover:bg-[#ff7b90]/10 transition-colors shrink-0 cursor-pointer"
                         title="Remove photo"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -486,16 +528,16 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 ))}
               </div>
 
-              <div className="pt-4 flex items-center justify-between">
+              <div className="pt-3 sm:pt-4 flex flex-col-reverse sm:flex-row items-center justify-between gap-3">
                 <button
                   onClick={() => setCurrentStep(1)}
-                  className="px-5 py-2.5 rounded-full glass-panel border border-white/10 text-xs text-[#d1c4b9] hover:text-white cursor-pointer"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-full glass-panel border border-white/10 text-xs text-[#d1c4b9] hover:text-white cursor-pointer text-center"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => setCurrentStep(3)}
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs font-semibold tracking-wide flex items-center gap-2 cursor-pointer shadow-lg active:scale-95"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs sm:text-sm font-semibold tracking-wide flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-all"
                 >
                   <span>Next: Write Love Letter</span>
                   <ArrowRight className="w-4 h-4" />
@@ -506,10 +548,10 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
 
           {/* STEP 3: THE LOVE LETTER */}
           {currentStep === 3 && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
+            <div className="space-y-5 sm:space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
-                  <h3 className="font-serif text-xl text-white font-medium mb-1">
+                  <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-1">
                     3. The Streaming Love Letter
                   </h3>
                   <p className="text-xs text-[#a8998d]">
@@ -518,7 +560,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 </div>
                 <button
                   onClick={handleAddParagraph}
-                  className="px-3.5 py-1.5 rounded-full bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-medium text-[#ffbe53] flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+                  className="w-full sm:w-auto px-4 py-2 rounded-full bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-semibold text-[#ffbe53] flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all shrink-0"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Paragraph</span>
@@ -533,12 +575,12 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                       value={para}
                       onChange={(e) => handleUpdateParagraph(idx, e.target.value)}
                       placeholder={`Paragraph ${idx + 1}...`}
-                      className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-2xl p-4 text-xs sm:text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#ffbe53] transition-colors resize-y leading-relaxed"
+                      className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-2xl p-3.5 sm:p-4 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#ffbe53] transition-colors resize-y leading-relaxed pr-10"
                     />
                     {letterParagraphs.length > 1 && (
                       <button
                         onClick={() => handleRemoveParagraph(idx)}
-                        className="absolute top-3 right-3 p-1 rounded-md text-[#a8998d] hover:text-[#ff7b90] transition-colors cursor-pointer"
+                        className="absolute top-3 right-3 p-1.5 rounded-lg text-[#a8998d] hover:text-[#ff7b90] hover:bg-white/5 transition-colors cursor-pointer"
                         title="Delete paragraph"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -548,16 +590,16 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 ))}
               </div>
 
-              <div className="pt-4 flex items-center justify-between">
+              <div className="pt-3 sm:pt-4 flex flex-col-reverse sm:flex-row items-center justify-between gap-3">
                 <button
                   onClick={() => setCurrentStep(2)}
-                  className="px-5 py-2.5 rounded-full glass-panel border border-white/10 text-xs text-[#d1c4b9] hover:text-white cursor-pointer"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-full glass-panel border border-white/10 text-xs text-[#d1c4b9] hover:text-white cursor-pointer text-center"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => setCurrentStep(4)}
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs font-semibold tracking-wide flex items-center gap-2 cursor-pointer shadow-lg active:scale-95"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs sm:text-sm font-semibold tracking-wide flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-all"
                 >
                   <span>Next: Choose Music & Finish</span>
                   <ArrowRight className="w-4 h-4" />
@@ -568,9 +610,9 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
 
           {/* STEP 4: MUSIC & PUBLISH */}
           {currentStep === 4 && (
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               <div>
-                <h3 className="font-serif text-xl text-white font-medium mb-1">
+                <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-1">
                   4. Background Music & Theme
                 </h3>
                 <p className="text-xs text-[#a8998d]">
@@ -579,16 +621,16 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
               </div>
 
               {/* OPTION 1: USER CUSTOM MUSIC UPLOAD */}
-              <div className="p-4 sm:p-5 rounded-2xl border-2 border-dashed border-[#ffbe53]/40 bg-[#160d26]/70 hover:border-[#ffbe53] transition-colors relative overflow-hidden group">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-11 h-11 rounded-2xl bg-[#ffbe53]/15 border border-[#ffbe53]/40 flex items-center justify-center text-[#ffbe53] shrink-0 shadow-md">
-                      <Upload className="w-5 h-5 animate-pulse" />
+              <div className="p-3.5 sm:p-5 rounded-2xl border-2 border-dashed border-[#ffbe53]/40 bg-[#160d26]/70 hover:border-[#ffbe53] transition-colors relative overflow-hidden group">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#ffbe53]/15 border border-[#ffbe53]/40 flex items-center justify-center text-[#ffbe53] shrink-0 shadow-md">
+                      <Upload className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-white">
-                          Upload Your Own Audio / Song
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-xs sm:text-sm font-semibold text-white">
+                          Upload Custom Song
                         </span>
                         {customAudioInfo && (
                           <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-emerald-500/30">
@@ -596,10 +638,10 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] text-[#a8998d] mt-0.5">
+                      <p className="text-[11px] text-[#a8998d] mt-0.5 truncate max-w-[200px] sm:max-w-xs">
                         {customAudioInfo
                           ? `${customAudioInfo.name} (${customAudioInfo.sizeFormatted})`
-                          : "Upload any MP3, WAV, or M4A song from your device (Max 15MB)"}
+                          : "Upload MP3, WAV, or M4A (Max 15MB)"}
                       </p>
                     </div>
                   </div>
@@ -609,17 +651,17 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                       <button
                         type="button"
                         onClick={togglePreviewAudio}
-                        className="flex-1 sm:flex-initial px-4 py-2 rounded-full bg-black/60 hover:bg-black border border-[#ffbe53]/50 text-xs font-semibold text-[#ffbe53] hover:text-white flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm active:scale-95"
+                        className="flex-1 sm:flex-initial px-3.5 py-2 rounded-full bg-black/60 hover:bg-black border border-[#ffbe53]/50 text-xs font-semibold text-[#ffbe53] hover:text-white flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm active:scale-95"
                       >
                         {isPlayingCustomAudio ? (
                           <>
                             <Pause className="w-3.5 h-3.5 fill-current" />
-                            <span>Pause Preview</span>
+                            <span>Pause</span>
                           </>
                         ) : (
                           <>
                             <Play className="w-3.5 h-3.5 fill-current" />
-                            <span>Test Play</span>
+                            <span>Preview</span>
                           </>
                         )}
                       </button>
@@ -639,7 +681,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 </div>
 
                 {isUploadingAudio && (
-                  <div className="mt-3 flex items-center gap-2 text-xs text-[#ffbe53]">
+                  <div className="mt-2.5 flex items-center gap-2 text-xs text-[#ffbe53]">
                     <div className="w-3 h-3 rounded-full border-2 border-t-transparent border-[#ffbe53] animate-spin" />
                     <span>Processing audio file...</span>
                   </div>
@@ -651,7 +693,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 <span className="text-[11px] font-mono uppercase tracking-wider text-[#a8998d] mb-2.5 block">
                   Or Choose A Handcrafted Preset Melody:
                 </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                   {[
                     {
                       title: "Romantic Ambient Piano & Music Box (Low Volume)",
@@ -679,141 +721,140 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                         setCustomAudioInfo(null);
                         soundManager.setCustomTrack(null);
                       }}
-                      className={`p-3.5 rounded-2xl border text-left flex items-center justify-between transition-all cursor-pointer ${
+                      className={`p-3 sm:p-3.5 rounded-2xl border text-left flex items-center justify-between transition-all cursor-pointer ${
                         musicTitle === track.title
                           ? "bg-[#ffbe53]/20 border-[#ffbe53] shadow-lg text-white"
                           : "bg-black/40 border-white/10 hover:border-white/20 text-[#d1c4b9]"
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#ffbe53]">
-                          <Music className="w-4 h-4" />
+                      <div className="flex items-center gap-2.5 sm:gap-3">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 flex items-center justify-center text-[#ffbe53] shrink-0">
+                          <Music className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </div>
                         <div>
                           <span className="text-xs font-semibold block">{track.title}</span>
                           <span className="text-[10px] text-[#a8998d]">Curated Track</span>
                         </div>
                       </div>
-                      {musicTitle === track.title && <Check className="w-4 h-4 text-[#ffbe53]" />}
+                      {musicTitle === track.title && <Check className="w-4 h-4 text-[#ffbe53] shrink-0" />}
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* Summary Card */}
-              <div className="p-5 rounded-2xl bg-black/60 border border-[#e0a96d]/30 space-y-2">
+              <div className="p-4 sm:p-5 rounded-2xl bg-black/60 border border-[#e0a96d]/30 space-y-2">
                 <span className="text-[10px] uppercase tracking-wider text-[#ffbe53] font-semibold block">
                   Surprise Summary:
                 </span>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
                   <div>
                     <span className="text-[#a8998d] block text-[10px]">Recipient:</span>
-                    <strong className="text-white">{recipientName || "Not set"}</strong>
+                    <strong className="text-white truncate block">{recipientName || "Not set"}</strong>
                   </div>
                   <div>
                     <span className="text-[#a8998d] block text-[10px]">Occasion:</span>
-                    <strong className="text-white">{template.title}</strong>
+                    <strong className="text-white truncate block">{template.title}</strong>
                   </div>
                   <div>
                     <span className="text-[#a8998d] block text-[10px]">Photos:</span>
-                    <strong className="text-white">{photos.length} Memories</strong>
+                    <strong className="text-white block">{photos.length} Memories</strong>
                   </div>
                   <div>
                     <span className="text-[#a8998d] block text-[10px]">Letter:</span>
-                    <strong className="text-white">{letterParagraphs.length} Paragraphs</strong>
+                    <strong className="text-white block">{letterParagraphs.length} Paragraphs</strong>
                   </div>
                 </div>
               </div>
 
               {/* Pricing & Guarantee Box */}
-              <div className="p-6 rounded-2xl glass-panel border border-[#ffbe53]/40 bg-gradient-to-br from-[#1c122e]/90 via-[#120c20]/90 to-[#2a1710]/80 shadow-[0_10px_35px_rgba(255,190,83,0.15)] space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+              <div className="p-4 sm:p-6 rounded-2xl glass-panel border border-[#ffbe53]/40 bg-gradient-to-br from-[#1c122e]/90 via-[#120c20]/90 to-[#2a1710]/80 shadow-[0_10px_35px_rgba(255,190,83,0.15)] space-y-3.5 sm:space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-white/10">
                   <div className="flex items-start gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#8a4b2a] via-[#c68953] to-[#ffbe53] flex items-center justify-center text-xl shadow-lg border border-[#ffbe53]/50 shrink-0">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-[#8a4b2a] via-[#c68953] to-[#ffbe53] flex items-center justify-center text-lg sm:text-xl shadow-lg border border-[#ffbe53]/50 shrink-0">
                       <span>🕯️</span>
                     </div>
                     <div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#ffbe53]/20 border border-[#ffbe53]/40 text-[10px] font-bold text-[#ffbe53] uppercase tracking-wider mb-1">
+                      <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#ffbe53]/20 border border-[#ffbe53]/40 text-[9px] sm:text-[10px] font-bold text-[#ffbe53] uppercase tracking-wider mb-0.5">
                         <span>Single Surprise Pass</span>
                       </div>
-                      <h4 className="font-serif text-xl sm:text-2xl text-white font-medium">
-                        Personalized Surprise for {recipientName || "Your Loved One"}
+                      <h4 className="font-serif text-lg sm:text-2xl text-white font-medium leading-snug">
+                        Surprise for {recipientName || "Your Loved One"}
                       </h4>
-                      <p className="text-xs text-[#d1c4b9]">
-                        One-time payment • Lifetime hosted link • Unlimited views
+                      <p className="text-[11px] sm:text-xs text-[#d1c4b9]">
+                        One-time payment • Lifetime link • Unlimited views
                       </p>
                     </div>
                   </div>
 
-                  <div className="text-left sm:text-right">
+                  <div className="flex items-center sm:flex-col justify-between sm:justify-start sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-white/5">
                     <div className="text-[10px] text-[#a8998d] uppercase tracking-wider">Total Charge</div>
-                    <div className="font-serif text-3xl sm:text-4xl font-bold text-gold-gradient">
+                    <div className="font-serif text-2xl sm:text-4xl font-bold text-gold-gradient">
                       ₹250
-                    </div>
-                    <div className="text-[10px] text-emerald-400 font-medium">
-                      ✓ All-inclusive • Instant Activation
                     </div>
                   </div>
                 </div>
 
                 {/* Included Features */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#d1c4b9] pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#d1c4b9]">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ffbe53] shrink-0" />
-                    <span>Interactive 4-Act Ceremony with Real Candle Blowing</span>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#ffbe53] shrink-0" />
+                    <span>Interactive 4-Act Ceremony with Real Blowing</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ffbe53] shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#ffbe53] shrink-0" />
                     <span>Pop-the-Memories Polaroid Balloon Reveal</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ffbe53] shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#ffbe53] shrink-0" />
                     <span>Auto-scrolling Typewriter Love Letter</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ffbe53] shrink-0" />
-                    <span>Private Hosted Link (Unlocked on Launch) + WhatsApp 1-Tap Share</span>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#ffbe53] shrink-0" />
+                    <span>Private Hosted Link + 1-Tap WhatsApp Share</span>
                   </div>
                 </div>
 
-                <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] text-[#a8998d] border-t border-white/5">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 text-[11px] text-[#a8998d] border-t border-white/5">
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                     <span>Secured by Razorpay • UPI, Cards, Netbanking</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-[10px] text-[#a8998d]/80">
                     <Lock className="w-3 h-3 text-[#ffbe53]" />
-                    <span>256-bit SSL Encrypted Checkout</span>
+                    <span>256-bit SSL Encrypted</span>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="pt-3 sm:pt-4 flex flex-col gap-3">
+                {/* Primary Action Button (Top on mobile for thumb priority) */}
                 <button
-                  onClick={() => setCurrentStep(3)}
-                  className="w-full sm:w-auto px-5 py-2.5 rounded-full glass-panel border border-white/10 text-xs text-[#d1c4b9] hover:text-white cursor-pointer"
+                  onClick={handleCreate}
+                  disabled={isSaving}
+                  className="w-full py-4 px-6 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-sm font-bold tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.4)] hover:shadow-[0_0_40px_rgba(255,190,83,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
                 >
-                  Back
+                  <CreditCard className="w-4 h-4" />
+                  <span>{isSaving ? "Processing Payment..." : "Pay ₹250 & Launch Surprise"}</span>
                 </button>
 
-                <div className="flex items-center gap-3 w-full sm:w-auto">
+                {/* Secondary Actions (Clean 50/50 split on mobile) */}
+                <div className="grid grid-cols-2 gap-3 w-full">
                   <button
-                    type="button"
-                    onClick={handleOpenDemo}
-                    className="w-full sm:w-auto px-5 py-3.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-[#ffbe53] text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-colors active:scale-95"
+                    onClick={() => setCurrentStep(3)}
+                    className="py-2.5 px-4 rounded-full glass-panel border border-white/10 text-xs text-[#d1c4b9] hover:text-white cursor-pointer text-center active:scale-95 transition-all"
                   >
-                    <Eye className="w-3.5 h-3.5 text-[#ffbe53]" />
-                    <span>Test Demo</span>
+                    ← Back
                   </button>
 
                   <button
-                    onClick={handleCreate}
-                    disabled={isSaving}
-                    className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-bold tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.4)] hover:shadow-[0_0_40px_rgba(255,190,83,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all"
+                    type="button"
+                    onClick={handleOpenDemo}
+                    className="py-2.5 px-4 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-[#ffbe53] text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors active:scale-95 shadow-sm"
                   >
-                    <CreditCard className="w-4 h-4" />
-                    <span>{isSaving ? "Processing Payment..." : "Pay ₹250 & Launch Surprise"}</span>
+                    <Eye className="w-3.5 h-3.5 text-[#ffbe53]" />
+                    <span>Test Demo</span>
                   </button>
                 </div>
               </div>

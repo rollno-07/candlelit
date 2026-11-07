@@ -124,7 +124,7 @@ export function Scene1Intro({
   };
 
   return (
-    <div className="relative z-10 flex flex-col items-center justify-center h-full min-h-[480px] px-4 py-4 sm:py-8 max-w-lg mx-auto text-center">
+    <div className="relative z-10 flex flex-col items-center justify-center h-full min-h-[460px] px-3.5 sm:px-4 py-3 sm:py-8 max-w-lg mx-auto text-center">
       <AnimatePresence mode="wait">
         {!isOpen ? (
           <motion.div
@@ -140,42 +140,42 @@ export function Scene1Intro({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 mb-6 shadow-md"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 mb-4 sm:mb-6 shadow-md"
             >
-              <span className="text-base">{meta.emoji}</span>
-              <span className="text-xs uppercase tracking-[0.22em] text-[#ffe8d6]/95 font-medium">
+              <span className="text-sm sm:text-base">{meta.emoji}</span>
+              <span className="text-[11px] sm:text-xs uppercase tracking-[0.18em] sm:tracking-[0.22em] text-[#ffe8d6]/95 font-medium">
                 {meta.badge}
               </span>
-              <span className="text-base">{meta.emoji}</span>
+              <span className="text-sm sm:text-base">{meta.emoji}</span>
             </motion.div>
 
             {/* Glassmorphic Luxury Letter Envelope Card */}
-            <div className="relative w-full rounded-2xl glass-card p-8 md:p-10 border border-[#e0a96d]/30 shadow-2xl overflow-hidden group">
+            <div className="relative w-full rounded-2xl sm:rounded-3xl glass-card p-5 sm:p-8 md:p-10 border border-[#e0a96d]/30 shadow-2xl overflow-hidden group">
               {/* Subtle background glow */}
               <div className="absolute -top-24 -right-24 w-52 h-52 bg-[#e0a96d]/15 rounded-full blur-3xl pointer-events-none" />
               <div className="absolute -bottom-24 -left-24 w-52 h-52 bg-[#ff7b90]/15 rounded-full blur-3xl pointer-events-none" />
 
               {/* Envelope Flap Simulation / Wax Seal */}
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center mb-5 sm:mb-6">
                 <motion.div
                   whileHover={{ scale: 1.08, rotate: 5 }}
-                  className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#8a4b2a] via-[#c68953] to-[#ffbe53] flex items-center justify-center shadow-lg border-2 border-[#ffe8cc]/60 relative"
+                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-[#8a4b2a] via-[#c68953] to-[#ffbe53] flex items-center justify-center shadow-lg border-2 border-[#ffe8cc]/60 relative"
                 >
-                  <Heart className="w-6 h-6 text-[#2c1308] fill-[#2c1308]" />
-                  <span className="absolute -bottom-1 text-[13px] font-serif font-bold text-[#ffe8cc] tracking-widest uppercase bg-[#2c1308]/70 px-2 py-0.5 rounded-full border border-[#ffbe53]/40">
+                  <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-[#2c1308] fill-[#2c1308]" />
+                  <span className="absolute -bottom-1 text-[12px] sm:text-[13px] font-serif font-bold text-[#ffe8cc] tracking-widest uppercase bg-[#2c1308]/85 px-2 py-0.5 rounded-full border border-[#ffbe53]/40">
                     {recipientInitial} &amp; {senderInitial}
                   </span>
                 </motion.div>
               </div>
 
               {/* Salutation */}
-              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-gold-gradient font-normal tracking-wide mb-3">
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-gold-gradient font-normal tracking-wide mb-2 sm:mb-3">
                 {meta.headline} {recipientName}
               </h2>
 
-              <div className="w-16 h-0.5 mx-auto bg-gradient-to-r from-transparent via-[#e0a96d] to-transparent mb-4" />
+              <div className="w-16 h-0.5 mx-auto bg-gradient-to-r from-transparent via-[#e0a96d] to-transparent mb-3.5 sm:mb-4" />
 
-              <p className="text-sm md:text-base text-[#d1c4b9] font-light leading-relaxed mb-8 max-w-sm mx-auto">
+              <p className="text-xs sm:text-sm md:text-base text-[#d1c4b9] font-light leading-relaxed mb-6 sm:mb-8 max-w-sm mx-auto">
                 {meta.subtitle}
               </p>
 
@@ -184,7 +184,7 @@ export function Scene1Intro({
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleOpenGift}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] font-bold text-sm tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.35)] hover:shadow-[0_0_35px_rgba(255,190,83,0.55)] transition-all duration-300 flex items-center justify-center gap-2.5 mx-auto cursor-pointer"
+                className="w-full sm:w-auto px-6 sm:px-8 py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] font-bold text-xs sm:text-sm tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.35)] hover:shadow-[0_0_35px_rgba(255,190,83,0.55)] transition-all duration-300 flex items-center justify-center gap-2 mx-auto cursor-pointer active:scale-98"
               >
                 <span>{meta.buttonText}</span>
                 <span className="text-base">{meta.emoji}</span>

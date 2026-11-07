@@ -114,16 +114,6 @@ export function SurprisePreviewModal({
           className="absolute inset-0 bg-black/95 backdrop-blur-md"
         />
 
-        {/* Unmissable Viewport-Level Return Button */}
-        <button
-          onClick={handleClose}
-          className="fixed top-3 left-3 sm:top-4 sm:left-4 z-[100000] flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#180e2a] hover:bg-[#251540] border-2 border-[#ffbe53] text-[#ffbe53] hover:text-white text-xs sm:text-sm font-bold shadow-[0_4px_24px_rgba(0,0,0,0.95),0_0_20px_rgba(255,190,83,0.5)] backdrop-blur-xl active:scale-95 transition-all cursor-pointer"
-          title="Return to Checkout"
-        >
-          <ArrowLeft className="w-4 h-4 text-[#ffbe53]" />
-          <span>← Back to Checkout</span>
-        </button>
-
         {/* Modal Card Over Checkout */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -132,30 +122,40 @@ export function SurprisePreviewModal({
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="relative w-full max-w-6xl h-full sm:h-[92vh] rounded-none sm:rounded-3xl glass-panel border sm:border-[#e0a96d]/40 bg-[#0d0718] sm:bg-[#0d0718]/95 backdrop-blur-2xl shadow-[0_25px_80px_rgba(0,0,0,0.9)] flex flex-col overflow-hidden z-10"
         >
-          {/* Top Bar */}
-          <div className="shrink-0 px-3 sm:px-6 py-3.5 border-b border-[#e0a96d]/20 bg-[#140b24]/80 flex items-center justify-between gap-2 sm:gap-3 pl-44 sm:pl-48">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="flex items-center gap-2 pl-2">
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#8a4b2a] via-[#c68953] to-[#ffbe53] flex items-center justify-center text-xs shadow-md border border-[#ffbe53]/40">
-                  <Eye className="w-3.5 h-3.5 text-[#1a1006]" />
+          {/* Top Bar - Clean Integrated Mobile & Desktop Header */}
+          <div className="shrink-0 px-3 sm:px-6 py-3 border-b border-[#e0a96d]/20 bg-[#140b24]/90 flex items-center justify-between gap-2 sm:gap-3">
+            {/* Left: Dedicated Back to Checkout Pill */}
+            <button
+              onClick={handleClose}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#e0a96d]/40 bg-[#1e1330] hover:bg-[#ffbe53]/15 text-xs font-semibold text-[#ffbe53] hover:text-white transition-all shadow-sm active:scale-95 cursor-pointer shrink-0"
+              title="Return to Checkout"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-[#ffbe53]" />
+              <span className="hidden xs:inline sm:inline">Back to Checkout</span>
+              <span className="inline xs:hidden sm:hidden">Back</span>
+            </button>
+
+            {/* Center: Surprise Preview Info */}
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="hidden xs:flex w-7 h-7 rounded-lg bg-gradient-to-tr from-[#8a4b2a] via-[#c68953] to-[#ffbe53] items-center justify-center text-xs shadow-md border border-[#ffbe53]/40 shrink-0">
+                <Eye className="w-3.5 h-3.5 text-[#1a1006]" />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-semibold text-gold-gradient truncate">
+                    Surprise Preview
+                  </span>
+                  <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[9px] text-emerald-400 font-medium shrink-0">
+                    Live
+                  </span>
                 </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-semibold text-gold-gradient">
-                      Surprise Preview
-                    </span>
-                    <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[9px] text-emerald-400 font-medium">
-                      Live
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-[#a8998d] truncate max-w-[160px] sm:max-w-xs">
-                    For <strong className="text-[#ffe8d6]">{effectiveRecipient}</strong>
-                  </p>
-                </div>
+                <p className="text-[10px] text-[#a8998d] truncate max-w-[110px] sm:max-w-xs">
+                  For <strong className="text-[#ffe8d6]">{effectiveRecipient}</strong>
+                </p>
               </div>
             </div>
 
-            {/* Act Navigation Tabs */}
+            {/* Act Navigation Tabs (Desktop) */}
             <div className="hidden md:flex items-center gap-1 bg-black/40 p-1 rounded-xl border border-white/5">
               {acts.map((act) => {
                 const Icon = act.icon;
@@ -181,7 +181,7 @@ export function SurprisePreviewModal({
             </div>
 
             {/* Right actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               <button
                 onClick={() => {
                   handleClose();
@@ -190,12 +190,12 @@ export function SurprisePreviewModal({
                 className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-bold shadow-[0_0_20px_rgba(255,190,83,0.35)] hover:shadow-[0_0_30px_rgba(255,190,83,0.5)] cursor-pointer active:scale-95 transition-all"
               >
                 <CreditCard className="w-3.5 h-3.5" />
-                <span>Pay ₹250 & Launch</span>
+                <span>Pay ₹250</span>
               </button>
 
               <button
                 onClick={handleClose}
-                className="p-2 rounded-full text-[#a8998d] hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 rounded-full text-[#a8998d] hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                 title="Close Preview"
                 aria-label="Close preview"
               >
@@ -336,27 +336,27 @@ export function SurprisePreviewModal({
             </div>
           </div>
 
-          {/* Bottom Control Bar */}
-          <div className="shrink-0 px-4 sm:px-6 py-3.5 border-t border-[#e0a96d]/20 bg-[#140b24]/90 flex flex-col sm:flex-row items-center justify-between gap-3">
+          {/* Bottom Control Bar - Streamlined Mobile & Desktop Layout */}
+          <div className="shrink-0 px-3 sm:px-6 py-2.5 sm:py-3.5 border-t border-[#e0a96d]/20 bg-[#140b24]/95 flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-3">
             {/* Act Step navigation */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between sm:justify-start w-full sm:w-auto gap-2">
               <button
                 onClick={handlePrevAct}
                 disabled={currentAct === 1}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium border border-white/10 text-[#a8998d] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1 transition-colors"
+                className="px-3 py-1.5 rounded-xl text-xs font-medium border border-white/10 text-[#a8998d] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1 transition-colors active:scale-95 cursor-pointer bg-white/5"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
                 <span>Prev Act</span>
               </button>
 
-              <span className="text-xs text-[#d1c4b9] font-mono px-2">
+              <span className="text-xs text-[#ffbe53] font-semibold font-mono px-2">
                 Act {currentAct} of 4
               </span>
 
               <button
                 onClick={handleNextAct}
                 disabled={currentAct === 4}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium border border-white/10 text-[#a8998d] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1 transition-colors"
+                className="px-3 py-1.5 rounded-xl text-xs font-medium border border-white/10 text-[#a8998d] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1 transition-colors active:scale-95 cursor-pointer bg-white/5"
               >
                 <span>Next Act</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -364,10 +364,10 @@ export function SurprisePreviewModal({
             </div>
 
             {/* Launch CTA */}
-            <div className="flex items-center gap-3 w-full sm:w-auto">
+            <div className="w-full sm:w-auto flex items-center gap-2">
               <button
                 onClick={handleClose}
-                className="w-1/2 sm:w-auto px-5 py-2.5 rounded-full border border-[#e0a96d]/40 bg-black/50 hover:bg-[#ffbe53]/10 text-xs font-semibold text-[#ffbe53] hover:text-white flex items-center justify-center gap-1.5 cursor-pointer transition-colors active:scale-95 shadow-sm"
+                className="hidden sm:flex px-4 py-2.5 rounded-full border border-[#e0a96d]/40 bg-black/50 hover:bg-[#ffbe53]/10 text-xs font-semibold text-[#ffbe53] hover:text-white items-center justify-center gap-1.5 cursor-pointer transition-colors active:scale-95 shadow-sm"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back to Checkout</span>
@@ -378,10 +378,10 @@ export function SurprisePreviewModal({
                   handleClose();
                   onProceedToPay();
                 }}
-                className="w-1/2 sm:w-auto px-6 py-2.5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-bold shadow-[0_0_20px_rgba(255,190,83,0.4)] hover:shadow-[0_0_30px_rgba(255,190,83,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all"
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs sm:text-sm font-bold shadow-[0_0_20px_rgba(255,190,83,0.4)] hover:shadow-[0_0_30px_rgba(255,190,83,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
               >
-                <CreditCard className="w-3.5 h-3.5" />
-                <span>Pay ₹250 & Launch</span>
+                <CreditCard className="w-4 h-4" />
+                <span>Pay ₹250 & Launch Surprise</span>
               </button>
             </div>
           </div>

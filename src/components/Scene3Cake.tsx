@@ -184,7 +184,7 @@ export function Scene3Cake({
         )}
 
         {/* Real Cake Display Container */}
-        <div className="relative w-76 h-76 sm:w-84 sm:h-84 md:w-92 md:h-92 rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(224,169,109,0.25)] border border-[#e0a96d]/30 group">
+        <div className="relative w-[270px] h-[270px] sm:w-[330px] sm:h-[330px] md:w-[380px] md:h-[380px] rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(224,169,109,0.25)] border border-[#e0a96d]/30 group mx-auto">
           <AnimatePresence mode="sync">
             {/* 1. LIT REAL CAKE */}
             {!candlesBlown && (

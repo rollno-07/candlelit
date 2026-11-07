@@ -379,7 +379,7 @@ export function Scene2Balloons({ onComplete, photos, templateId = "birthday-surp
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md"
             onClick={() => setActiveMemory(null)}
           >
             <motion.div
@@ -388,7 +388,7 @@ export function Scene2Balloons({ onComplete, photos, templateId = "birthday-surp
               exit={{ scale: 0.85, y: 30, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-sm bg-[#faf6f0] text-[#2c1d11] rounded-2xl p-4 sm:p-5 shadow-2xl border-4 border-white/80 overflow-hidden"
+              className="relative w-full max-w-sm max-h-[88vh] overflow-y-auto no-scrollbar bg-[#faf6f0] text-[#2c1d11] rounded-2xl p-3.5 sm:p-5 shadow-2xl border-4 border-white/90"
               style={{
                 boxShadow: "0 25px 60px -10px rgba(0,0,0,0.8), 0 0 30px rgba(224,169,109,0.3)",
               }}
@@ -396,14 +396,14 @@ export function Scene2Balloons({ onComplete, photos, templateId = "birthday-surp
               {/* Close Button */}
               <button
                 onClick={() => setActiveMemory(null)}
-                className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center shadow transition-colors cursor-pointer"
+                className="absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center shadow transition-colors cursor-pointer"
                 aria-label="Close memory modal"
               >
                 <X className="w-4 h-4" />
               </button>
 
               {/* Photo Frame */}
-              <div className="relative w-full aspect-square rounded-lg overflow-hidden shadow-inner bg-[#1a110a] mb-4">
+              <div className="relative w-full aspect-[4/3] sm:aspect-square rounded-xl overflow-hidden shadow-inner bg-[#1a110a] mb-3 sm:mb-4">
                 <Image
                   src={activeMemory.photoUrl}
                   alt={activeMemory.title}
@@ -417,23 +417,23 @@ export function Scene2Balloons({ onComplete, photos, templateId = "birthday-surp
 
               {/* Memory Text / Handwritten Note */}
               <div className="px-1 text-center">
-                <div className="flex items-center justify-center gap-1.5 text-xs text-[#9c6a38] uppercase tracking-wider font-semibold mb-1">
+                <div className="flex items-center justify-center gap-1.5 text-[11px] sm:text-xs text-[#9c6a38] uppercase tracking-wider font-semibold mb-1">
                   <Heart className="w-3 h-3 fill-current" />
                   <span>{activeMemory.subtitle}</span>
                   <Heart className="w-3 h-3 fill-current" />
                 </div>
 
-                <h3 className="font-serif text-2xl font-bold text-[#2a1b12] mb-2 leading-tight">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#2a1b12] mb-1.5 sm:mb-2 leading-tight">
                   {activeMemory.title}
                 </h3>
 
-                <p className="font-serif text-sm text-[#4a3b30] italic leading-relaxed mb-4">
+                <p className="font-serif text-xs sm:text-sm text-[#4a3b30] italic leading-relaxed mb-3.5 sm:mb-4">
                   &ldquo;{activeMemory.note}&rdquo;
                 </p>
 
                 <button
                   onClick={() => setActiveMemory(null)}
-                  className="w-full py-2.5 rounded-full bg-[#2a1b12] hover:bg-[#3d2719] text-[#fdf8f4] text-xs font-medium tracking-wider uppercase transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 sm:py-3 rounded-full bg-[#2a1b12] hover:bg-[#3d2719] text-[#fdf8f4] text-xs font-semibold tracking-wider uppercase transition-colors cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 shadow-md"
                 >
                   <Check className="w-3.5 h-3.5 text-[#ffbe53]" />
                   <span>Cherish This &amp; Continue</span>
