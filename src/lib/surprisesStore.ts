@@ -144,34 +144,7 @@ export async function getSurpriseBySlug(slug: string): Promise<SurpriseData | nu
     };
   }
 
-  // 4. Dynamic pattern: {templateId}-{recipientName} (e.g. "propose-maya", "birthday-surprise-john")
-  for (const tmpl of TEMPLATES) {
-    const prefix = `${tmpl.id}-`;
-    if (slug.startsWith(prefix)) {
-      const rawName = slug.slice(prefix.length).trim();
-      if (rawName.length > 0) {
-        const recipient = rawName.charAt(0).toUpperCase() + rawName.slice(1);
-        return {
-          id: `auto-${slug}`,
-          slug: slug,
-          templateId: tmpl.id,
-          recipientName: recipient,
-          senderName: "With Love",
-          occasionSubtitle: tmpl.defaultFields.occasionSubtitle,
-          cakeOrObjectMessage:
-            tmpl.id === "birthday-surprise"
-              ? `Happy Birthday ${recipient}`
-              : tmpl.defaultFields.cakeOrObjectMessage,
-          photos: tmpl.defaultFields.defaultPhotos,
-          letter: tmpl.defaultFields.defaultLetter,
-          musicUrl: tmpl.defaultFields.musicUrl,
-          musicTitle: tmpl.defaultFields.musicLabel,
-          createdAt: new Date().toISOString(),
-        };
-      }
-    }
-  }
-
+  // Note: Only paid/saved surprises or official demo templates can be resolved.
   return null;
 }
 

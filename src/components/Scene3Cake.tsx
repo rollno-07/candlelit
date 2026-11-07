@@ -108,7 +108,7 @@ export function Scene3Cake({
   });
 
   return (
-    <div className="relative z-10 w-full min-h-[92vh] flex flex-col items-center justify-between px-4 py-6 overflow-hidden">
+    <div className="relative z-10 w-full h-full min-h-[480px] flex flex-col items-center justify-between px-4 py-3 sm:py-6 overflow-hidden">
       {/* Header Info */}
       <div className="w-full max-w-md mx-auto text-center pt-2">
         <motion.div

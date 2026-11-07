@@ -44,6 +44,10 @@ export interface SurpriseData {
   musicTitle?: string;
   createdAt: string;
   userId?: string;
+  isPaid?: boolean;
+  paymentId?: string;
+  orderId?: string;
+  amountPaid?: number;
 }
 
 export interface UserProfile {

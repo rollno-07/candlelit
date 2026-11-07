@@ -92,18 +92,49 @@ export function Scene2Balloons({ onComplete, photos }: Scene2BalloonsProps) {
   const [activeMemory, setActiveMemory] = useState<BalloonData | null>(null);
 
   const balloonsList = React.useMemo(() => {
-    if (photos && photos.length > 0) {
-      return BALLOONS.slice(0, Math.min(BALLOONS.length, photos.length)).map((b, i) => ({
+    const rawList =
+      photos && photos.length > 0
+        ? BALLOONS.slice(0, Math.min(BALLOONS.length, photos.length)).map((b, i) => ({
+            ...b,
+            photoUrl: photos[i].url,
+            title: photos[i].caption || b.title,
+            note: photos[i].caption || b.note,
+          }))
+        : BALLOONS;
+
+    const total = rawList.length;
+
+    return rawList.map((b, i) => {
+      // Calculate balanced, symmetrical horizontal position across the full stage
+      let xOffset = 50;
+      if (total === 1) {
+        xOffset = 50;
+      } else if (total === 2) {
+        xOffset = i === 0 ? 34 : 66;
+      } else if (total === 3) {
+        const positions = [22, 50, 78];
+        xOffset = positions[i] ?? 50;
+      } else if (total === 4) {
+        const positions = [18, 38, 62, 82];
+        xOffset = positions[i] ?? 50;
+      } else {
+        const step = 76 / Math.max(1, total - 1);
+        xOffset = 12 + i * step;
+      }
+
+      // Elegant vertical float heights in the center visual band of the sky
+      const yOffsets = [20, 34, 18, 32, 22];
+      const yOffset = yOffsets[i % yOffsets.length];
+
+      return {
         ...b,
-        photoUrl: photos[i].url,
-        title: photos[i].caption || b.title,
-        note: photos[i].caption || b.note,
-      }));
-    }
-    return BALLOONS;
+        xOffset,
+        yOffset,
+      };
+    });
   }, [photos]);
 
-  const handlePop = (balloon: BalloonData) => {
+  const handlePop = (balloon: BalloonData & { yOffset?: number }) => {
     if (poppedIds.includes(balloon.id)) return;
 
     soundManager.playPopSound();
@@ -114,9 +145,9 @@ export function Scene2Balloons({ onComplete, photos }: Scene2BalloonsProps) {
   const allPopped = poppedIds.length === balloonsList.length;
 
   return (
-    <div className="relative z-10 w-full min-h-[90vh] flex flex-col items-center justify-between px-4 py-6 overflow-hidden">
+    <div className="relative z-10 w-full h-full min-h-[500px] flex flex-col items-center justify-between px-4 py-3 sm:py-6 overflow-hidden">
       {/* Top Banner / Progress */}
-      <div className="w-full max-w-md mx-auto text-center pt-2">
+      <div className="w-full max-w-md mx-auto text-center shrink-0 pt-1 pb-2">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -155,7 +186,7 @@ export function Scene2Balloons({ onComplete, photos }: Scene2BalloonsProps) {
       </div>
 
       {/* Balloon Sky Area */}
-      <div className="relative w-full max-w-2xl h-[58vh] md:h-[62vh] my-auto">
+      <div className="relative w-full max-w-4xl flex-1 min-h-[300px] sm:min-h-[380px] my-auto">
         {balloonsList.map((balloon) => {
           const isPopped = poppedIds.includes(balloon.id);
 
@@ -193,7 +224,7 @@ export function Scene2Balloons({ onComplete, photos }: Scene2BalloonsProps) {
                   onClick={() => handlePop(balloon)}
                   style={{
                     left: `calc(${balloon.xOffset}% - 38px)`,
-                    top: `${18 + (balloon.id % 3) * 14}%`,
+                    top: `${balloon.yOffset ?? 25}%`,
                   }}
                   className="absolute cursor-pointer select-none group flex flex-col items-center touch-manipulation"
                   whileHover={{ scale: 1.12 }}

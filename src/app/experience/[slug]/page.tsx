@@ -13,6 +13,7 @@ import { Scene4Letter } from "@/components/Scene4Letter";
 import { soundManager } from "@/utils/audioSynthesizer";
 import { getSurpriseBySlug } from "@/lib/surprisesStore";
 import { SurpriseData } from "@/types/candlelit";
+import { ArrowLeft } from "lucide-react";
 
 type ActNumber = 1 | 2 | 3 | 4;
 
@@ -135,6 +136,19 @@ function ExperienceContent() {
 
       {/* Persistent Floating BGM Player in Bottom Right */}
       <MusicPlayer />
+
+      {/* Floating Back to Checkout button for demo / templates */}
+      {(slug.startsWith("demo-") || slug === "birthday-surprise" || slug === "propose" || slug === "anniversary") && (
+        <div className="fixed top-4 left-4 z-40">
+          <Link
+            href={`/create/${surprise?.templateId || "birthday-surprise"}`}
+            className="px-3.5 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-lg bg-black/60 backdrop-blur-md active:scale-95"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-[#ffbe53]" />
+            <span>Back to Checkout</span>
+          </Link>
+        </div>
+      )}
 
       {/* Main Act Scene Container */}
       <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center">

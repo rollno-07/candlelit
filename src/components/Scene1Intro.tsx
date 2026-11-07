@@ -30,7 +30,7 @@ export function Scene1Intro({
   };
 
   return (
-    <div className="relative z-10 flex flex-col items-center justify-center min-h-[92vh] px-4 py-8 max-w-lg mx-auto text-center">
+    <div className="relative z-10 flex flex-col items-center justify-center h-full min-h-[480px] px-4 py-4 sm:py-8 max-w-lg mx-auto text-center">
       <AnimatePresence mode="wait">
         {!isOpen ? (
           <motion.div

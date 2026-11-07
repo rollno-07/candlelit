@@ -16,12 +16,19 @@ import {
   ArrowLeft,
   Check,
   Eye,
-  Share2
+  Share2,
+  CreditCard,
+  ShieldCheck,
+  CheckCircle2,
+  Lock
 } from "lucide-react";
 import { TemplateDefinition, SurpriseData } from "@/types/candlelit";
 import { saveSurprise } from "@/lib/surprisesStore";
 import { useAuth } from "@/lib/authContext";
+import { processRazorpayPayment } from "@/utils/razorpayClient";
+import { soundManager } from "@/utils/audioSynthesizer";
 import { ShareModal } from "./ShareModal";
+import { SurprisePreviewModal } from "./SurprisePreviewModal";
 import { AuthModal } from "../auth/AuthModal";
 
 interface SurpriseBuilderProps {
@@ -31,6 +38,7 @@ interface SurpriseBuilderProps {
 export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
   const { user } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
 
   // Form states initialized with template defaults
@@ -92,7 +100,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
     setLetterParagraphs(letterParagraphs.filter((_, i) => i !== idx));
   };
 
-  // Save / Create handler
+  // Save / Create handler with Razorpay Payment (₹250)
   const handleCreate = async () => {
     if (!recipientName.trim()) {
       alert("Please enter the name of the recipient.");
@@ -102,6 +110,24 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
 
     setIsSaving(true);
     try {
+      // 1. Process payment via Razorpay for ₹250
+      const payment = await processRazorpayPayment({
+        amountInRupees: 250,
+        templateId: template.id,
+        recipientName: recipientName.trim(),
+        userEmail: user?.email,
+        userName: user?.name,
+      });
+
+      if (!payment.success) {
+        if (payment.error && !payment.error.includes("cancelled") && !payment.error.includes("closed")) {
+          alert(`Payment not completed: ${payment.error}`);
+        }
+        setIsSaving(false);
+        return;
+      }
+
+      // 2. Prepare surprise data with verified payment records
       const surpriseData: SurpriseData = {
         id: `surprise-${Date.now()}`,
         slug: currentSlug,
@@ -118,13 +144,18 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
         musicTitle,
         createdAt: new Date().toISOString(),
         userId: user?.id,
+        isPaid: true,
+        paymentId: payment.paymentId,
+        orderId: payment.orderId,
+        amountPaid: 250,
       };
 
       const slug = await saveSurprise(surpriseData, user?.id);
       setCreatedSlug(slug);
-    } catch (e) {
+    } catch (e: unknown) {
       console.error(e);
-      alert("Failed to save surprise. Please try again.");
+      const msg = e instanceof Error ? e.message : "Failed to complete creation.";
+      alert(msg);
     } finally {
       setIsSaving(false);
     }
@@ -149,10 +180,26 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
             </h1>
           </div>
 
-          {/* Target URL Preview Badge */}
-          <div className="px-3.5 py-1.5 rounded-full bg-black/60 border border-[#e0a96d]/30 text-xs font-mono text-[#ffbe53] flex items-center gap-2 shadow">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="truncate">candleit.one7app.in/{currentSlug}</span>
+          {/* Studio Header Controls */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                soundManager.unlockAudio();
+                setShowPreviewModal(true);
+              }}
+              className="px-3.5 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-[#ffbe53] text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-colors shadow"
+              title="Test Demo Preview of your craft"
+            >
+              <Eye className="w-3.5 h-3.5 text-[#ffbe53]" />
+              <span>Test Demo</span>
+            </button>
+            <div className="hidden sm:flex px-3.5 py-1.5 rounded-full bg-[#120c20]/90 border border-[#e0a96d]/30 text-xs text-[#ffe8d6] items-center gap-2 shadow">
+              <Sparkles className="w-3.5 h-3.5 text-[#ffbe53]" />
+              <span className="font-medium text-[11px] tracking-wide">
+                Step {currentStep} of 4 • Studio Draft
+              </span>
+            </div>
           </div>
         </div>
 
@@ -188,7 +235,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                   1. Who is this special surprise for?
                 </h3>
                 <p className="text-xs text-[#a8998d]">
-                  Their name will be featured on the envelope, cake, and personalized URL.
+                  Their name will be featured on the envelope, cake, and personalized letter.
                 </p>
               </div>
 
@@ -513,6 +560,69 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 </div>
               </div>
 
+              {/* Pricing & Guarantee Box */}
+              <div className="p-6 rounded-2xl glass-panel border border-[#ffbe53]/40 bg-gradient-to-br from-[#1c122e]/90 via-[#120c20]/90 to-[#2a1710]/80 shadow-[0_10px_35px_rgba(255,190,83,0.15)] space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+                  <div className="flex items-start gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#8a4b2a] via-[#c68953] to-[#ffbe53] flex items-center justify-center text-xl shadow-lg border border-[#ffbe53]/50 shrink-0">
+                      <span>🕯️</span>
+                    </div>
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#ffbe53]/20 border border-[#ffbe53]/40 text-[10px] font-bold text-[#ffbe53] uppercase tracking-wider mb-1">
+                        <span>Single Surprise Pass</span>
+                      </div>
+                      <h4 className="font-serif text-xl sm:text-2xl text-white font-medium">
+                        Personalized Surprise for {recipientName || "Your Loved One"}
+                      </h4>
+                      <p className="text-xs text-[#d1c4b9]">
+                        One-time payment • Lifetime hosted link • Unlimited views
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="text-left sm:text-right">
+                    <div className="text-[10px] text-[#a8998d] uppercase tracking-wider">Total Charge</div>
+                    <div className="font-serif text-3xl sm:text-4xl font-bold text-gold-gradient">
+                      ₹250
+                    </div>
+                    <div className="text-[10px] text-emerald-400 font-medium">
+                      ✓ All-inclusive • Instant Activation
+                    </div>
+                  </div>
+                </div>
+
+                {/* Included Features */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#d1c4b9] pt-1">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-[#ffbe53] shrink-0" />
+                    <span>Interactive 4-Act Ceremony with Real Candle Blowing</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-[#ffbe53] shrink-0" />
+                    <span>Pop-the-Memories Polaroid Balloon Reveal</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-[#ffbe53] shrink-0" />
+                    <span>Auto-scrolling Typewriter Love Letter</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-[#ffbe53] shrink-0" />
+                    <span>Private Hosted Link (Unlocked on Launch) + WhatsApp 1-Tap Share</span>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] text-[#a8998d] border-t border-white/5">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Secured by Razorpay • UPI, Cards, Netbanking</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[10px] text-[#a8998d]/80">
+                    <Lock className="w-3 h-3 text-[#ffbe53]" />
+                    <span>256-bit SSL Encrypted Checkout</span>
+                  </div>
+                </div>
+              </div>
+
               {/* Action Buttons */}
               <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <button
@@ -523,22 +633,25 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 </button>
 
                 <div className="flex items-center gap-3 w-full sm:w-auto">
-                  <Link
-                    href={`/experience/${template.id}`}
-                    target="_blank"
-                    className="w-full sm:w-auto px-5 py-3 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      soundManager.unlockAudio();
+                      setShowPreviewModal(true);
+                    }}
+                    className="w-full sm:w-auto px-5 py-3.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-[#ffbe53] text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-colors active:scale-95"
                   >
                     <Eye className="w-3.5 h-3.5 text-[#ffbe53]" />
                     <span>Test Demo</span>
-                  </Link>
+                  </button>
 
                   <button
                     onClick={handleCreate}
                     disabled={isSaving}
                     className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-bold tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.4)] hover:shadow-[0_0_40px_rgba(255,190,83,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all"
                   >
-                    <Sparkles className="w-4 h-4 fill-current" />
-                    <span>{isSaving ? "Creating Magic..." : "Create & Generate Link"}</span>
+                    <CreditCard className="w-4 h-4" />
+                    <span>{isSaving ? "Processing Payment..." : "Pay ₹250 & Launch Surprise"}</span>
                   </button>
                 </div>
               </div>
@@ -546,6 +659,23 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
           )}
         </div>
       </div>
+
+      {/* Test Demo / Surprise Craft Preview Modal over Checkout */}
+      <SurprisePreviewModal
+        isOpen={showPreviewModal}
+        onClose={() => {
+          setShowPreviewModal(false);
+          setCurrentStep(4);
+        }}
+        recipientName={recipientName}
+        senderName={senderName}
+        occasionSubtitle={occasionSubtitle}
+        cakeOrObjectMessage={cakeOrObjectMessage}
+        photos={photos}
+        letter={letterParagraphs}
+        musicTitle={musicTitle}
+        onProceedToPay={handleCreate}
+      />
 
       {/* Share Modal on Success */}
       {createdSlug && (

@@ -153,7 +153,7 @@ export function Scene4Letter({
   const displayedText = fullText.slice(0, displayedLength);
 
   return (
-    <div className="relative z-10 w-full h-[90vh] md:h-[92vh] max-w-4xl mx-auto flex flex-col justify-between items-center px-3 py-2 select-none overflow-hidden">
+    <div className="relative z-10 w-full h-full min-h-[480px] max-w-4xl mx-auto flex flex-col justify-between items-center px-3 py-2 select-none overflow-hidden">
       {/* CINEMATIC FRAMING CARD (Prominently visible in background) */}
       <div className="absolute inset-x-2 sm:inset-x-8 top-14 bottom-16 z-0 flex items-center justify-center pointer-events-none">
         <AnimatePresence mode="wait">
