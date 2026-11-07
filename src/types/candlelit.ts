@@ -26,6 +26,19 @@ export interface TemplateDefinition {
     subtypes?: string[]; // e.g. for Anniversary: ["Marriage", "Love", "Proposal", "Work"]
     days?: string[]; // e.g. for Valentine: ["Rose Day", "Propose Day", "Chocolate Day", "Teddy Day", "Promise Day", "Hug Day", "Kiss Day", "Valentine's Day"]
   };
+  prompts?: {
+    step3Badge: string;
+    step3Title: string;
+    step3Description: string;
+    letterLabel: string;
+    letterPlaceholder: string;
+  };
+  ritualConfig?: {
+    ritualLabel: string;
+    ritualPlaceholder: string;
+    ritualHelper: string;
+    allowCakeUpload?: boolean;
+  };
 }
 
 export interface SurpriseData {
@@ -42,6 +55,10 @@ export interface SurpriseData {
   letter: string[];
   musicUrl: string;
   musicTitle?: string;
+  customCakeUrl?: string;
+  customCandlePosition?: { top: number; arcSpread: number };
+  act4Title?: string;
+  act4Subtitle?: string;
   createdAt: string;
   userId?: string;
   isPaid?: boolean;

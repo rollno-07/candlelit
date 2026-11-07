@@ -24,13 +24,18 @@ import {
   Upload,
   Play,
   Pause,
-  Disc
+  Disc,
+  Wand2,
+  Sliders,
+  Cake,
 } from "lucide-react";
 import { TemplateDefinition, SurpriseData } from "@/types/candlelit";
 import { saveSurprise } from "@/lib/surprisesStore";
 import { useAuth } from "@/lib/authContext";
 import { processRazorpayPayment } from "@/utils/razorpayClient";
 import { soundManager } from "@/utils/audioSynthesizer";
+import { enhancePhotoCandlelight } from "@/utils/photoEnhancer";
+import { InspirationModal } from "@/components/inspiration/InspirationModal";
 import { ShareModal } from "./ShareModal";
 import { SurprisePreviewModal } from "./SurprisePreviewModal";
 import { AuthModal } from "../auth/AuthModal";
@@ -43,6 +48,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
   const { user } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showInspirationModal, setShowInspirationModal] = useState(false);
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
 
   // Form states initialized with template defaults
@@ -52,6 +58,13 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
   const [occasionSubtitle, setOccasionSubtitle] = useState(template.defaultFields.occasionSubtitle);
   const [cakeOrObjectMessage, setCakeOrObjectMessage] = useState(template.defaultFields.cakeOrObjectMessage);
   const [subtype, setSubtype] = useState(template.options?.subtypes?.[0] || template.options?.days?.[0] || "");
+
+  // Custom cake photo & candle alignment state
+  const [customCakeUrl, setCustomCakeUrl] = useState<string>("");
+  const [candleTop, setCandleTop] = useState<number>(42);
+  const [candleSpread, setCandleSpread] = useState<number>(10);
+  const [isEnhancingCake, setIsEnhancingCake] = useState(false);
+  const [enhancingPhotoIdx, setEnhancingPhotoIdx] = useState<number | null>(null);
 
   const [photos, setPhotos] = useState<{ url: string; caption: string }[]>(
     template.defaultFields.defaultPhotos
@@ -63,6 +76,74 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
 
   const [musicUrl, setMusicUrl] = useState(template.defaultFields.musicUrl);
   const [musicTitle, setMusicTitle] = useState(template.defaultFields.musicLabel);
+
+  // Template narrative & prompt variations
+  const isBirthday = template.id === "birthday-surprise";
+  const isAnniversary = template.id === "anniversary";
+  const isProposal = template.id === "propose";
+  const isRetirement = template.id === "retirement";
+  const isMothersDay = template.id === "mothers-day";
+  const isFathersDay = template.id === "fathers-day";
+  const isBabyShower = template.id === "baby-shower" || template.id === "pregnancy-reveal";
+  const isValentine = template.id === "valentine";
+
+  const step3Title = isBirthday
+    ? "3. Birthday Message & Wishes"
+    : isAnniversary
+    ? "3. Anniversary Vows & Reflections"
+    : isProposal
+    ? "3. The Big Question & Confession"
+    : isRetirement
+    ? "3. Career Tribute & Legacy Letter"
+    : isMothersDay
+    ? "3. Letter to Mom & Gratitude"
+    : isFathersDay
+    ? "3. Tribute to My Hero & Guide"
+    : isBabyShower
+    ? "3. Blessings for Mama & Baby"
+    : "3. The Streaming Sentimental Letter";
+
+  const step3Description = isBirthday
+    ? "These heartfelt birthday wishes will stream line by line with gentle auto-scroll in Act IV."
+    : isAnniversary
+    ? "These vows and cherished memories will stream line by line in Act IV."
+    : isProposal
+    ? "Your confession and romantic promises will stream leading up to the proposal reveal."
+    : isRetirement
+    ? "Your tribute and reflections on their leadership and accomplishments."
+    : isMothersDay || isFathersDay
+    ? "Express your deepest gratitude and appreciation for everything they have given."
+    : "This letter streams line by line with gentle auto-scroll in Act IV.";
+
+  const ritualLabel = isBirthday
+    ? "Cake Message (3D Royal Icing Inscription)"
+    : isProposal
+    ? "Velvet Ring Box Inscription"
+    : isAnniversary
+    ? "Champagne Toast / Cake Message"
+    : isRetirement
+    ? "Trophy / Lifetime Award Plaque Text"
+    : isMothersDay
+    ? "Bouquet Ribbon / Card Note"
+    : isFathersDay
+    ? "World's Best Dad Plaque Text"
+    : isBabyShower
+    ? "Gift Box / Ultrasound Card Note"
+    : "Centerpiece / Sacred Object Message";
+
+  const ritualPlaceholder = isBirthday
+    ? `e.g. Happy Birthday ${recipientName || "Sophia"} 🎂`
+    : isProposal
+    ? `e.g. Will You Marry Me, ${recipientName || "Sophia"}? 💍`
+    : isAnniversary
+    ? `e.g. Happy Anniversary, My Forever 🥂`
+    : isRetirement
+    ? `e.g. Happy Retirement, Chief! 🏆`
+    : isMothersDay
+    ? `e.g. World's Best Mom 🌸`
+    : isFathersDay
+    ? `e.g. World's Greatest Dad 🏆`
+    : `e.g. For ${recipientName || "My Love"} ✨`;
 
   // Custom audio upload & preview state
   const [customAudioInfo, setCustomAudioInfo] = useState<{
@@ -191,6 +272,55 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
     setLetterParagraphs(letterParagraphs.filter((_, i) => i !== idx));
   };
 
+  const handleUploadPhotoFile = (idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      const result = uploadEvent.target?.result as string;
+      handleUpdatePhoto(idx, "url", result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleBeautifyPhoto = async (idx: number) => {
+    const currentUrl = photos[idx]?.url;
+    if (!currentUrl) return;
+    setEnhancingPhotoIdx(idx);
+    try {
+      const enhanced = await enhancePhotoCandlelight(currentUrl);
+      handleUpdatePhoto(idx, "url", enhanced);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setEnhancingPhotoIdx(null);
+    }
+  };
+
+  const handleUploadCakeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      const result = uploadEvent.target?.result as string;
+      setCustomCakeUrl(result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleBeautifyCake = async () => {
+    if (!customCakeUrl) return;
+    setIsEnhancingCake(true);
+    try {
+      const enhanced = await enhancePhotoCandlelight(customCakeUrl);
+      setCustomCakeUrl(enhanced);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsEnhancingCake(false);
+    }
+  };
+
   // Save / Create handler with Razorpay Payment (₹250)
   const handleCreate = async () => {
     if (!recipientName.trim()) {
@@ -233,6 +363,8 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
         letter: letterParagraphs.filter((p) => p.trim().length > 0),
         musicUrl,
         musicTitle,
+        customCakeUrl: customCakeUrl || undefined,
+        customCandlePosition: { top: candleTop, arcSpread: candleSpread },
         createdAt: new Date().toISOString(),
         userId: user?.id,
         isPaid: true,
@@ -421,13 +553,13 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
 
               <div>
                 <label className="block text-xs font-semibold text-[#d1c4b9] uppercase tracking-wider mb-1.5">
-                  Centerpiece / Cake Message
+                  {ritualLabel}
                 </label>
                 <input
                   type="text"
                   value={cakeOrObjectMessage}
                   onChange={(e) => setCakeOrObjectMessage(e.target.value)}
-                  placeholder={`e.g. Happy Birthday ${recipientName || "Sophia"}`}
+                  placeholder={ritualPlaceholder}
                   className="w-full bg-black/50 border border-[#e0a96d]/30 rounded-xl px-3.5 sm:px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#ffbe53] transition-colors"
                 />
               </div>
@@ -465,6 +597,160 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 </button>
               </div>
 
+              {/* CUSTOM CAKE PHOTO & CANDLE PLACEMENT (for Birthday & Celebration templates) */}
+              {isBirthday && (
+                <div className="p-4 sm:p-5 rounded-2xl border-2 border-dashed border-[#ffbe53]/40 bg-[#160d26]/80 shadow-lg">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#ffbe53]/20 border border-[#ffbe53]/40 flex items-center justify-center text-[#ffbe53] shrink-0">
+                        <Cake className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-white flex items-center gap-1.5">
+                          <span>Upload Your Own Cake Photo</span>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#ffbe53]/20 text-[#ffbe53] border border-[#ffbe53]/30">
+                            Smart Candle Alignment
+                          </span>
+                        </h4>
+                        <p className="text-xs text-[#a8998d]">
+                          Upload a photo of your actual cake. Real candles and cutting physics will be mapped onto it!
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <label className="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs font-bold flex items-center justify-center gap-1.5 shadow cursor-pointer active:scale-95 transition-all">
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>{customCakeUrl ? "Change Cake Photo" : "Upload Cake Photo"}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleUploadCakeFile}
+                          className="hidden"
+                        />
+                      </label>
+                      {customCakeUrl && (
+                        <button
+                          type="button"
+                          onClick={() => setCustomCakeUrl("")}
+                          className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-[#a8998d] hover:text-[#ff7b90] transition-colors cursor-pointer"
+                          title="Reset to default cake"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Custom Cake Preview & Candle Alignment Controls */}
+                  {customCakeUrl && (
+                    <div className="mt-4 pt-4 border-t border-white/10 flex flex-col md:flex-row items-center gap-5">
+                      {/* Live Inscription & Candle Visual Preview */}
+                      <div className="relative w-44 h-44 sm:w-48 sm:h-48 rounded-2xl overflow-hidden border-2 border-[#ffbe53]/50 shadow-2xl bg-black shrink-0">
+                        <Image
+                          src={customCakeUrl}
+                          alt="Custom uploaded cake"
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+
+                        {/* 3D Royal Icing Inscription */}
+                        <div
+                          className="absolute inset-x-0 text-center pointer-events-none px-2 z-20"
+                          style={{
+                            top: `${candleTop + 14}%`,
+                            transform: "perspective(200px) rotateX(18deg)",
+                          }}
+                        >
+                          <span
+                            className="font-serif italic text-xs font-bold select-none truncate block"
+                            style={{
+                              color: "#fff4d0",
+                              textShadow: "0 2px 4px rgba(0,0,0,0.95), 0 0 10px rgba(255,190,83,0.7)",
+                            }}
+                          >
+                            {cakeOrObjectMessage || (recipientName ? `Happy Birthday ${recipientName}` : "Happy Birthday")}
+                          </span>
+                        </div>
+
+                        {/* Interactive Parabolic Candle Arc */}
+                        {[
+                          { left: `${50 - candleSpread * 2}%`, top: `${candleTop + 3.5}%` },
+                          { left: `${50 - candleSpread}%`, top: `${candleTop + 1.2}%` },
+                          { left: "50%", top: `${candleTop}%` },
+                          { left: `${50 + candleSpread}%`, top: `${candleTop + 1.2}%` },
+                          { left: `${50 + candleSpread * 2}%`, top: `${candleTop + 3.5}%` },
+                        ].map((c, i) => (
+                          <div
+                            key={i}
+                            style={{ left: c.left, top: c.top }}
+                            className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none z-10"
+                          >
+                            <div className="w-2.5 h-2.5 rounded-full bg-radial from-[#ffe494] to-[#ff9500] animate-ping" />
+                            <div className="w-1 h-3.5 rounded-full bg-gradient-to-b from-[#ffd700] to-[#e0a96d] -mt-1 border-t border-white/60" />
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Alignment Sliders */}
+                      <div className="flex-1 w-full space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-semibold text-white flex items-center gap-1.5">
+                            <Sliders className="w-3.5 h-3.5 text-[#ffbe53]" />
+                            <span>Align Candles on Cake Surface</span>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={handleBeautifyCake}
+                            disabled={isEnhancingCake}
+                            className="px-3 py-1.5 rounded-lg bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-semibold text-[#ffbe53] flex items-center gap-1.5 transition-colors cursor-pointer"
+                          >
+                            <Wand2 className="w-3.5 h-3.5" />
+                            <span>{isEnhancingCake ? "Enhancing..." : "✨ Beautify Cake Photo"}</span>
+                          </button>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between text-[11px] text-[#a8998d] mb-1">
+                            <span>Candle Height on Cake Tier:</span>
+                            <span className="font-mono text-[#ffbe53]">{candleTop}%</span>
+                          </div>
+                          <input
+                            type="range"
+                            min={25}
+                            max={65}
+                            value={candleTop}
+                            onChange={(e) => setCandleTop(Number(e.target.value))}
+                            className="w-full accent-[#ffbe53] cursor-pointer"
+                          />
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between text-[11px] text-[#a8998d] mb-1">
+                            <span>Candle Arc Spread:</span>
+                            <span className="font-mono text-[#ffbe53]">{candleSpread * 4}%</span>
+                          </div>
+                          <input
+                            type="range"
+                            min={6}
+                            max={15}
+                            value={candleSpread}
+                            onChange={(e) => setCandleSpread(Number(e.target.value))}
+                            className="w-full accent-[#ffbe53] cursor-pointer"
+                          />
+                        </div>
+
+                        <p className="text-[11px] text-[#a8998d]">
+                          💡 Drag the sliders until the candles sit naturally along the upper frosting line.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Memory Photos List */}
               <div className="space-y-3.5">
                 {photos.map((photo, idx) => (
                   <div
@@ -499,13 +785,15 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                     </div>
 
                     <div className="flex-1 w-full space-y-2">
-                      <input
-                        type="text"
-                        value={photo.url}
-                        onChange={(e) => handleUpdatePhoto(idx, "url", e.target.value)}
-                        placeholder="Image URL or preset path"
-                        className="w-full bg-black/60 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#ffbe53]"
-                      />
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={photo.url}
+                          onChange={(e) => handleUpdatePhoto(idx, "url", e.target.value)}
+                          placeholder="Image URL or upload file below"
+                          className="w-full bg-black/60 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#ffbe53]"
+                        />
+                      </div>
                       <input
                         type="text"
                         value={photo.caption}
@@ -513,6 +801,29 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                         placeholder="Sweet caption (e.g. Under the stars with you ✨)"
                         className="w-full bg-black/60 border border-white/10 rounded-lg px-3 py-2 text-xs text-[#ffbe53] placeholder-white/30 focus:outline-none focus:border-[#ffbe53]"
                       />
+
+                      {/* File upload & Beautifier Actions */}
+                      <div className="flex items-center gap-2 pt-1">
+                        <label className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-[#d1c4b9] hover:text-white flex items-center gap-1.5 cursor-pointer transition-colors">
+                          <Upload className="w-3 h-3 text-[#ffbe53]" />
+                          <span>Upload File</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleUploadPhotoFile(idx, e)}
+                            className="hidden"
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => handleBeautifyPhoto(idx)}
+                          disabled={enhancingPhotoIdx === idx}
+                          className="px-3 py-1.5 rounded-lg bg-[#ffbe53]/15 hover:bg-[#ffbe53]/25 border border-[#ffbe53]/30 text-xs text-[#ffbe53] flex items-center gap-1.5 cursor-pointer transition-colors"
+                        >
+                          <Wand2 className="w-3 h-3" />
+                          <span>{enhancingPhotoIdx === idx ? "Enhancing..." : "✨ Beautify"}</span>
+                        </button>
+                      </div>
                     </div>
 
                     {photos.length > 1 && (
@@ -539,32 +850,42 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                   onClick={() => setCurrentStep(3)}
                   className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs sm:text-sm font-semibold tracking-wide flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-all"
                 >
-                  <span>Next: Write Love Letter</span>
+                  <span>Next: Write Message</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 3: THE LOVE LETTER */}
+          {/* STEP 3: TEMPLATE-ADAPTIVE MESSAGE / LETTER */}
           {currentStep === 3 && (
             <div className="space-y-5 sm:space-y-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
                   <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-1">
-                    3. The Streaming Love Letter
+                    {step3Title}
                   </h3>
                   <p className="text-xs text-[#a8998d]">
-                    This letter streams line by line with gentle auto-scroll in Act IV.
+                    {step3Description}
                   </p>
                 </div>
-                <button
-                  onClick={handleAddParagraph}
-                  className="w-full sm:w-auto px-4 py-2 rounded-full bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-semibold text-[#ffbe53] flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all shrink-0"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Paragraph</span>
-                </button>
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => setShowInspirationModal(true)}
+                    className="flex-1 sm:flex-initial px-4 py-2 rounded-full bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs font-bold flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 fill-current" />
+                    <span>AI Write For Me</span>
+                  </button>
+                  <button
+                    onClick={handleAddParagraph}
+                    className="px-4 py-2 rounded-full bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-semibold text-[#ffbe53] flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all shrink-0"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Paragraph</span>
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-3">
@@ -876,7 +1197,41 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
         letter={letterParagraphs}
         musicTitle={musicTitle}
         musicUrl={musicUrl}
+        customCakeUrl={customCakeUrl}
+        customCandlePosition={{ top: candleTop, arcSpread: candleSpread }}
         onProceedToPay={handleCreate}
+      />
+
+      {/* AI Inspiration Studio Modal */}
+      <InspirationModal
+        isOpen={showInspirationModal}
+        onClose={() => setShowInspirationModal(false)}
+        initialCategory={
+          isBirthday
+            ? "birthday"
+            : isAnniversary
+            ? "anniversary"
+            : isProposal
+            ? "proposal"
+            : isValentine
+            ? "valentine"
+            : isRetirement
+            ? "retirement"
+            : isMothersDay
+            ? "mothers-day"
+            : isBabyShower
+            ? "baby-shower"
+            : "romantic"
+        }
+        recipientName={recipientName}
+        senderName={senderName}
+        onSelectText={(text) => {
+          if (letterParagraphs.length === 1 && letterParagraphs[0].trim().length === 0) {
+            setLetterParagraphs([text]);
+          } else {
+            setLetterParagraphs([...letterParagraphs, text]);
+          }
+        }}
       />
 
       {/* Share Modal on Success */}

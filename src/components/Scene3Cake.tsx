@@ -13,10 +13,12 @@ interface Scene3CakeProps {
   onComplete: () => void;
   recipientName?: string;
   cakeOrObjectMessage?: string;
+  customCakeUrl?: string;
+  customCandlePosition?: { top: number; arcSpread: number };
 }
 
 // Flame & Ember coordinates on the cake image (percentages)
-const CANDLE_COORDINATES = [
+const DEFAULT_CANDLE_COORDINATES = [
   { id: 1, flameLeft: "33.8%", flameTop: "15.2%", wickTop: "18.5%" },
   { id: 2, flameLeft: "41.8%", flameTop: "12.8%", wickTop: "16.0%" },
   { id: 3, flameLeft: "51.4%", flameTop: "11.2%", wickTop: "14.5%" },
@@ -28,11 +30,52 @@ export function Scene3Cake({
   onComplete,
   recipientName = "",
   cakeOrObjectMessage,
+  customCakeUrl,
+  customCandlePosition,
 }: Scene3CakeProps) {
   const [candlesBlown, setCandlesBlown] = useState(false);
   const [isBlowingAnim, setIsBlowingAnim] = useState(false);
   const [isSliced, setIsSliced] = useState(false);
   const cakeContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // Dynamic coordinates for user uploaded cake
+  const candleBaseTop = customCandlePosition?.top || 42;
+  const candleArcSpread = customCandlePosition?.arcSpread || 10;
+
+  const candleCoordinates = customCakeUrl
+    ? [
+        {
+          id: 1,
+          flameLeft: `${50 - candleArcSpread * 2}%`,
+          flameTop: `${candleBaseTop + 3.5}%`,
+          wickTop: `${candleBaseTop + 6.5}%`,
+        },
+        {
+          id: 2,
+          flameLeft: `${50 - candleArcSpread}%`,
+          flameTop: `${candleBaseTop + 1.2}%`,
+          wickTop: `${candleBaseTop + 4.2}%`,
+        },
+        {
+          id: 3,
+          flameLeft: "50%",
+          flameTop: `${candleBaseTop}%`,
+          wickTop: `${candleBaseTop + 3}%`,
+        },
+        {
+          id: 4,
+          flameLeft: `${50 + candleArcSpread}%`,
+          flameTop: `${candleBaseTop + 1.2}%`,
+          wickTop: `${candleBaseTop + 4.2}%`,
+        },
+        {
+          id: 5,
+          flameLeft: `${50 + candleArcSpread * 2}%`,
+          flameTop: `${candleBaseTop + 3.5}%`,
+          wickTop: `${candleBaseTop + 6.5}%`,
+        },
+      ]
+    : DEFAULT_CANDLE_COORDINATES;
 
   // Trigger realistic candle blowout
   const handleExtinguish = () => {
@@ -197,8 +240,8 @@ export function Scene3Cake({
                 className="absolute inset-0 cursor-pointer"
               >
                 <Image
-                  src="/images/real_birthday_cake.jpg"
-                  alt="Real celebration cake with Happy Birthday and 5 lit candles"
+                  src={customCakeUrl || "/images/real_birthday_cake.jpg"}
+                  alt="Real celebration cake with candles"
                   fill
                   sizes="(max-width: 640px) 340px, 420px"
                   className={`object-cover transition-transform duration-300 ${
@@ -210,12 +253,34 @@ export function Scene3Cake({
                 {/* Living Candlelight Glow Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
 
+                {/* 3D Royal Icing Inscription */}
+                {(customCakeUrl || cakeOrObjectMessage) && (
+                  <div
+                    className="absolute inset-x-0 text-center pointer-events-none z-25 px-4"
+                    style={{
+                      top: `${candleBaseTop + 13}%`,
+                      transform: "perspective(300px) rotateX(20deg)",
+                    }}
+                  >
+                    <span
+                      className="font-serif italic text-base sm:text-lg md:text-xl font-bold tracking-wider select-none"
+                      style={{
+                        color: "#fff4d0",
+                        textShadow:
+                          "0 2px 4px rgba(0,0,0,0.95), 0 0 12px rgba(255,190,83,0.7), 0 0 25px rgba(224,169,109,0.5)",
+                      }}
+                    >
+                      {cakeOrObjectMessage || (recipientName ? `Happy Birthday ${recipientName}` : "Happy Celebration")}
+                    </span>
+                  </div>
+                )}
+
                 {/* Dynamic Flickering Flame Glows & Breath Reaction */}
-                {CANDLE_COORDINATES.map((c) => (
+                {candleCoordinates.map((c) => (
                   <div
                     key={c.id}
                     style={{ left: c.flameLeft, top: c.flameTop }}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20"
+                    className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20 flex flex-col items-center"
                   >
                     {/* Pulsing Warm Flame Core Glow */}
                     <motion.div
@@ -238,6 +303,11 @@ export function Scene3Cake({
                       }}
                       className="w-8 h-8 rounded-full bg-radial from-[#ffe494]/70 via-[#ff9500]/30 to-transparent blur-sm"
                     />
+
+                    {/* Realistic candle stalk if custom cake */}
+                    {customCakeUrl && (
+                      <div className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#ffd700] via-[#ffbe53] to-[#e0a96d] shadow-sm -mt-2 border-t border-white/60" />
+                    )}
                   </div>
                 ))}
 
@@ -261,23 +331,45 @@ export function Scene3Cake({
                 className="absolute inset-0 cursor-crosshair"
               >
                 <Image
-                  src="/images/real_birthday_cake_blown.jpg"
-                  alt="Real birthday cake with extinguished candles and curling smoke"
+                  src={customCakeUrl || "/images/real_birthday_cake_blown.jpg"}
+                  alt="Real celebration cake with extinguished candles and curling smoke"
                   fill
                   sizes="(max-width: 640px) 340px, 420px"
-                  className="object-cover"
+                  className={`object-cover ${customCakeUrl ? "filter brightness-90" : ""}`}
                   priority
                 />
 
                 {/* Soft moody vignette after blow */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
 
+                {/* 3D Royal Icing Inscription */}
+                {(customCakeUrl || cakeOrObjectMessage) && (
+                  <div
+                    className="absolute inset-x-0 text-center pointer-events-none z-25 px-4"
+                    style={{
+                      top: `${candleBaseTop + 13}%`,
+                      transform: "perspective(300px) rotateX(20deg)",
+                    }}
+                  >
+                    <span
+                      className="font-serif italic text-base sm:text-lg md:text-xl font-bold tracking-wider select-none opacity-85"
+                      style={{
+                        color: "#fff4d0",
+                        textShadow:
+                          "0 2px 4px rgba(0,0,0,0.95), 0 0 10px rgba(255,190,83,0.5)",
+                      }}
+                    >
+                      {cakeOrObjectMessage || (recipientName ? `Happy Birthday ${recipientName}` : "Happy Celebration")}
+                    </span>
+                  </div>
+                )}
+
                 {/* 5 Animated Glowing Embers on Candle Wicks */}
-                {CANDLE_COORDINATES.map((c) => (
+                {candleCoordinates.map((c) => (
                   <div
                     key={c.id}
                     style={{ left: c.flameLeft, top: c.wickTop }}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20"
+                    className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20 flex flex-col items-center"
                   >
                     {/* Hot glowing ember point cooling down */}
                     <motion.div
@@ -289,6 +381,11 @@ export function Scene3Cake({
                       transition={{ duration: 4.5, ease: "easeOut" }}
                       className="w-2 h-2 rounded-full bg-gradient-to-t from-[#ff2a00] to-[#ffaa00] shadow-[0_0_10px_#ff4500]"
                     />
+
+                    {/* Realistic candle stalk if custom cake */}
+                    {customCakeUrl && (
+                      <div className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#ffd700]/80 via-[#ffbe53]/80 to-[#e0a96d]/80 shadow-sm -mt-0.5" />
+                    )}
 
                     {/* Additional rising smoke particle wisps */}
                     {[0, 1].map((s) => (
@@ -324,7 +421,7 @@ export function Scene3Cake({
               </motion.div>
             )}
 
-            {/* 3. SLICED REAL CAKE (Slice served on gold spatula) */}
+            {/* 3. SLICED REAL CAKE */}
             {isSliced && (
               <motion.div
                 key="cake-sliced"
@@ -334,13 +431,20 @@ export function Scene3Cake({
                 className="absolute inset-0"
               >
                 <Image
-                  src="/images/real_birthday_cake_sliced.jpg"
-                  alt="Real birthday cake with slice pulled out on ornate gold server spatula"
+                  src={customCakeUrl || "/images/real_birthday_cake_sliced.jpg"}
+                  alt="Celebration cake with slice"
                   fill
                   sizes="(max-width: 640px) 340px, 420px"
                   className="object-cover"
                   priority
                 />
+
+                {/* Dynamic Slice Split Overlay if custom cake */}
+                {customCakeUrl && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="w-1 h-full bg-gradient-to-b from-transparent via-[#ffbe53] to-transparent shadow-[0_0_20px_#ffbe53] animate-pulse" />
+                  </div>
+                )}
 
                 {/* Golden celebratory shimmer overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />

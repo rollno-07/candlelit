@@ -109,42 +109,27 @@ export function BackgroundFX() {
 
     initStars();
 
-    // Floating Little Heart Particles
-    // Phase 1: 0 - 4.5 seconds -> scattered across whole screen
-    // Phase 2: 4.5+ seconds -> smoothly transition to only flying in bottom area
-    const FULLSCREEN_DURATION_MS = 4500;
-    const startTime = performance.now();
-    const maxFullscreenHearts = 45;
-    const maxBottomHearts = 26;
+    // Floating Little Heart Particles - Continuous Screen-Wide Engine
+    // Hearts continuously float across the entire viewport from bottom to top and never disappear
+    const totalHearts = 38;
 
-    const spawnHeart = (isBottomOnly: boolean, initialScatter: boolean = false): HeartParticle => {
-      let startY: number;
-      let maxLife: number;
-
-      if (initialScatter) {
-        // Dispersed across entire viewport height
-        startY = Math.random() * height;
-        maxLife = 200 + Math.random() * 240;
-      } else if (isBottomOnly) {
-        // Spawns just at/below bottom viewport line
-        startY = height + 10 + Math.random() * 25;
-        maxLife = 140 + Math.random() * 120;
-      } else {
-        // Fullscreen phase floating from bottom
-        startY = height + 15;
-        maxLife = 260 + Math.random() * 240;
-      }
+    const spawnHeart = (initialScatter: boolean = false): HeartParticle => {
+      // Dispersed across entire height on initial load, or spawn below bottom viewport line
+      const startY = initialScatter
+        ? Math.random() * height
+        : height + 15 + Math.random() * 35;
+      const maxLife = 400 + Math.random() * 350;
 
       return {
         x: Math.random() * width,
         y: startY,
-        size: isBottomOnly ? 4.5 + Math.random() * 5.5 : 5 + Math.random() * 7,
-        speedY: isBottomOnly ? 0.35 + Math.random() * 0.55 : 0.35 + Math.random() * 0.65,
+        size: 4.5 + Math.random() * 6.5,
+        speedY: 0.35 + Math.random() * 0.55,
         speedX: (Math.random() - 0.5) * 0.35,
         rotation: (Math.random() - 0.5) * 0.6,
         rotationSpeed: (Math.random() - 0.5) * 0.015,
         alpha: 0,
-        life: initialScatter ? Math.random() * 100 : 0,
+        life: initialScatter ? Math.random() * 200 : 0,
         maxLife,
         color: heartColors[Math.floor(Math.random() * heartColors.length)],
         isInitial: initialScatter,
@@ -152,8 +137,8 @@ export function BackgroundFX() {
     };
 
     const hearts: HeartParticle[] = [];
-    for (let i = 0; i < maxFullscreenHearts; i++) {
-      hearts.push(spawnHeart(false, true));
+    for (let i = 0; i < totalHearts; i++) {
+      hearts.push(spawnHeart(true));
     }
 
     let time = 0;
@@ -218,13 +203,7 @@ export function BackgroundFX() {
 
       ctx.shadowBlur = 0;
 
-      // Calculate bottom area boundary (bottom ~28% of viewport)
-      const elapsed = performance.now() - startTime;
-      const isBottomPhase = elapsed > FULLSCREEN_DURATION_MS;
-      const bottomAreaHeight = Math.max(160, Math.min(260, height * 0.28));
-      const bottomCeilingY = height - bottomAreaHeight;
-
-      // Draw floating little glowing hearts
+      // Draw continuous floating little glowing hearts
       for (let i = 0; i < hearts.length; i++) {
         const h = hearts[i];
         h.life += 1;
@@ -232,53 +211,22 @@ export function BackgroundFX() {
         h.x += h.speedX + Math.sin(time + h.life * 0.02) * 0.45;
         h.rotation += h.rotationSpeed;
 
-        if (h.isInitial) {
-          // Initial whole-screen phase: standard lifecycle fade
-          const progress = h.life / h.maxLife;
-          if (progress < 0.15) {
-            h.alpha = (progress / 0.15) * 0.85;
-          } else if (progress > 0.8) {
-            h.alpha = (1 - (progress - 0.8) / 0.2) * 0.85;
-          } else {
-            h.alpha = 0.85;
-          }
-
-          drawHeart(ctx, h.x, h.y, h.size, h.rotation, h.color, h.alpha);
-
-          // Once initial heart finishes or leaves viewport top:
-          if (h.life >= h.maxLife || h.y < -30) {
-            if (isBottomPhase) {
-              if (hearts.length > maxBottomHearts) {
-                // Smoothly prune down from 45 to 26 bottom hearts
-                hearts.splice(i, 1);
-                i--;
-              } else {
-                hearts[i] = spawnHeart(true, false);
-              }
-            } else {
-              hearts[i] = spawnHeart(false, false);
-            }
-          }
+        // Smooth fade-in as it rises from bottom, smooth fade-out as it reaches the very top
+        if (h.y >= height - 35) {
+          // Entering at the bottom
+          h.alpha = Math.max(0, Math.min(0.85, ((height + 20 - h.y) / 55) * 0.85));
+        } else if (h.y <= 65) {
+          // Softly dissolving as it reaches the top edge
+          h.alpha = Math.max(0, (h.y / 65) * 0.85);
         } else {
-          // Bottom-only flying mode: float gently in the bottom zone and fade out softly before reaching middle content
-          if (h.y >= height - 25) {
-            // Fade in as it rises from bottom
-            h.alpha = Math.max(0, Math.min(0.85, ((height + 15 - h.y) / 40) * 0.85));
-          } else if (h.y <= bottomCeilingY + 65) {
-            // Softly dissolve to 0 before touching main content
-            const fadeDistance = 65;
-            const progress = Math.max(0, (h.y - bottomCeilingY) / fadeDistance);
-            h.alpha = progress * 0.85;
-          } else {
-            h.alpha = 0.85;
-          }
+          h.alpha = 0.85;
+        }
 
-          drawHeart(ctx, h.x, h.y, h.size, h.rotation, h.color, h.alpha);
+        drawHeart(ctx, h.x, h.y, h.size, h.rotation, h.color, h.alpha);
 
-          // Respawn at bottom when it reaches ceiling or maxLife
-          if (h.y <= bottomCeilingY || h.life >= h.maxLife) {
-            hearts[i] = spawnHeart(true, false);
-          }
+        // Respawn when heart exits the top of the viewport or life finishes
+        if (h.y < -25 || h.life >= h.maxLife) {
+          hearts[i] = spawnHeart(false);
         }
       }
 

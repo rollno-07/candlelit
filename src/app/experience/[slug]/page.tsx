@@ -208,6 +208,8 @@ function ExperienceContent() {
                 senderName={surprise.senderName}
                 templateId={surprise.templateId}
                 cakeOrObjectMessage={surprise.cakeOrObjectMessage}
+                customCakeUrl={surprise.customCakeUrl}
+                customCandlePosition={surprise.customCandlePosition}
               />
             </motion.section>
           )}

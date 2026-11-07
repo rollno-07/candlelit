@@ -27,6 +27,8 @@ interface Scene3CeremonyProps {
   senderName?: string;
   templateId?: string;
   cakeOrObjectMessage?: string;
+  customCakeUrl?: string;
+  customCandlePosition?: { top: number; arcSpread: number };
 }
 
 export function Scene3Ceremony({
@@ -35,6 +37,8 @@ export function Scene3Ceremony({
   senderName = "With All My Heart",
   templateId = "birthday-surprise",
   cakeOrObjectMessage,
+  customCakeUrl,
+  customCandlePosition,
 }: Scene3CeremonyProps) {
   // If Birthday Surprise, use the full photorealistic Scene3Cake
   if (templateId === "birthday-surprise") {
@@ -43,6 +47,8 @@ export function Scene3Ceremony({
         onComplete={onComplete}
         recipientName={recipientName}
         cakeOrObjectMessage={cakeOrObjectMessage}
+        customCakeUrl={customCakeUrl}
+        customCandlePosition={customCandlePosition}
       />
     );
   }

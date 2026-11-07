@@ -37,6 +37,8 @@ interface SurprisePreviewModalProps {
   letter: string[];
   musicTitle?: string;
   musicUrl?: string;
+  customCakeUrl?: string;
+  customCandlePosition?: { top: number; arcSpread: number };
   onProceedToPay: () => void;
 }
 
@@ -53,6 +55,8 @@ export function SurprisePreviewModal({
   letter,
   musicTitle,
   musicUrl,
+  customCakeUrl,
+  customCandlePosition,
   onProceedToPay,
 }: SurprisePreviewModalProps) {
   const [mounted, setMounted] = useState(false);
@@ -308,6 +312,8 @@ export function SurprisePreviewModal({
                       senderName={effectiveSender}
                       templateId={templateId}
                       cakeOrObjectMessage={cakeOrObjectMessage}
+                      customCakeUrl={customCakeUrl}
+                      customCandlePosition={customCandlePosition}
                       onComplete={() => setCurrentAct(4)}
                     />
                   </motion.div>

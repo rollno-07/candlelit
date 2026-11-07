@@ -3,13 +3,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, MessageSquare, Check, X, Send, Heart } from "lucide-react";
+import { Sparkles, MessageSquare, Check, X, Send, Heart, Wand2 } from "lucide-react";
+import { InspirationModal } from "@/components/inspiration/InspirationModal";
 
 export function Footer() {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [feedbackText, setFeedbackText] = useState("");
   const [feedbackEmail, setFeedbackEmail] = useState("");
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+  const [inspirationCategory, setInspirationCategory] = useState<string | null>(null);
 
   const handleSubmitFeedback = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,32 +79,45 @@ export function Footer() {
 
             {/* Column 2: INSPIRATION (2 cols) */}
             <div className="md:col-span-2">
-              <h4 className="text-[11px] font-semibold tracking-widest uppercase text-white mb-4">
-                Inspiration
+              <h4 className="text-[11px] font-semibold tracking-widest uppercase text-white mb-4 flex items-center gap-1.5">
+                <span>Inspiration</span>
+                <Sparkles className="w-3 h-3 text-[#ffbe53] fill-current" />
               </h4>
               <ul className="space-y-2.5 text-xs text-[#a8998d]">
                 <li>
-                  <Link href="/create/birthday-surprise" className="hover:text-[#ffbe53] transition-colors block">
+                  <button
+                    onClick={() => setInspirationCategory("birthday")}
+                    className="hover:text-[#ffbe53] transition-colors block text-left cursor-pointer"
+                  >
                     Birthday Wishes
-                  </Link>
+                  </button>
                 </li>
                 <li>
-                  <Link href="/create/anniversary" className="hover:text-[#ffbe53] transition-colors inline-flex items-center gap-1.5">
+                  <button
+                    onClick={() => setInspirationCategory("anniversary")}
+                    className="hover:text-[#ffbe53] transition-colors inline-flex items-center gap-1.5 text-left cursor-pointer"
+                  >
                     <span>Anniversary Quotes</span>
                     <span className="px-1.5 py-0.2 rounded text-[9px] font-bold uppercase bg-[#ff4d6d]/20 text-[#ff7b90] border border-[#ff4d6d]/30 tracking-wider">
                       HOT
                     </span>
-                  </Link>
+                  </button>
                 </li>
                 <li>
-                  <Link href="/create/valentine" className="hover:text-[#ffbe53] transition-colors block">
+                  <button
+                    onClick={() => setInspirationCategory("valentine")}
+                    className="hover:text-[#ffbe53] transition-colors block text-left cursor-pointer"
+                  >
                     Valentine Messages
-                  </Link>
+                  </button>
                 </li>
                 <li>
-                  <Link href="/templates" className="hover:text-[#ffbe53] transition-colors block">
+                  <button
+                    onClick={() => setInspirationCategory("romantic")}
+                    className="hover:text-[#ffbe53] transition-colors block text-left cursor-pointer"
+                  >
                     Romantic Texts
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -321,6 +336,13 @@ export function Footer() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* AI Inspiration Studio Modal */}
+      <InspirationModal
+        isOpen={Boolean(inspirationCategory)}
+        onClose={() => setInspirationCategory(null)}
+        initialCategory={inspirationCategory || "birthday"}
+      />
     </>
   );
 }
