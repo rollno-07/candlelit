@@ -444,10 +444,10 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
 
           <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
             {[
-              { num: 1, label: "Details" },
-              { num: 2, label: "Memories" },
-              { num: 3, label: "Letter" },
-              { num: 4, label: "Music" },
+              { num: 1, label: "Cake & Details" },
+              { num: 2, label: "Balloon Photos" },
+              { num: 3, label: "Heartfelt Letter" },
+              { num: 4, label: "Music & Preview" },
             ].map((tab) => (
               <button
                 key={tab.num}
@@ -564,6 +564,240 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 />
               </div>
 
+              {/* 🎂 STEP 1: EXPLICIT CAKE PHOTO & PRESENTATION PROMPT */}
+              {!isProposal && (
+                <div className="pt-4 border-t border-white/10 space-y-4">
+                  <div>
+                    <label className="text-xs font-semibold text-[#d1c4b9] uppercase tracking-wider flex items-center gap-1.5">
+                      <Cake className="w-4 h-4 text-[#ffbe53]" />
+                      <span>Cake Presentation & Ceremony Photo</span>
+                    </label>
+                    <p className="text-xs text-[#a8998d] mt-1">
+                      Choose between our curated 3D bakery cake or upload a photo of your actual cake.
+                    </p>
+                  </div>
+
+                  {/* Choice Cards: Bakery vs Real Upload */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {/* Option 1: Signature 3D Bakery Cake */}
+                    <div
+                      onClick={() => setCustomCakeUrl("")}
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                        !customCakeUrl
+                          ? "border-[#ffbe53] bg-[#ffbe53]/10 shadow-[0_0_20px_rgba(255,190,83,0.15)] ring-1 ring-[#ffbe53]"
+                          : "border-white/10 bg-black/30 hover:border-white/20 hover:bg-white/[0.02]"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-2xl">🎂</span>
+                          <div>
+                            <h4 className="text-sm font-semibold text-white">Signature 3D Bakery Cake</h4>
+                            <span className="text-[10px] text-[#ffbe53] font-medium">Curated Luxury Experience</span>
+                          </div>
+                        </div>
+                        <div
+                          className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
+                            !customCakeUrl ? "border-[#ffbe53] bg-[#ffbe53] text-[#1c1208]" : "border-white/30"
+                          }`}
+                        >
+                          {!customCakeUrl && <Check className="w-3 h-3 stroke-[3]" />}
+                        </div>
+                      </div>
+                      <p className="text-xs text-[#a8998d] leading-relaxed">
+                        Photorealistic 3D chocolate velvet cake with burning gold candles, sparkler embers, and 3D royal icing.
+                      </p>
+                    </div>
+
+                    {/* Option 2: Upload Real Cake Photo */}
+                    <label
+                      htmlFor="cake-photo-input-step1"
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                        customCakeUrl
+                          ? "border-[#ffbe53] bg-[#ffbe53]/10 shadow-[0_0_20px_rgba(255,190,83,0.15)] ring-1 ring-[#ffbe53]"
+                          : "border-white/10 bg-black/30 hover:border-white/20 hover:bg-white/[0.02]"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-2xl">📸</span>
+                          <div>
+                            <h4 className="text-sm font-semibold text-white">Upload Real Cake Photo</h4>
+                            <span className="text-[10px] text-[#ffbe53] font-medium">Smart AI Candle Alignment</span>
+                          </div>
+                        </div>
+                        <div
+                          className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
+                            customCakeUrl ? "border-[#ffbe53] bg-[#ffbe53] text-[#1c1208]" : "border-white/30"
+                          }`}
+                        >
+                          {customCakeUrl && <Check className="w-3 h-3 stroke-[3]" />}
+                        </div>
+                      </div>
+                      <p className="text-xs text-[#a8998d] leading-relaxed">
+                        Upload your real celebration cake! Real candles, blow-out smoke, 3D royal icing name, and knife cutting map onto your photo.
+                      </p>
+                    </label>
+                  </div>
+
+                  {/* Hidden file input */}
+                  <input
+                    id="cake-photo-input-step1"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleUploadCakeFile}
+                    className="hidden"
+                  />
+
+                  {/* If user hasn't uploaded cake yet */}
+                  {!customCakeUrl ? (
+                    <label
+                      htmlFor="cake-photo-input-step1"
+                      className="block p-4 sm:p-5 rounded-2xl border-2 border-dashed border-[#e0a96d]/30 hover:border-[#ffbe53] bg-[#160d26]/40 hover:bg-[#160d26]/80 text-center cursor-pointer transition-all group"
+                    >
+                      <div className="w-11 h-11 mx-auto rounded-full bg-[#ffbe53]/15 border border-[#ffbe53]/30 flex items-center justify-center text-[#ffbe53] mb-2 group-hover:scale-105 transition-transform">
+                        <Upload className="w-5 h-5" />
+                      </div>
+                      <p className="text-xs sm:text-sm font-semibold text-white group-hover:text-[#ffbe53] transition-colors">
+                        Click here to upload your real cake photo (optional)
+                      </p>
+                      <p className="text-[11px] text-[#a8998d] mt-1">
+                        PNG, JPG, or WEBP up to 15MB. If skipped, our signature luxury bakery cake is used automatically!
+                      </p>
+                    </label>
+                  ) : (
+                    /* If cake photo is uploaded: show preview + candle alignment sliders + beautify */
+                    <div className="p-4 sm:p-5 rounded-2xl border border-[#ffbe53]/40 bg-[#160d26]/90 shadow-xl space-y-4">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-3 border-b border-white/10">
+                        <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                          <Sparkles className="w-4 h-4 text-[#ffbe53]" />
+                          <span>Real Cake Photo Configured</span>
+                        </span>
+
+                        <div className="flex items-center gap-2">
+                          <label
+                            htmlFor="cake-photo-input-step1"
+                            className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-semibold text-white cursor-pointer transition-colors"
+                          >
+                            Change Photo
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setCustomCakeUrl("")}
+                            className="px-3 py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/25 border border-red-500/30 text-xs font-semibold text-[#ff7b90] cursor-pointer transition-colors"
+                          >
+                            Reset to Bakery Cake
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col md:flex-row items-center gap-5">
+                        {/* Visual Preview */}
+                        <div className="relative w-44 h-44 sm:w-48 sm:h-48 rounded-2xl overflow-hidden border-2 border-[#ffbe53]/50 shadow-2xl bg-black shrink-0">
+                          <Image
+                            src={customCakeUrl}
+                            alt="Custom uploaded cake"
+                            fill
+                            className="object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+                          {/* 3D Royal Icing Inscription */}
+                          <div
+                            className="absolute inset-x-0 text-center pointer-events-none px-2 z-20"
+                            style={{
+                              top: `${candleTop + 14}%`,
+                              transform: "perspective(200px) rotateX(18deg)",
+                            }}
+                          >
+                            <span
+                              className="font-serif italic text-xs font-bold select-none truncate block"
+                              style={{
+                                color: "#fff4d0",
+                                textShadow: "0 2px 4px rgba(0,0,0,0.95), 0 0 10px rgba(255,190,83,0.7)",
+                              }}
+                            >
+                              {cakeOrObjectMessage || (recipientName ? `Happy Birthday ${recipientName}` : "Happy Birthday")}
+                            </span>
+                          </div>
+
+                          {/* Interactive Parabolic Candle Arc */}
+                          {[
+                            { left: `${50 - candleSpread * 2}%`, top: `${candleTop + 3.5}%` },
+                            { left: `${50 - candleSpread}%`, top: `${candleTop + 1.2}%` },
+                            { left: "50%", top: `${candleTop}%` },
+                            { left: `${50 + candleSpread}%`, top: `${candleTop + 1.2}%` },
+                            { left: `${50 + candleSpread * 2}%`, top: `${candleTop + 3.5}%` },
+                          ].map((c, i) => (
+                            <div
+                              key={i}
+                              style={{ left: c.left, top: c.top }}
+                              className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none z-10"
+                            >
+                              <div className="w-2.5 h-2.5 rounded-full bg-radial from-[#ffe494] to-[#ff9500] animate-ping" />
+                              <div className="w-1 h-3.5 rounded-full bg-gradient-to-b from-[#ffd700] to-[#e0a96d] -mt-1 border-t border-white/60" />
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Alignment Sliders */}
+                        <div className="flex-1 w-full space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-semibold text-white flex items-center gap-1.5">
+                              <Sliders className="w-3.5 h-3.5 text-[#ffbe53]" />
+                              <span>Align Candles on Cake Surface</span>
+                            </span>
+                            <button
+                              type="button"
+                              onClick={handleBeautifyCake}
+                              disabled={isEnhancingCake}
+                              className="px-3 py-1.5 rounded-lg bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-semibold text-[#ffbe53] flex items-center gap-1.5 transition-colors cursor-pointer"
+                            >
+                              <Wand2 className="w-3.5 h-3.5" />
+                              <span>{isEnhancingCake ? "Enhancing..." : "✨ Beautify Cake Photo"}</span>
+                            </button>
+                          </div>
+
+                          <div>
+                            <div className="flex items-center justify-between text-[11px] text-[#a8998d] mb-1">
+                              <span>Candle Height on Cake Tier:</span>
+                              <span className="font-mono text-[#ffbe53]">{candleTop}%</span>
+                            </div>
+                            <input
+                              type="range"
+                              min={25}
+                              max={65}
+                              value={candleTop}
+                              onChange={(e) => setCandleTop(Number(e.target.value))}
+                              className="w-full accent-[#ffbe53] cursor-pointer"
+                            />
+                          </div>
+
+                          <div>
+                            <div className="flex items-center justify-between text-[11px] text-[#a8998d] mb-1">
+                              <span>Candle Arc Spread:</span>
+                              <span className="font-mono text-[#ffbe53]">{candleSpread * 4}%</span>
+                            </div>
+                            <input
+                              type="range"
+                              min={6}
+                              max={15}
+                              value={candleSpread}
+                              onChange={(e) => setCandleSpread(Number(e.target.value))}
+                              className="w-full accent-[#ffbe53] cursor-pointer"
+                            />
+                          </div>
+
+                          <p className="text-[11px] text-[#a8998d]">
+                            💡 Drag the sliders until the candles sit naturally along the upper frosting line.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="pt-3 sm:pt-4 flex flex-col sm:flex-row justify-end">
                 <button
                   onClick={() => setCurrentStep(2)}
@@ -597,156 +831,37 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 </button>
               </div>
 
-              {/* CUSTOM CAKE PHOTO & CANDLE PLACEMENT (for Birthday & Celebration templates) */}
-              {isBirthday && (
-                <div className="p-4 sm:p-5 rounded-2xl border-2 border-dashed border-[#ffbe53]/40 bg-[#160d26]/80 shadow-lg">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#ffbe53]/20 border border-[#ffbe53]/40 flex items-center justify-center text-[#ffbe53] shrink-0">
-                        <Cake className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-semibold text-white flex items-center gap-1.5">
-                          <span>Upload Your Own Cake Photo</span>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#ffbe53]/20 text-[#ffbe53] border border-[#ffbe53]/30">
-                            Smart Candle Alignment
-                          </span>
-                        </h4>
-                        <p className="text-xs text-[#a8998d]">
-                          Upload a photo of your actual cake. Real candles and cutting physics will be mapped onto it!
-                        </p>
-                      </div>
+              {/* CAKE CEREMONY CONFIGURATION STATUS (Configured in Step 1) */}
+              {!isProposal && (
+                <div className="p-3.5 sm:p-4 rounded-2xl bg-[#160d26]/60 border border-[#e0a96d]/25 flex items-center justify-between gap-3 shadow-md">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#ffbe53]/15 border border-[#ffbe53]/30 flex items-center justify-center text-lg shrink-0">
+                      {customCakeUrl ? "📸" : "🎂"}
                     </div>
-
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
-                      <label className="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-gradient-to-r from-[#e0a96d] to-[#ffbe53] text-[#1c1208] text-xs font-bold flex items-center justify-center gap-1.5 shadow cursor-pointer active:scale-95 transition-all">
-                        <Upload className="w-3.5 h-3.5" />
-                        <span>{customCakeUrl ? "Change Cake Photo" : "Upload Cake Photo"}</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleUploadCakeFile}
-                          className="hidden"
-                        />
-                      </label>
-                      {customCakeUrl && (
-                        <button
-                          type="button"
-                          onClick={() => setCustomCakeUrl("")}
-                          className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-[#a8998d] hover:text-[#ff7b90] transition-colors cursor-pointer"
-                          title="Reset to default cake"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-white truncate">
+                          {customCakeUrl ? "Custom Cake Photo Active" : "Signature 3D Bakery Cake"}
+                        </span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#ffbe53]/20 text-[#ffbe53] border border-[#ffbe53]/30 shrink-0">
+                          Act III
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[#a8998d] truncate">
+                        {customCakeUrl
+                          ? "Burning candles & royal icing mapped onto your photo"
+                          : "Curated 3D chocolate velvet cake with burning gold candles"}
+                      </p>
                     </div>
                   </div>
 
-                  {/* Custom Cake Preview & Candle Alignment Controls */}
-                  {customCakeUrl && (
-                    <div className="mt-4 pt-4 border-t border-white/10 flex flex-col md:flex-row items-center gap-5">
-                      {/* Live Inscription & Candle Visual Preview */}
-                      <div className="relative w-44 h-44 sm:w-48 sm:h-48 rounded-2xl overflow-hidden border-2 border-[#ffbe53]/50 shadow-2xl bg-black shrink-0">
-                        <Image
-                          src={customCakeUrl}
-                          alt="Custom uploaded cake"
-                          fill
-                          className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-
-                        {/* 3D Royal Icing Inscription */}
-                        <div
-                          className="absolute inset-x-0 text-center pointer-events-none px-2 z-20"
-                          style={{
-                            top: `${candleTop + 14}%`,
-                            transform: "perspective(200px) rotateX(18deg)",
-                          }}
-                        >
-                          <span
-                            className="font-serif italic text-xs font-bold select-none truncate block"
-                            style={{
-                              color: "#fff4d0",
-                              textShadow: "0 2px 4px rgba(0,0,0,0.95), 0 0 10px rgba(255,190,83,0.7)",
-                            }}
-                          >
-                            {cakeOrObjectMessage || (recipientName ? `Happy Birthday ${recipientName}` : "Happy Birthday")}
-                          </span>
-                        </div>
-
-                        {/* Interactive Parabolic Candle Arc */}
-                        {[
-                          { left: `${50 - candleSpread * 2}%`, top: `${candleTop + 3.5}%` },
-                          { left: `${50 - candleSpread}%`, top: `${candleTop + 1.2}%` },
-                          { left: "50%", top: `${candleTop}%` },
-                          { left: `${50 + candleSpread}%`, top: `${candleTop + 1.2}%` },
-                          { left: `${50 + candleSpread * 2}%`, top: `${candleTop + 3.5}%` },
-                        ].map((c, i) => (
-                          <div
-                            key={i}
-                            style={{ left: c.left, top: c.top }}
-                            className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none z-10"
-                          >
-                            <div className="w-2.5 h-2.5 rounded-full bg-radial from-[#ffe494] to-[#ff9500] animate-ping" />
-                            <div className="w-1 h-3.5 rounded-full bg-gradient-to-b from-[#ffd700] to-[#e0a96d] -mt-1 border-t border-white/60" />
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Alignment Sliders */}
-                      <div className="flex-1 w-full space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-semibold text-white flex items-center gap-1.5">
-                            <Sliders className="w-3.5 h-3.5 text-[#ffbe53]" />
-                            <span>Align Candles on Cake Surface</span>
-                          </span>
-                          <button
-                            type="button"
-                            onClick={handleBeautifyCake}
-                            disabled={isEnhancingCake}
-                            className="px-3 py-1.5 rounded-lg bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-semibold text-[#ffbe53] flex items-center gap-1.5 transition-colors cursor-pointer"
-                          >
-                            <Wand2 className="w-3.5 h-3.5" />
-                            <span>{isEnhancingCake ? "Enhancing..." : "✨ Beautify Cake Photo"}</span>
-                          </button>
-                        </div>
-
-                        <div>
-                          <div className="flex items-center justify-between text-[11px] text-[#a8998d] mb-1">
-                            <span>Candle Height on Cake Tier:</span>
-                            <span className="font-mono text-[#ffbe53]">{candleTop}%</span>
-                          </div>
-                          <input
-                            type="range"
-                            min={25}
-                            max={65}
-                            value={candleTop}
-                            onChange={(e) => setCandleTop(Number(e.target.value))}
-                            className="w-full accent-[#ffbe53] cursor-pointer"
-                          />
-                        </div>
-
-                        <div>
-                          <div className="flex items-center justify-between text-[11px] text-[#a8998d] mb-1">
-                            <span>Candle Arc Spread:</span>
-                            <span className="font-mono text-[#ffbe53]">{candleSpread * 4}%</span>
-                          </div>
-                          <input
-                            type="range"
-                            min={6}
-                            max={15}
-                            value={candleSpread}
-                            onChange={(e) => setCandleSpread(Number(e.target.value))}
-                            className="w-full accent-[#ffbe53] cursor-pointer"
-                          />
-                        </div>
-
-                        <p className="text-[11px] text-[#a8998d]">
-                          💡 Drag the sliders until the candles sit naturally along the upper frosting line.
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentStep(1)}
+                    className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-[#ffbe53] border border-[#ffbe53]/30 transition-colors shrink-0 cursor-pointer"
+                  >
+                    Edit Cake →
+                  </button>
                 </div>
               )}
 

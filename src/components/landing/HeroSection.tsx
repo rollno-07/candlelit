@@ -1,12 +1,28 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Sparkles, Heart, ArrowRight, Play, CheckCircle2 } from "lucide-react";
+import { useAuth } from "@/lib/authContext";
+import { AuthModal } from "@/components/auth/AuthModal";
 
 export function HeroSection() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingTarget, setPendingTarget] = useState<string>("/templates");
+
+  const handleActionClick = (targetUrl: string) => {
+    if (!user) {
+      setPendingTarget(targetUrl);
+      setShowAuthModal(true);
+    } else {
+      router.push(targetUrl);
+    }
+  };
   return (
     <section className="relative pt-32 pb-20 px-4 sm:px-6 max-w-7xl mx-auto flex flex-col items-center text-center overflow-hidden">
       {/* Ambient background glows */}
@@ -57,13 +73,13 @@ export function HeroSection() {
         transition={{ duration: 0.7, delay: 0.3 }}
         className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
       >
-        <Link
-          href="/templates"
+        <button
+          onClick={() => handleActionClick("/templates")}
           className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-sm font-semibold tracking-wide shadow-[0_0_30px_rgba(255,190,83,0.4)] hover:shadow-[0_0_45px_rgba(255,190,83,0.6)] transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
         >
           <span>Choose a Template to Start</span>
           <ArrowRight className="w-4 h-4" />
-        </Link>
+        </button>
 
         <Link
           href="/experience/birthday-surprise"
@@ -179,17 +195,30 @@ export function HeroSection() {
                 </div>
               </div>
 
-              <Link
-                href="/create/birthday-surprise"
-                className="inline-flex items-center gap-2 text-xs font-semibold text-[#ffbe53] hover:text-white transition-colors pt-2"
+              <button
+                type="button"
+                onClick={() => handleActionClick("/create/birthday-surprise")}
+                className="inline-flex items-center gap-2 text-xs font-semibold text-[#ffbe53] hover:text-white transition-colors pt-2 cursor-pointer"
               >
                 <span>Customize this template now</span>
                 <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+              </button>
             </div>
           </div>
         </div>
       </motion.div>
+
+      {/* Mandatory Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={() => {
+          setShowAuthModal(false);
+          router.push(pendingTarget);
+        }}
+        title="Sign In to Start"
+        subtitle="Sign in or create an account to begin customizing your cinematic celebration"
+      />
     </section>
   );
 }

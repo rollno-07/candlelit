@@ -9,9 +9,17 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  title?: string;
+  subtitle?: string;
 }
 
-export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
+export function AuthModal({
+  isOpen,
+  onClose,
+  onSuccess,
+  title = "Welcome to Candlelit",
+  subtitle = "Sign in to save, publish, and track your personalized surprises",
+}: AuthModalProps) {
   const { loginWithGoogle, loginWithEmail, signupWithEmail, loginAsGuest } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
@@ -104,10 +112,10 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
               <span className="text-xl">🕯️</span>
             </div>
             <h3 className="font-serif text-2xl text-gold-gradient font-light">
-              Welcome to Candlelit
+              {title}
             </h3>
-            <p className="text-xs text-[#a8998d] mt-1">
-              Sign in to save, publish, and track your personalized surprises
+            <p className="text-xs text-[#d1c4b9] mt-1 max-w-xs mx-auto">
+              {subtitle}
             </p>
           </div>
 

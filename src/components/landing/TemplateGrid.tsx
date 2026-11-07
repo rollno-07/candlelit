@@ -3,13 +3,20 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { TEMPLATES } from "@/lib/templatesData";
 import { TemplateCategory } from "@/types/candlelit";
 import { Sparkles, ArrowRight, Heart, Calendar } from "lucide-react";
+import { useAuth } from "@/lib/authContext";
+import { AuthModal } from "@/components/auth/AuthModal";
 
 export function TemplateGrid() {
+  const { user } = useAuth();
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<TemplateCategory>("all");
+  const [pendingTemplateId, setPendingTemplateId] = useState<string | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const categories: { id: TemplateCategory; label: string }[] = [
     { id: "all", label: "All Templates (11)" },
@@ -17,6 +24,22 @@ export function TemplateGrid() {
     { id: "milestones", label: "Milestones & Life" },
     { id: "celebrations", label: "Celebrations & Special Days" },
   ];
+
+  const handleTemplateSelect = (templateId: string) => {
+    if (!user) {
+      setPendingTemplateId(templateId);
+      setShowAuthModal(true);
+    } else {
+      router.push(`/create/${templateId}`);
+    }
+  };
+
+  const handleAuthSuccess = () => {
+    setShowAuthModal(false);
+    if (pendingTemplateId) {
+      router.push(`/create/${pendingTemplateId}`);
+    }
+  };
 
   const filteredTemplates =
     activeCategory === "all"
@@ -70,7 +93,10 @@ export function TemplateGrid() {
           >
             {/* Template Thumbnail & Header */}
             <div>
-              <div className="relative h-48 w-full overflow-hidden bg-black/40">
+              <div
+                onClick={() => handleTemplateSelect(template.id)}
+                className="relative h-48 w-full overflow-hidden bg-black/40 cursor-pointer"
+              >
                 <Image
                   src={template.previewImage}
                   alt={template.title}
@@ -89,7 +115,10 @@ export function TemplateGrid() {
 
               {/* Content Info */}
               <div className="p-5 sm:p-6">
-                <h3 className="font-serif text-xl sm:text-2xl text-white font-medium group-hover:text-[#ffbe53] transition-colors">
+                <h3
+                  onClick={() => handleTemplateSelect(template.id)}
+                  className="font-serif text-xl sm:text-2xl text-white font-medium group-hover:text-[#ffbe53] transition-colors cursor-pointer"
+                >
                   {template.title}
                 </h3>
                 <p className="mt-2 text-xs text-[#a8998d] leading-relaxed line-clamp-2">
@@ -115,13 +144,14 @@ export function TemplateGrid() {
 
             {/* Bottom Actions */}
             <div className="p-5 sm:p-6 pt-0 flex items-center gap-2.5 sm:gap-3">
-              <Link
-                href={`/create/${template.id}`}
+              <button
+                type="button"
+                onClick={() => handleTemplateSelect(template.id)}
                 className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-semibold tracking-wide shadow-[0_0_15px_rgba(255,190,83,0.25)] hover:shadow-[0_0_25px_rgba(255,190,83,0.45)] transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
               >
                 <span>Customize Template</span>
                 <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+              </button>
 
               <Link
                 href={`/experience/${template.id}`}
@@ -134,6 +164,15 @@ export function TemplateGrid() {
           </motion.div>
         ))}
       </div>
+
+      {/* Mandatory Auth Modal for Template Selection */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+        title="Sign In to Customize"
+        subtitle="Sign in or create a free account to personalize this template and save your surprise."
+      />
     </section>
   );
 }

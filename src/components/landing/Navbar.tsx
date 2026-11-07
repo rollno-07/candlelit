@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Heart, User, LogOut, PlusCircle, Menu, X, ArrowRight, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/authContext";
@@ -11,9 +11,18 @@ import { AuthModal } from "@/components/auth/AuthModal";
 export function Navbar() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleCreateClick = () => {
+    if (!user) {
+      setShowAuthModal(true);
+    } else {
+      router.push("/templates");
+    }
+  };
 
   const isCreatePage = pathname?.startsWith("/create");
   const isExperiencePage = pathname?.startsWith("/experience");
@@ -143,13 +152,13 @@ export function Navbar() {
               </button>
             )}
 
-            <Link
-              href="/templates"
+            <button
+              onClick={handleCreateClick}
               className="px-5 py-2 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-bold tracking-wide shadow-[0_0_20px_rgba(255,190,83,0.3)] hover:shadow-[0_0_25px_rgba(255,190,83,0.5)] transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer shrink-0"
             >
               <span>Create Surprise</span>
               <Sparkles className="w-3.5 h-3.5 fill-current" />
-            </Link>
+            </button>
           </div>
 
           {/* Mobile Hamburger Toggle (Clean header on mobile: only Logo + Hamburger) */}
@@ -356,14 +365,16 @@ export function Navbar() {
 
               {/* Drawer Bottom CTA */}
               <div className="px-5 pt-3 border-t border-white/10">
-                <Link
-                  href="/templates"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-bold tracking-wide flex items-center justify-center gap-2 shadow-[0_4px_25px_rgba(255,190,83,0.4)] active:scale-98 transition-all"
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handleCreateClick();
+                  }}
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-bold tracking-wide flex items-center justify-center gap-2 shadow-[0_4px_25px_rgba(255,190,83,0.4)] active:scale-98 transition-all cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 fill-current" />
                   <span>Create a Surprise Now</span>
-                </Link>
+                </button>
               </div>
             </motion.aside>
           </div>
@@ -373,9 +384,9 @@ export function Navbar() {
       {/* Sticky Floating Create Button (Right Bottom Corner) */}
       {!isCreatePage && !isExperiencePage && !isMobileMenuOpen && (
         <div className="fixed bottom-[max(1.25rem,calc(env(safe-area-inset-bottom)+0.75rem))] right-4 sm:right-6 z-40 animate-in fade-in duration-300">
-          <Link
-            href="/templates"
-            className="group flex items-center gap-2.5 px-4.5 py-3 sm:px-5 sm:py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] bg-[length:200%_auto] hover:bg-right text-[#1c1208] text-xs sm:text-sm font-bold tracking-wide shadow-[0_6px_25px_rgba(255,190,83,0.55)] hover:shadow-[0_8px_32px_rgba(255,190,83,0.75)] border border-white/50 active:scale-95 transition-all duration-300"
+          <button
+            onClick={handleCreateClick}
+            className="group flex items-center gap-2.5 px-4.5 py-3 sm:px-5 sm:py-3.5 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] bg-[length:200%_auto] hover:bg-right text-[#1c1208] text-xs sm:text-sm font-bold tracking-wide shadow-[0_6px_25px_rgba(255,190,83,0.55)] hover:shadow-[0_8px_32px_rgba(255,190,83,0.75)] border border-white/50 active:scale-95 transition-all duration-300 cursor-pointer"
             aria-label="Create a Surprise"
           >
             <span className="relative flex h-2.5 w-2.5">
@@ -385,12 +396,21 @@ export function Navbar() {
             <span>Create</span>
             <span className="hidden xs:inline">Surprise</span>
             <Sparkles className="w-4 h-4 fill-current group-hover:rotate-12 transition-transform" />
-          </Link>
+          </button>
         </div>
       )}
 
       {/* Auth Modal */}
-      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={() => {
+          setShowAuthModal(false);
+          router.push("/templates");
+        }}
+        title="Sign In to Create"
+        subtitle="Sign in or create an account to start creating your personalized surprise"
+      />
     </>
   );
 }
