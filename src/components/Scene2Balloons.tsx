@@ -85,11 +85,89 @@ const BALLOONS: BalloonData[] = [
 interface Scene2BalloonsProps {
   onComplete: () => void;
   photos?: { url: string; caption: string }[];
+  templateId?: string;
 }
 
-export function Scene2Balloons({ onComplete, photos }: Scene2BalloonsProps) {
+interface Act2Meta {
+  badge: string;
+  emoji: string;
+  heading: string;
+  nextCta: string;
+}
+
+const TEMPLATE_ACT2_METAS: Record<string, Act2Meta> = {
+  "birthday-surprise": {
+    badge: "Act II: Celebration Memories",
+    emoji: "🎂",
+    heading: "Pop each balloon to reveal a memory ✨",
+    nextCta: "All Memories Unlocked! Slice The Cake 🎂",
+  },
+  "anniversary": {
+    badge: "Act II: Our Journey Together",
+    emoji: "🥂",
+    heading: "Tap each milestone sphere to unlock a memory 🥂",
+    nextCta: "All Memories Unlocked! The Champagne Toast 🥂",
+  },
+  "propose": {
+    badge: "Act II: Reasons I Fell For You",
+    emoji: "💍",
+    heading: "Tap each love crystal to reveal a moment 💎",
+    nextCta: "All Memories Unlocked! The Big Question 💍",
+  },
+  "valentine": {
+    badge: "Act II: Velvet Love & Romance",
+    emoji: "🌹",
+    heading: "Tap each floating rose to unlock a memory 🌹",
+    nextCta: "All Memories Unlocked! Unlock My Heart 🌹",
+  },
+  "karwa-chauth": {
+    badge: "Act II: Sacred Memories & Vows",
+    emoji: "🌙",
+    heading: "Tap each glowing diya to illuminate a memory 🌙",
+    nextCta: "All Memories Unlocked! Behold The Moon 🌙",
+  },
+  "pregnancy-reveal": {
+    badge: "Act II: The Journey to Our Miracle",
+    emoji: "🍼",
+    heading: "Tap each soft cloud to unlock a memory 🍼",
+    nextCta: "All Memories Unlocked! Reveal Our Secret 🍼",
+  },
+  "baby-shower": {
+    badge: "Act II: Wonderland of Wishes",
+    emoji: "👶",
+    heading: "Tap each floating star to reveal a sweet wish 👶",
+    nextCta: "All Memories Unlocked! Shower of Blessings 👶",
+  },
+  "retirement": {
+    badge: "Act II: Career Milestones & Honors",
+    emoji: "🏆",
+    heading: "Tap each honor badge to celebrate a milestone 🏆",
+    nextCta: "All Memories Unlocked! Award The Trophy 🏆",
+  },
+  "mothers-day": {
+    badge: "Act II: Moments of Pure Gratitude",
+    emoji: "💐",
+    heading: "Tap each blooming peony to reveal a moment with Mom 💐",
+    nextCta: "All Memories Unlocked! Bloom Mom's Bouquet 💐",
+  },
+  "fathers-day": {
+    badge: "Act II: Dad's Hall of Fame",
+    emoji: "🕶️",
+    heading: "Tap each champion badge to unlock a moment with Dad 🕶️",
+    nextCta: "All Memories Unlocked! Award Dad's Medal 🕶️",
+  },
+  "womens-day": {
+    badge: "Act II: Shining Moments of Brilliance",
+    emoji: "👑",
+    heading: "Tap each crystal gem to celebrate her brilliance 👑",
+    nextCta: "All Memories Unlocked! Crown The Queen 👑",
+  },
+};
+
+export function Scene2Balloons({ onComplete, photos, templateId = "birthday-surprise" }: Scene2BalloonsProps) {
   const [poppedIds, setPoppedIds] = useState<number[]>([]);
   const [activeMemory, setActiveMemory] = useState<BalloonData | null>(null);
+  const actMeta = TEMPLATE_ACT2_METAS[templateId] || TEMPLATE_ACT2_METAS["birthday-surprise"];
 
   const balloonsList = React.useMemo(() => {
     const rawList =
@@ -151,17 +229,17 @@ export function Scene2Balloons({ onComplete, photos }: Scene2BalloonsProps) {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-1 rounded-full glass-panel border border-[#e0a96d]/30 mb-2"
+          className="inline-flex items-center gap-2 px-4 py-1 rounded-full glass-panel border border-[#e0a96d]/30 mb-2 shadow-sm"
         >
-          <Image src="/cake-icon.svg" alt="Cake" width={16} height={16} className="drop-shadow" />
+          <span className="text-sm">{actMeta.emoji}</span>
           <span className="text-xs uppercase tracking-widest text-[#ffe8d6] font-medium">
-            Act II: Pop The Memories
+            {actMeta.badge}
           </span>
-          <Image src="/cake-icon.svg" alt="Cake" width={16} height={16} className="drop-shadow" />
+          <span className="text-sm">{actMeta.emoji}</span>
         </motion.div>
 
         <h2 className="font-serif text-2xl md:text-3xl text-gold-gradient font-light">
-          Tap each balloon to reveal a memory ✨
+          {actMeta.heading}
         </h2>
 
         {/* Counter */}
@@ -289,7 +367,7 @@ export function Scene2Balloons({ onComplete, photos }: Scene2BalloonsProps) {
             className="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] font-medium text-sm tracking-wide shadow-[0_0_30px_rgba(255,190,83,0.5)] hover:shadow-[0_0_45px_rgba(255,190,83,0.8)] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
           >
             <Sparkles className="w-4 h-4 fill-current" />
-            <span>All Memories Unlocked! Slice The Cake 🎂</span>
+            <span>{actMeta.nextCta}</span>
           </button>
         </motion.div>
       )}

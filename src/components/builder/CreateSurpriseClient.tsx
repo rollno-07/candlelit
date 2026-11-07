@@ -19,7 +19,7 @@ function CreateSurpriseContent() {
       <BackgroundFX />
       <Navbar />
 
-      <div className="relative z-10 flex-1">
+      <div className="relative flex-1">
         <SurpriseBuilder template={template} />
       </div>
     </main>

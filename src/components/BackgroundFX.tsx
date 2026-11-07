@@ -12,16 +12,45 @@ interface Star {
   color: string;
 }
 
-interface Particle {
+interface HeartParticle {
   x: number;
   y: number;
   size: number;
   speedY: number;
   speedX: number;
+  rotation: number;
+  rotationSpeed: number;
   alpha: number;
   life: number;
   maxLife: number;
   color: string;
+}
+
+function drawHeart(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  rotation: number,
+  color: string,
+  alpha: number
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation);
+  ctx.beginPath();
+  const w = size;
+  const h = size * 1.1;
+  ctx.moveTo(0, -h * 0.2);
+  ctx.bezierCurveTo(-w * 0.55, -h * 0.75, -w * 0.95, -h * 0.05, 0, h * 0.65);
+  ctx.bezierCurveTo(w * 0.95, -h * 0.05, w * 0.55, -h * 0.75, 0, -h * 0.2);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = color;
+  ctx.fill();
+  ctx.restore();
 }
 
 export function BackgroundFX() {
@@ -48,7 +77,17 @@ export function BackgroundFX() {
 
     // Star colors: champagne, rose gold, pale warm white
     const starColors = ["#ffffff", "#ffe8cc", "#ffd8a8", "#ffc9c9", "#ffe0e6"];
-    const particleColors = ["#ffbe53", "#e0a96d", "#ff7b90", "#ffd166"];
+    // Romantic floating heart colors: glowing ruby, warm gold, blush pink, soft rose
+    const heartColors = [
+      "#ff4d6d",
+      "#ff758f",
+      "#ff85a1",
+      "#ffbe53",
+      "#ffd166",
+      "#f472b6",
+      "#ffc2d1",
+      "#e0a96d",
+    ];
 
     let stars: Star[] = [];
     const initStars = () => {
@@ -69,35 +108,37 @@ export function BackgroundFX() {
 
     initStars();
 
-    // Floating Stardust Particles
-    const particles: Particle[] = [];
-    const maxParticles = 35;
+    // Floating Little Heart Particles
+    const hearts: HeartParticle[] = [];
+    const maxHearts = 45;
 
-    const spawnParticle = (): Particle => {
+    const spawnHeart = (): HeartParticle => {
       return {
         x: Math.random() * width,
-        y: height + 10,
-        size: 1 + Math.random() * 2.2,
-        speedY: 0.3 + Math.random() * 0.8,
-        speedX: (Math.random() - 0.5) * 0.5,
+        y: height + 20,
+        size: 5 + Math.random() * 7,
+        speedY: 0.35 + Math.random() * 0.65,
+        speedX: (Math.random() - 0.5) * 0.4,
+        rotation: (Math.random() - 0.5) * 0.6,
+        rotationSpeed: (Math.random() - 0.5) * 0.015,
         alpha: 0,
         life: 0,
-        maxLife: 200 + Math.random() * 250,
-        color: particleColors[Math.floor(Math.random() * particleColors.length)],
+        maxLife: 260 + Math.random() * 260,
+        color: heartColors[Math.floor(Math.random() * heartColors.length)],
       };
     };
 
-    for (let i = 0; i < maxParticles; i++) {
-      const p = spawnParticle();
-      p.y = Math.random() * height;
-      p.life = Math.random() * p.maxLife;
-      particles.push(p);
+    for (let i = 0; i < maxHearts; i++) {
+      const h = spawnHeart();
+      h.y = Math.random() * height;
+      h.life = Math.random() * h.maxLife;
+      hearts.push(h);
     }
 
     let time = 0;
 
     const render = () => {
-      time += 0.03;
+      time += 0.025;
       ctx.clearRect(0, 0, width, height);
 
       // Deep celestial background gradient
@@ -156,33 +197,28 @@ export function BackgroundFX() {
 
       ctx.shadowBlur = 0;
 
-      // Draw floating stardust particles
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        p.life += 1;
-        p.y -= p.speedY;
-        p.x += p.speedX + Math.sin(time + p.life * 0.02) * 0.4;
+      // Draw floating little glowing hearts
+      for (let i = 0; i < hearts.length; i++) {
+        const h = hearts[i];
+        h.life += 1;
+        h.y -= h.speedY;
+        h.x += h.speedX + Math.sin(time + h.life * 0.02) * 0.45;
+        h.rotation += h.rotationSpeed;
 
-        // Fade in and fade out
-        const progress = p.life / p.maxLife;
-        if (progress < 0.2) {
-          p.alpha = (progress / 0.2) * 0.8;
+        // Fade in and fade out envelope
+        const progress = h.life / h.maxLife;
+        if (progress < 0.15) {
+          h.alpha = (progress / 0.15) * 0.85;
         } else if (progress > 0.8) {
-          p.alpha = (1 - (progress - 0.8) / 0.2) * 0.8;
+          h.alpha = (1 - (progress - 0.8) / 0.2) * 0.85;
         } else {
-          p.alpha = 0.8;
+          h.alpha = 0.85;
         }
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = Math.max(0, p.alpha);
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = p.color;
-        ctx.fill();
+        drawHeart(ctx, h.x, h.y, h.size, h.rotation, h.color, h.alpha);
 
-        if (p.life >= p.maxLife || p.y < -10) {
-          particles[i] = spawnParticle();
+        if (h.life >= h.maxLife || h.y < -25) {
+          hearts[i] = spawnHeart();
         }
       }
 

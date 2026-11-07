@@ -8,7 +8,7 @@ import { BackgroundFX } from "@/components/BackgroundFX";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { Scene1Intro } from "@/components/Scene1Intro";
 import { Scene2Balloons } from "@/components/Scene2Balloons";
-import { Scene3Cake } from "@/components/Scene3Cake";
+import { Scene3Ceremony } from "@/components/ceremonies/Scene3Ceremony";
 import { Scene4Letter } from "@/components/Scene4Letter";
 import { soundManager } from "@/utils/audioSynthesizer";
 import { getSurpriseBySlug } from "@/lib/surprisesStore";
@@ -40,6 +40,9 @@ function ExperienceContent() {
       try {
         const data = await getSurpriseBySlug(slug);
         setSurprise(data);
+        if (data?.musicUrl) {
+          soundManager.setCustomTrack(data.musicUrl);
+        }
       } catch (e) {
         console.error("Error loading surprise:", e);
       } finally {
@@ -137,18 +140,16 @@ function ExperienceContent() {
       {/* Persistent Floating BGM Player in Bottom Right */}
       <MusicPlayer />
 
-      {/* Floating Back to Checkout button for demo / templates */}
-      {(slug.startsWith("demo-") || slug === "birthday-surprise" || slug === "propose" || slug === "anniversary") && (
-        <div className="fixed top-4 left-4 z-40">
-          <Link
-            href={`/create/${surprise?.templateId || "birthday-surprise"}`}
-            className="px-3.5 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-lg bg-black/60 backdrop-blur-md active:scale-95"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#ffbe53]" />
-            <span>Back to Checkout</span>
-          </Link>
-        </div>
-      )}
+      {/* Floating Back to Checkout button */}
+      <div className="fixed top-4 left-4 z-50">
+        <Link
+          href={`/create/${surprise?.templateId || "birthday-surprise"}`}
+          className="px-3.5 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-lg bg-black/70 backdrop-blur-md active:scale-95"
+        >
+          <ArrowLeft className="w-3.5 h-3.5 text-[#ffbe53]" />
+          <span>Back to Checkout</span>
+        </Link>
+      </div>
 
       {/* Main Act Scene Container */}
       <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center">
@@ -166,6 +167,7 @@ function ExperienceContent() {
                 onComplete={() => goToAct(2)}
                 recipientName={surprise.recipientName}
                 senderName={surprise.senderName}
+                templateId={surprise.templateId}
               />
             </motion.section>
           )}
@@ -182,6 +184,7 @@ function ExperienceContent() {
               <Scene2Balloons
                 onComplete={() => goToAct(3)}
                 photos={surprise.photos}
+                templateId={surprise.templateId}
               />
             </motion.section>
           )}
@@ -195,9 +198,11 @@ function ExperienceContent() {
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="w-full"
             >
-              <Scene3Cake
+              <Scene3Ceremony
                 onComplete={() => goToAct(4)}
                 recipientName={surprise.recipientName}
+                senderName={surprise.senderName}
+                templateId={surprise.templateId}
                 cakeOrObjectMessage={surprise.cakeOrObjectMessage}
               />
             </motion.section>
@@ -218,6 +223,7 @@ function ExperienceContent() {
                 senderName={surprise.senderName}
                 letter={surprise.letter}
                 photos={surprise.photos}
+                templateId={surprise.templateId}
               />
             </motion.section>
           )}

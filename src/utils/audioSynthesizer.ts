@@ -12,6 +12,8 @@ class SoundManager {
   private bgmGainNode: GainNode | null = null;
   private melodyIntervalId: any = null;
   private currentStepIndex: number = 0;
+  private customAudio: HTMLAudioElement | null = null;
+  private customTrackUrl: string | null = null;
 
   constructor() {
     // Audio will unlock on first user interaction
@@ -53,10 +55,65 @@ class SoundManager {
   }
 
   /**
-   * Unlock Audio on interaction and start gentle ambient melody
+   * Set user's custom uploaded or selected audio file
+   */
+  public setCustomTrack(url: string | null) {
+    this.customTrackUrl = url && url.trim().length > 0 ? url : null;
+
+    if (typeof window === "undefined") return;
+
+    if (this.customAudio) {
+      this.customAudio.pause();
+      this.customAudio.src = "";
+      this.customAudio = null;
+    }
+
+    if (this.customTrackUrl) {
+      // If ambient synthesizer was running, stop it
+      if (this.melodyIntervalId) {
+        clearInterval(this.melodyIntervalId);
+        this.melodyIntervalId = null;
+      }
+
+      const audio = new Audio();
+      audio.src = this.customTrackUrl;
+      audio.loop = true;
+      audio.preload = "auto";
+      audio.volume = this.isMuted ? 0 : 0.5;
+      this.customAudio = audio;
+
+      if (this.isBgmPlaying && !this.isMuted) {
+        audio.play().catch(() => {});
+      }
+    } else {
+      // Resume ambient synthesizer if active
+      if (this.isBgmPlaying && !this.isMuted) {
+        this.startAmbientMelody();
+      }
+    }
+    this.notify();
+  }
+
+  public getCustomTrack(): string | null {
+    return this.customTrackUrl;
+  }
+
+  /**
+   * Unlock Audio on interaction and start gentle ambient melody or custom track
    */
   public unlockAudio() {
     this.initContext();
+
+    if (this.customTrackUrl && this.customAudio) {
+      this.isBgmPlaying = true;
+      this.customAudio.volume = this.isMuted ? 0 : 0.5;
+      if (!this.isMuted) {
+        this.customAudio.play().catch(() => {});
+      }
+      this.notify();
+      return;
+    }
+
     if (!this.isBgmPlaying) {
       this.startAmbientMelody();
     }
@@ -70,14 +127,26 @@ class SoundManager {
     this.initContext();
     this.isMuted = !this.isMuted;
 
+    if (this.customAudio) {
+      this.customAudio.muted = this.isMuted;
+      this.customAudio.volume = this.isMuted ? 0 : 0.5;
+      if (!this.isMuted && this.isBgmPlaying) {
+        this.customAudio.play().catch(() => {});
+      }
+    }
+
     if (this.bgmGainNode && this.ctx) {
       const targetVolume = this.isMuted ? 0.0001 : 0.14;
       this.bgmGainNode.gain.cancelScheduledValues(this.ctx.currentTime);
       this.bgmGainNode.gain.linearRampToValueAtTime(targetVolume, this.ctx.currentTime + 0.3);
     }
 
-    if (!this.isBgmPlaying && !this.isMuted) {
-      this.startAmbientMelody();
+    if (!this.customTrackUrl) {
+      if (!this.isBgmPlaying && !this.isMuted) {
+        this.startAmbientMelody();
+      } else {
+        this.notify();
+      }
     } else {
       this.notify();
     }

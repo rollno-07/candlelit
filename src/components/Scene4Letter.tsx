@@ -50,7 +50,22 @@ interface Scene4LetterProps {
   senderName?: string;
   letter?: string[];
   photos?: { url: string; caption: string }[];
+  templateId?: string;
 }
+
+const TEMPLATE_ACT4_METAS: Record<string, { badge: string; emoji: string }> = {
+  "birthday-surprise": { badge: "Act IV: Birthday Love Letter", emoji: "🎂" },
+  "anniversary": { badge: "Act IV: Vows of Eternity", emoji: "🥂" },
+  "propose": { badge: "Act IV: The Forever Promise", emoji: "💍" },
+  "valentine": { badge: "Act IV: Be My Valentine", emoji: "🌹" },
+  "karwa-chauth": { badge: "Act IV: Moonlit Devotion", emoji: "🌙" },
+  "pregnancy-reveal": { badge: "Act IV: To Our Growing Family", emoji: "🍼" },
+  "baby-shower": { badge: "Act IV: Letter to Mama & Baby", emoji: "👶" },
+  "retirement": { badge: "Act IV: Tributes & Congratulations", emoji: "🏆" },
+  "mothers-day": { badge: "Act IV: Letter to My First Home", emoji: "💐" },
+  "fathers-day": { badge: "Act IV: Tribute to My Anchor", emoji: "🕶️" },
+  "womens-day": { badge: "Act IV: Tribute to an Extraordinary Queen", emoji: "👑" },
+};
 
 export function Scene4Letter({
   onRestart,
@@ -58,7 +73,9 @@ export function Scene4Letter({
   senderName = "With Love",
   letter,
   photos,
+  templateId = "birthday-surprise",
 }: Scene4LetterProps) {
+  const act4Meta = TEMPLATE_ACT4_METAS[templateId] || TEMPLATE_ACT4_METAS["birthday-surprise"];
   const paragraphs = letter && letter.length > 0 ? letter : DEFAULT_CELEBRATION_LETTER;
   const fullText = paragraphs.join("\n\n");
   const [displayedLength, setDisplayedLength] = useState(0);
@@ -186,11 +203,11 @@ export function Scene4Letter({
       {/* TOP HEADER */}
       <div className="relative z-20 text-center shrink-0 pt-1">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full glass-panel border border-[#e0a96d]/30 mb-1 shadow">
-          <Image src="/cake-icon.svg" alt="Cake" width={14} height={14} className="drop-shadow" />
+          <span className="text-sm">{act4Meta.emoji}</span>
           <span className="text-[11px] uppercase tracking-widest text-[#ffe8d6] font-medium">
-            Act IV: The Love Letter
+            {act4Meta.badge}
           </span>
-          <Image src="/cake-icon.svg" alt="Cake" width={14} height={14} className="drop-shadow" />
+          <span className="text-sm">{act4Meta.emoji}</span>
         </div>
         <h2 className="font-serif text-2xl md:text-3xl text-gold-gradient font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
           From My Heart To Yours

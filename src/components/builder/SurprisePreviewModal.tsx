@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -15,11 +16,11 @@ import {
   Flame,
   FileText,
   Volume2,
-  ArrowLeft
+  ArrowLeft,
 } from "lucide-react";
 import { Scene1Intro } from "@/components/Scene1Intro";
 import { Scene2Balloons } from "@/components/Scene2Balloons";
-import { Scene3Cake } from "@/components/Scene3Cake";
+import { Scene3Ceremony } from "@/components/ceremonies/Scene3Ceremony";
 import { Scene4Letter } from "@/components/Scene4Letter";
 import { BackgroundFX } from "@/components/BackgroundFX";
 import { soundManager } from "@/utils/audioSynthesizer";
@@ -29,11 +30,13 @@ interface SurprisePreviewModalProps {
   onClose: () => void;
   recipientName: string;
   senderName: string;
+  templateId?: string;
   occasionSubtitle?: string;
   cakeOrObjectMessage?: string;
   photos: { url: string; caption: string }[];
   letter: string[];
   musicTitle?: string;
+  musicUrl?: string;
   onProceedToPay: () => void;
 }
 
@@ -44,15 +47,28 @@ export function SurprisePreviewModal({
   onClose,
   recipientName,
   senderName,
+  templateId = "birthday-surprise",
   cakeOrObjectMessage,
   photos,
   letter,
   musicTitle,
+  musicUrl,
   onProceedToPay,
 }: SurprisePreviewModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [currentAct, setCurrentAct] = useState<ActNumber>(1);
   const effectiveRecipient = recipientName.trim() || "Your Loved One";
   const effectiveSender = senderName.trim() || "With All My Heart";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen && musicUrl) {
+      soundManager.setCustomTrack(musicUrl);
+    }
+  }, [isOpen, musicUrl]);
 
   const acts = [
     { num: 1 as ActNumber, label: "Act 1: Invitation", icon: Mail },
@@ -69,11 +85,11 @@ export function SurprisePreviewModal({
     if (currentAct > 1) setCurrentAct((prev) => (prev - 1) as ActNumber);
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  return createPortal(
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 md:p-6 overflow-hidden">
+      <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center p-0 sm:p-4 overflow-hidden">
         {/* Dark Backdrop with blur */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -82,6 +98,16 @@ export function SurprisePreviewModal({
           onClick={onClose}
           className="absolute inset-0 bg-black/95 backdrop-blur-md"
         />
+
+        {/* Unmissable Viewport-Level Return Button */}
+        <button
+          onClick={onClose}
+          className="fixed top-3 left-3 sm:top-4 sm:left-4 z-[100000] flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#180e2a] hover:bg-[#251540] border-2 border-[#ffbe53] text-[#ffbe53] hover:text-white text-xs sm:text-sm font-bold shadow-[0_4px_24px_rgba(0,0,0,0.95),0_0_20px_rgba(255,190,83,0.5)] backdrop-blur-xl active:scale-95 transition-all cursor-pointer"
+          title="Return to Checkout"
+        >
+          <ArrowLeft className="w-4 h-4 text-[#ffbe53]" />
+          <span>← Back to Checkout</span>
+        </button>
 
         {/* Modal Card Over Checkout */}
         <motion.div
@@ -92,18 +118,9 @@ export function SurprisePreviewModal({
           className="relative w-full max-w-6xl h-full sm:h-[92vh] rounded-none sm:rounded-3xl glass-panel border sm:border-[#e0a96d]/40 bg-[#0d0718] sm:bg-[#0d0718]/95 backdrop-blur-2xl shadow-[0_25px_80px_rgba(0,0,0,0.9)] flex flex-col overflow-hidden z-10"
         >
           {/* Top Bar */}
-          <div className="shrink-0 px-3 sm:px-6 py-3.5 border-b border-[#e0a96d]/20 bg-[#140b24]/80 flex items-center justify-between gap-2 sm:gap-3">
+          <div className="shrink-0 px-3 sm:px-6 py-3.5 border-b border-[#e0a96d]/20 bg-[#140b24]/80 flex items-center justify-between gap-2 sm:gap-3 pl-44 sm:pl-48">
             <div className="flex items-center gap-2 sm:gap-3">
-              <button
-                onClick={onClose}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#e0a96d]/40 bg-[#1e1330] hover:bg-[#ffbe53]/15 text-xs font-semibold text-[#ffbe53] hover:text-white transition-all cursor-pointer shadow-sm active:scale-95 shrink-0"
-                title="Return to Checkout"
-              >
-                <ArrowLeft className="w-3.5 h-3.5 text-[#ffbe53]" />
-                <span>Back to Checkout</span>
-              </button>
-
-              <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-white/10">
+              <div className="flex items-center gap-2 pl-2">
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#8a4b2a] via-[#c68953] to-[#ffbe53] flex items-center justify-center text-xs shadow-md border border-[#ffbe53]/40">
                   <Eye className="w-3.5 h-3.5 text-[#1a1006]" />
                 </div>
@@ -208,12 +225,24 @@ export function SurprisePreviewModal({
           </div>
 
           {/* Interactive Scene Body */}
-          <div className="relative flex-1 w-full overflow-y-auto overflow-x-hidden bg-[#0a0714] flex flex-col items-center justify-center">
+          <div className="relative flex-1 min-h-0 w-full overflow-y-auto overflow-x-hidden bg-[#0a0714] flex flex-col items-center justify-center">
             {/* Background Atmosphere */}
             <BackgroundFX />
 
+            {/* Floating Quick Return Button inside scene */}
+            <div className="absolute top-3 left-3 z-30">
+              <button
+                onClick={onClose}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/85 hover:bg-black border border-[#e0a96d]/50 text-[#ffbe53] hover:text-white text-xs font-semibold shadow-[0_4px_16px_rgba(0,0,0,0.8)] backdrop-blur-md active:scale-95 transition-all cursor-pointer"
+                title="Return to checkout"
+              >
+                <ArrowLeft className="w-3.5 h-3.5 text-[#ffbe53]" />
+                <span>Back to Checkout</span>
+              </button>
+            </div>
+
             {/* Render Act Scenes with live craft details */}
-            <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center p-1 sm:p-3 overflow-hidden">
+            <div className="relative z-10 w-full flex-1 min-h-0 flex flex-col items-center justify-center p-1 sm:p-3 overflow-hidden">
               <AnimatePresence mode="wait">
                 {currentAct === 1 && (
                   <motion.div
@@ -227,6 +256,7 @@ export function SurprisePreviewModal({
                     <Scene1Intro
                       recipientName={effectiveRecipient}
                       senderName={effectiveSender}
+                      templateId={templateId}
                       onComplete={() => setCurrentAct(2)}
                     />
                   </motion.div>
@@ -243,6 +273,7 @@ export function SurprisePreviewModal({
                   >
                     <Scene2Balloons
                       photos={photos}
+                      templateId={templateId}
                       onComplete={() => setCurrentAct(3)}
                     />
                   </motion.div>
@@ -257,8 +288,10 @@ export function SurprisePreviewModal({
                     transition={{ duration: 0.4 }}
                     className="w-full h-full flex flex-col items-center justify-center"
                   >
-                    <Scene3Cake
+                    <Scene3Ceremony
                       recipientName={effectiveRecipient}
+                      senderName={effectiveSender}
+                      templateId={templateId}
                       cakeOrObjectMessage={cakeOrObjectMessage}
                       onComplete={() => setCurrentAct(4)}
                     />
@@ -279,6 +312,7 @@ export function SurprisePreviewModal({
                       senderName={effectiveSender}
                       letter={letter}
                       photos={photos}
+                      templateId={templateId}
                       onRestart={() => setCurrentAct(1)}
                     />
                   </motion.div>
@@ -338,6 +372,7 @@ export function SurprisePreviewModal({
           </div>
         </motion.div>
       </div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
