@@ -1,13 +1,15 @@
 export interface InspirationItem {
   id: string;
-  category: "birthday" | "anniversary" | "proposal" | "valentine" | "romantic" | "retirement" | "mothers-day" | "baby-shower";
+  category: "birthday" | "anniversary" | "proposal" | "valentine" | "romantic" | "retirement" | "mothers-day" | "fathers-day" | "baby-shower";
   title: string;
   text: string;
   tone: string;
 }
 
 export const CURATED_INSPIRATIONS: InspirationItem[] = [
-  // BIRTHDAY WISHES
+  // ==========================================
+  // 1. BIRTHDAY WISHES (Slot 1: 1-10, Slot 2: 11-20)
+  // ==========================================
   {
     id: "bday-1",
     category: "birthday",
@@ -29,8 +31,130 @@ export const CURATED_INSPIRATIONS: InspirationItem[] = [
     text: "Happy Birthday to the one who makes ordinary grocery trips feel like adventures and simple conversations feel like home. Here is to celebrating you today, tomorrow, and every day after.",
     tone: "Playful & Sweet",
   },
+  {
+    id: "bday-4",
+    category: "birthday",
+    title: "Constellations in Your Eyes",
+    text: "If I could give you one gift today, it would be the ability to see yourself through my eyes—because only then would you realize how extraordinary, gentle, and utterly irreplaceable you truly are. Happy Birthday, beautiful soul.",
+    tone: "Soulful & Tender",
+  },
+  {
+    id: "bday-5",
+    category: "birthday",
+    title: "Golden Hour Wishes",
+    text: "May the year ahead be filled with slow coffee mornings, laughter that makes your stomach ache, and quiet moments where you feel deeply and unconditionally cherished. You deserve every ounce of magic the universe has to offer.",
+    tone: "Cinematic Warmth",
+  },
+  {
+    id: "bday-6",
+    category: "birthday",
+    title: "The Song in Every Room",
+    text: "You don't just walk into a room—you bring warmth, kindness, and music with you wherever you go. The world is softer, kinder, and infinitely brighter simply because you were born.",
+    tone: "Poetic & Heartfelt",
+  },
+  {
+    id: "bday-7",
+    category: "birthday",
+    title: "Timeless Celebration",
+    text: "Count your age by moments of pure joy, not by candles on the cake. Today we celebrate the masterpiece that is your life, your resilient spirit, and the boundless love you give to everyone around you.",
+    tone: "Grand & Celebratory",
+  },
+  {
+    id: "bday-8",
+    category: "birthday",
+    title: "My Anchor and My Dream",
+    text: "Happy Birthday to my best friend, my secret-keeper, and my safe harbor. Walking beside you through this life is the greatest privilege I could ever ask for.",
+    tone: "Intimate & Deep",
+  },
+  {
+    id: "bday-9",
+    category: "birthday",
+    title: "Wild and Boundless Joy",
+    text: "Here is to another 365 days of chasing sunsets, laughing until we cry, and dreaming bigger than the sky! May this birthday be the spark for your greatest adventures yet.",
+    tone: "Vibrant & Playful",
+  },
+  {
+    id: "bday-10",
+    category: "birthday",
+    title: "Whispered Under Starlight",
+    text: "Before you blow out your candles and make a silent wish, remember that my only wish for you has already come true: having you in my life. Happy Birthday, my forever.",
+    tone: "Whispered Romance",
+  },
+  // Birthday Slot 2 (11-20)
+  {
+    id: "bday-11",
+    category: "birthday",
+    title: "A Symphony of Moments",
+    text: "Every chapter of your story has been etched in courage, tenderness, and grace. On your birthday, I hope you pause to admire how far you have climbed and the beauty you leave in your wake.",
+    tone: "Inspiring & Poetic",
+  },
+  {
+    id: "bday-12",
+    category: "birthday",
+    title: "Forever Young at Heart",
+    text: "Age is just the number of years the world has been lucky enough to enjoy your presence. Keep your sparkle, keep your wild laugh, and never stop dancing in the rain. Happy Birthday!",
+    tone: "Joyful & Radiant",
+  },
+  {
+    id: "bday-13",
+    category: "birthday",
+    title: "The Heartbeat of Us",
+    text: "Today is my favorite holiday on the calendar—the day the love of my life was given to the world. Thank you for your warmth, your patience, and the unconditional love you give so freely.",
+    tone: "Deep Devotion",
+  },
+  {
+    id: "bday-14",
+    category: "birthday",
+    title: "Sunlit Milestones",
+    text: "May the candles on your cake burn as brightly as the joy you ignite in everyone who loves you. Wishing you health, peace, and endless reasons to smile this coming year.",
+    tone: "Warm Blessings",
+  },
+  {
+    id: "bday-15",
+    category: "birthday",
+    title: "My Favorite Story",
+    text: "Of all the books written and all the journeys charted, loving you and celebrating your birthday is my favorite story to tell. Here is to turning the page together.",
+    tone: "Romantic Elegance",
+  },
+  {
+    id: "bday-16",
+    category: "birthday",
+    title: "Courage & Radiance",
+    text: "To a warrior with the gentlest heart: may this year open doors you never thought possible and reward your hard work with peace and celebration. Happy Birthday!",
+    tone: "Empowering & Strong",
+  },
+  {
+    id: "bday-17",
+    category: "birthday",
+    title: "Sweetest Confections",
+    text: "Cakes, candles, balloons, and sweet frosting—none of it is quite as sweet as having you in our lives. Eat the extra slice of cake; you deserve the whole bakery today!",
+    tone: "Playful & Cheerful",
+  },
+  {
+    id: "bday-18",
+    category: "birthday",
+    title: "Unshakable Grace",
+    text: "You carry grace like sunlight, effortless and warm. May your birthday wrap you in the same tenderness you offer so generously to everyone else.",
+    tone: "Gentle & Tender",
+  },
+  {
+    id: "bday-19",
+    category: "birthday",
+    title: "The Best Is Yet to Come",
+    text: "If you think your past years were good, just wait for what is waiting on your horizon. The universe is conspiring to make this your sweetest, most prosperous year yet.",
+    tone: "Hopeful & Grand",
+  },
+  {
+    id: "bday-20",
+    category: "birthday",
+    title: "Midnight Candlelit Secret",
+    text: "When the party quietens and the candles flicker low, know that my heart beats in rhythm with yours today, tomorrow, and through all our years ahead. Happy Birthday.",
+    tone: "Intimate Devotion",
+  },
 
-  // ANNIVERSARY QUOTES
+  // ==========================================
+  // 2. ANNIVERSARY QUOTES (Slot 1: 1-10, Slot 2: 11-20)
+  // ==========================================
   {
     id: "anni-1",
     category: "anniversary",
@@ -52,8 +176,130 @@ export const CURATED_INSPIRATIONS: InspirationItem[] = [
     text: "Cheers to another year of shared laughter, inside jokes, and falling deeper in love with every sunrise. You are my home and my favorite adventure.",
     tone: "Warm & Emotional",
   },
+  {
+    id: "anni-4",
+    category: "anniversary",
+    title: "Our Quiet Sanctuary",
+    text: "In a chaotic world, the sanctuary of your arms is the only place I ever need to be. Another year of learning, loving, and growing together.",
+    tone: "Soulful Romance",
+  },
+  {
+    id: "anni-5",
+    category: "anniversary",
+    title: "Hand in Hand Forever",
+    text: "From our first nervous smiles to the deep comfort of knowing each other's silence, every second with you has been a gift. Happy Anniversary, my heart.",
+    tone: "Tender Devotion",
+  },
+  {
+    id: "anni-6",
+    category: "anniversary",
+    title: "Champagne Toast to Us",
+    text: "Here is to the vows we spoke, the promises we kept, and the beautiful tomorrows waiting for us. Happy Anniversary to the best thing that ever happened to me.",
+    tone: "Celebratory Toast",
+  },
+  {
+    id: "anni-7",
+    category: "anniversary",
+    title: "Roots and Wings",
+    text: "You give me roots so I know where home is, and wings so we can fly toward our dreams together. Loving you is the easiest thing I will ever do.",
+    tone: "Poetic Wisdom",
+  },
+  {
+    id: "anni-8",
+    category: "anniversary",
+    title: "The Masterpiece of Us",
+    text: "We didn't just build a marriage; we crafted a sanctuary of trust, humor, and endless patience. Happy Anniversary to my favorite partner in crime.",
+    tone: "Warm & Real",
+  },
+  {
+    id: "anni-9",
+    category: "anniversary",
+    title: "More Than Yesterday",
+    text: "I loved you yesterday, I love you still, I always have, and I always will. With every year that passes, my love for you only deepens.",
+    tone: "Classic Romance",
+  },
+  {
+    id: "anni-10",
+    category: "anniversary",
+    title: "A Decade of Gold",
+    text: "May our love remain as unshakeable as the mountains and as gentle as the evening tide. Happy Anniversary, my forever love.",
+    tone: "Grand & Timeless",
+  },
+  // Anniversary Slot 2 (11-20)
+  {
+    id: "anni-11",
+    category: "anniversary",
+    title: "The Rhythm of Two",
+    text: "Life is a dance, and there is no one else I would rather share the floor with, through every tempo and season. Happy Anniversary to my soulmate.",
+    tone: "Musical & Poetic",
+  },
+  {
+    id: "anni-12",
+    category: "anniversary",
+    title: "The Best Decision",
+    text: "Out of all the decisions I have ever made, taking your hand and saying 'I do' was the best, wisest, and happiest choice of my existence.",
+    tone: "Heartfelt Conviction",
+  },
+  {
+    id: "anni-13",
+    category: "anniversary",
+    title: "Through Every Season",
+    text: "Through spring blossoms and winter frost, your hand has remained steady in mine. Thank you for loving me exactly as I am.",
+    tone: "Tender & Grateful",
+  },
+  {
+    id: "anni-14",
+    category: "anniversary",
+    title: "Our Unwritten Future",
+    text: "Every anniversary is both a celebration of our history and an eager anticipation for the pages we have yet to write. I love you more today than ever.",
+    tone: "Eager Romance",
+  },
+  {
+    id: "anni-15",
+    category: "anniversary",
+    title: "Golden Vows",
+    text: "Words can scarcely hold the gratitude I carry for your kindness, your loyalty, and the light you spill into my days. Happy Anniversary, my treasure.",
+    tone: "Lyrical Elegance",
+  },
+  {
+    id: "anni-16",
+    category: "anniversary",
+    title: "Unbroken Promises",
+    text: "Promises made under candlelight, kept in the daylight. You are my constant reminder that true love exists in the real world.",
+    tone: "Sincere Devotion",
+  },
+  {
+    id: "anni-17",
+    category: "anniversary",
+    title: "A Shared Horizon",
+    text: "Looking out at the horizon, I don't care where the road leads, so long as your hand is in mine. Happy Anniversary, my love.",
+    tone: "Cinematic Horizon",
+  },
+  {
+    id: "anni-18",
+    category: "anniversary",
+    title: "Sweet Familiarity",
+    text: "There is an incredible magic in being so completely known and so completely loved. Happy Anniversary to thekeeper of my heart.",
+    tone: "Intimate & True",
+  },
+  {
+    id: "anni-19",
+    category: "anniversary",
+    title: "Infinite Tomorrows",
+    text: "If I lived a thousand years, I would want all one thousand spent beside you. Happy Anniversary to my forever muse.",
+    tone: "Eternal Poetry",
+  },
+  {
+    id: "anni-20",
+    category: "anniversary",
+    title: "Golden Hour Toast",
+    text: "Raise your glass with me to every tear wiped away, every secret shared, and every sunrise we greeted together. Happy Anniversary!",
+    tone: "Joyous Celebration",
+  },
 
-  // PROPOSAL CONFESSIONS
+  // ==========================================
+  // 3. PROPOSALS & CONFESSIONS (Slot 1: 1-10, Slot 2: 11-20)
+  // ==========================================
   {
     id: "prop-1",
     category: "proposal",
@@ -68,8 +314,137 @@ export const CURATED_INSPIRATIONS: InspirationItem[] = [
     text: "There is no dream I have that does not have you standing by my side. Let us take this promise into forever.",
     tone: "Poetic & Sincere",
   },
+  {
+    id: "prop-3",
+    category: "proposal",
+    title: "A Lifetime of Sunday Mornings",
+    text: "I want to make coffee with you on sleepy Sundays, hold your hand through the storms, and laugh with you until we are old and gray. Marry me, my love.",
+    tone: "Tender & Intimate",
+  },
+  {
+    id: "prop-4",
+    category: "proposal",
+    title: "Written in the Constellations",
+    text: "From the moment I met you, my heart stopped searching. You are my destination. Will you do me the greatest honor of becoming my wife?",
+    tone: "Grand Romantic",
+  },
+  {
+    id: "prop-5",
+    category: "proposal",
+    title: "The Promise of Forever",
+    text: "I cannot promise that life will always be easy, but I can promise that you will never have to face a single day alone. Walk with me forever.",
+    tone: "Soulful Devotion",
+  },
+  {
+    id: "prop-6",
+    category: "proposal",
+    title: "My Whole Heart",
+    text: "You didn't just complete my life; you gave it color, purpose, and music. Take this ring as a symbol of my unending love.",
+    tone: "Passionate & Pure",
+  },
+  {
+    id: "prop-7",
+    category: "proposal",
+    title: "The Missing Piece",
+    text: "Before you, I didn't know what it meant to feel completely safe and understood. You are my home. Will you be mine forever?",
+    tone: "Vulnerable & Real",
+  },
+  {
+    id: "prop-8",
+    category: "proposal",
+    title: "An Adventure for Eternity",
+    text: "Let's turn all our wildest dreams into our reality. Say yes, and let's start the greatest adventure of our lives.",
+    tone: "Excited & Heartfelt",
+  },
+  {
+    id: "prop-9",
+    category: "proposal",
+    title: "Whispered on Bended Knee",
+    text: "I don't just want you for today or tomorrow; I want every morning sunrise and every midnight whisper. Will you marry me?",
+    tone: "Intimate Vow",
+  },
+  {
+    id: "prop-10",
+    category: "proposal",
+    title: "Forever Beside You",
+    text: "With this ring, I give you my heart, my loyalty, and my deepest devotion for all the days of my life. Will you marry me?",
+    tone: "Classic & Noble",
+  },
+  // Proposal Slot 2 (11-20)
+  {
+    id: "prop-11",
+    category: "proposal",
+    title: "Beyond All Words",
+    text: "Words can only hint at what my heart feels every time you smile. Let me spend the rest of my days showing you how deeply you are loved.",
+    tone: "Deeply Moving",
+  },
+  {
+    id: "prop-12",
+    category: "proposal",
+    title: "One Heart, One Journey",
+    text: "Two lives intertwined by fate, choosing each other with absolute certainty. Let's make this official. Marry me, my darling.",
+    tone: "Poetic Certainty",
+  },
+  {
+    id: "prop-13",
+    category: "proposal",
+    title: "My Answer to Everything",
+    text: "Whenever the world felt heavy, thinking of you made everything light. You are my peace and my purpose. Say yes to forever.",
+    tone: "Gentle Truth",
+  },
+  {
+    id: "prop-14",
+    category: "proposal",
+    title: "A Ring Under the Stars",
+    text: "Under the witness of the night sky, I offer you the truest parts of who I am. Walk with me into eternity.",
+    tone: "Celestial Vow",
+  },
+  {
+    id: "prop-15",
+    category: "proposal",
+    title: "The Vow Before the Vow",
+    text: "Even before we say our vows, my soul has already made its promise to cherish, respect, and adore you every second. Will you marry me?",
+    tone: "Sacred Romance",
+  },
+  {
+    id: "prop-16",
+    category: "proposal",
+    title: "The Great Yes",
+    text: "Life with you is the only life I can imagine. Give me the honor of calling you my spouse.",
+    tone: "Bold & Sincere",
+  },
+  {
+    id: "prop-17",
+    category: "proposal",
+    title: "A Heartbeat Apart",
+    text: "Every beat of my heart has been leading to this very moment. Will you spend forever with me?",
+    tone: "Emotional Climax",
+  },
+  {
+    id: "prop-18",
+    category: "proposal",
+    title: "Unconditional Forever",
+    text: "In your eyes, I found my sanctuary. In your heart, I found my home. Let's build our life together.",
+    tone: "Tender Promise",
+  },
+  {
+    id: "prop-19",
+    category: "proposal",
+    title: "My Favorite Certainty",
+    text: "In an uncertain world, my love for you is the truest, purest certainty I possess. Will you marry me?",
+    tone: "Unshakable Love",
+  },
+  {
+    id: "prop-20",
+    category: "proposal",
+    title: "The Ring of Eternity",
+    text: "This golden ring has no beginning and no end, just like my love for you. Be mine, forever and always.",
+    tone: "Timeless Devotion",
+  },
 
-  // VALENTINE & ROMANTIC TEXTS
+  // ==========================================
+  // 4. VALENTINE & ROMANTIC TEXTS (Slot 1: 1-10, Slot 2: 11-20)
+  // ==========================================
   {
     id: "val-1",
     category: "valentine",
@@ -84,8 +459,137 @@ export const CURATED_INSPIRATIONS: InspirationItem[] = [
     text: "In a world of billions of souls, mine recognized yours in an instant. Being loved by you is the quietest luxury I have ever known.",
     tone: "Intimate & Soulful",
   },
+  {
+    id: "val-3",
+    category: "valentine",
+    title: "Roses and Constellations",
+    text: "A million roses will wither, but my admiration for your radiant spirit only blooms brighter with each passing season. You are my forever Valentine.",
+    tone: "Poetic & Gentle",
+  },
+  {
+    id: "val-4",
+    category: "romantic",
+    title: "The Sanctuary of Us",
+    text: "Whenever the world feels overwhelming, I close my eyes and think of your laugh. That simple thought is enough to anchor my entire soul.",
+    tone: "Deep & Grounded",
+  },
+  {
+    id: "val-5",
+    category: "valentine",
+    title: "Unspoken Language",
+    text: "We have a language made of glances, gentle touches, and shared smiles that words could never capture. Happy Valentine's Day, my heart.",
+    tone: "Subtle & Sweet",
+  },
+  {
+    id: "val-6",
+    category: "romantic",
+    title: "The Architecture of Love",
+    text: "You didn't just love me—you taught me how to believe in kindness again. Thank you for making my heart your home.",
+    tone: "Tearjerker & Vulnerable",
+  },
+  {
+    id: "val-7",
+    category: "valentine",
+    title: "Sweet Symphony",
+    text: "Happy Valentine's Day to the one who makes ordinary moments taste like champagne and feels like a warm fire on a cold night.",
+    tone: "Warm & Cozy",
+  },
+  {
+    id: "val-8",
+    category: "romantic",
+    title: "A Thousand Lifetimes",
+    text: "If I was given a thousand lifetimes to wander this earth, I would spend every single one searching for you until I found your hand.",
+    tone: "Epic Romance",
+  },
+  {
+    id: "val-9",
+    category: "valentine",
+    title: "My Greatest Treasure",
+    text: "Out of everything this life has offered, you are by far the most precious gift. Happy Valentine's Day, my beautiful love.",
+    tone: "Noble Devotion",
+  },
+  {
+    id: "val-10",
+    category: "romantic",
+    title: "The Quiet Hours",
+    text: "My favorite part of every day is the quiet hour before sleep, whispering about our dreams and knowing tomorrow starts with you.",
+    tone: "Intimate Warmth",
+  },
+  // Valentine/Romantic Slot 2 (11-20)
+  {
+    id: "val-11",
+    category: "valentine",
+    title: "Velvet Petals & You",
+    text: "Red roses pale in comparison to the warmth of your touch. Happy Valentine's Day to the one who owns my heart completely.",
+    tone: "Sensory Romance",
+  },
+  {
+    id: "val-12",
+    category: "romantic",
+    title: "The Melody in My Chest",
+    text: "My heart beats with your name on every pulse. Loving you is as effortless as breathing and as sacred as prayer.",
+    tone: "Poetic Devotion",
+  },
+  {
+    id: "val-13",
+    category: "valentine",
+    title: "Sweetest Valentine Ever",
+    text: "Chocolates will be eaten and flowers will fade, but my promise to stand by you, laugh with you, and adore you is forever.",
+    tone: "Sweet & Sincere",
+  },
+  {
+    id: "val-14",
+    category: "romantic",
+    title: "Midnight Confession",
+    text: "Sometimes I look at you while you are reading or talking, and I am overwhelmed by how fortunate I am to be loved by someone so pure.",
+    tone: "Vulnerable Truth",
+  },
+  {
+    id: "val-15",
+    category: "valentine",
+    title: "A Love That Heals",
+    text: "Your kindness healed places in my heart you didn't even break. Happy Valentine's Day to my guardian angel.",
+    tone: "Tender Healing",
+  },
+  {
+    id: "val-16",
+    category: "romantic",
+    title: "Constancy in Chaos",
+    text: "Everything changes, but my devotion to your happiness remains my eternal constant. You are my compass.",
+    tone: "Steadfast Devotion",
+  },
+  {
+    id: "val-17",
+    category: "valentine",
+    title: "Playful Sweetheart",
+    text: "You are the ketchup to my fries, the butter to my toast, and the rhythm to my heart! Happy Valentine's Day, cutie.",
+    tone: "Playful & Flirty",
+  },
+  {
+    id: "val-18",
+    category: "romantic",
+    title: "Golden Thread",
+    text: "An invisible golden thread has tied our souls together since before we even met. I am so grateful I found you.",
+    tone: "Cosmic Connection",
+  },
+  {
+    id: "val-19",
+    category: "valentine",
+    title: "Forever Valentine",
+    text: "Not just on February 14th, but every single sunrise of the year, you are my cherished Valentine.",
+    tone: "Timeless Romantic",
+  },
+  {
+    id: "val-20",
+    category: "romantic",
+    title: "The Quiet Miracle",
+    text: "Finding someone who understands your silence as clearly as your words is a rare miracle. Thank you for being mine.",
+    tone: "Soulful Peace",
+  },
 
-  // RETIREMENT TRIBUTES
+  // ==========================================
+  // 5. RETIREMENT, MOTHERS, FATHERS, BABY
+  // ==========================================
   {
     id: "ret-1",
     category: "retirement",
@@ -93,8 +597,6 @@ export const CURATED_INSPIRATIONS: InspirationItem[] = [
     text: "Decades of relentless dedication, wisdom, and leadership have left an indelible mark on everyone who worked beside you. Now it is time to turn off the alarm clock, savor peaceful mornings, and celebrate a lifetime of brilliance.",
     tone: "Honor & Prestige",
   },
-
-  // MOTHER'S DAY
   {
     id: "mom-1",
     category: "mothers-day",
@@ -102,8 +604,13 @@ export const CURATED_INSPIRATIONS: InspirationItem[] = [
     text: "Mom, you are the warmth that held our home together and the gentle hand that guided me when I felt lost. Thank you for teaching me kindness, resilience, and what unconditional love truly looks like.",
     tone: "Heartfelt Gratitude",
   },
-
-  // BABY SHOWER / PREGNANCY
+  {
+    id: "dad-1",
+    category: "fathers-day",
+    title: "My Guiding Anchor",
+    text: "Dad, thank you for being the quiet pillar of strength I could always rely on. Your sacrifices, wisdom, and unconditional support gave me the courage to stand tall in this world.",
+    tone: "Strength & Respect",
+  },
   {
     id: "baby-1",
     category: "baby-shower",
@@ -112,4 +619,3 @@ export const CURATED_INSPIRATIONS: InspirationItem[] = [
     tone: "Gentle & Tender",
   },
 ];
-

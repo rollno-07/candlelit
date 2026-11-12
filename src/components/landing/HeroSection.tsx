@@ -37,10 +37,10 @@ export function HeroSection() {
       >
         <span className="w-2 h-2 rounded-full bg-[#ffbe53] animate-ping" />
         <span className="font-medium tracking-wide uppercase text-[11px] text-[#ffbe53]">
-          11 Interactive Cinematic Templates
+          #1 Digital Craft & Online Surprise Platform
         </span>
         <span className="text-[#a8998d]">|</span>
-        <span className="text-[#d1c4b9]">Ready to Personalize</span>
+        <span className="text-[#d1c4b9]">Birthday & Anniversary Heartcraft</span>
       </motion.div>
 
       {/* Main Headline */}
@@ -52,8 +52,9 @@ export function HeroSection() {
       >
         Turn Your Feelings Into An{" "}
         <span className="text-gold-gradient font-normal italic">
-          Unforgettable Digital Surprise
-        </span>
+          Unforgettable Digital Craft
+        </span>{" "}
+        & Online Surprise
       </motion.h1>
 
       {/* Subtitle */}
@@ -63,7 +64,7 @@ export function HeroSection() {
         transition={{ duration: 0.7, delay: 0.2 }}
         className="mt-6 text-base sm:text-lg md:text-xl text-[#d1c4b9] font-light max-w-2xl leading-relaxed"
       >
-        Craft a breathtaking 4-act experience with interactive candle-blowing cakes, floating polaroid memories, romantic music, and streaming love letters in under 3 minutes.
+        Craft breathtaking birthday digital surprises, anniversary heartcraft celebrations, and romantic online surprises in under 60 seconds with interactive candle-blowing cakes, floating polaroid memories, and streaming love letters.
       </motion.p>
 
       {/* CTA Buttons */}
@@ -103,11 +104,11 @@ export function HeroSection() {
         </div>
         <div className="flex items-center gap-1.5">
           <CheckCircle2 className="w-3.5 h-3.5 text-[#ffbe53]" />
-          <span>Curated Romantic BGM</span>
+          <span>Heartcraft Digital Surprises</span>
         </div>
         <div className="flex items-center gap-1.5">
           <CheckCircle2 className="w-3.5 h-3.5 text-[#ffbe53]" />
-          <span>Instant Shareable Link</span>
+          <span>Instant WhatsApp Surprise Link</span>
         </div>
       </motion.div>
 

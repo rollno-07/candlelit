@@ -53,14 +53,14 @@ export function TemplateGrid() {
         <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full glass-panel border border-[#e0a96d]/30 text-xs text-[#ffe8d6] mb-3">
           <Sparkles className="w-3.5 h-3.5 text-[#ffbe53]" />
           <span className="uppercase tracking-widest text-[11px] font-medium">
-            Curated Occasion Catalog
+            Curated Digital Craft Catalog
           </span>
         </div>
         <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-gold-gradient font-light">
-          Choose Your Storyline
+          Choose Your Digital Craft Storyline
         </h2>
         <p className="mt-3 text-sm sm:text-base text-[#d1c4b9] font-light">
-          Every template is crafted with cinematic pacing, custom music, and rich emotional interactions.
+          Every template is a personalized heartcraft experience designed with cinematic pacing, custom music, and interactive rituals for birthdays, anniversaries, and romantic celebrations.
         </p>
 
         {/* Category Filters */}
@@ -124,6 +124,18 @@ export function TemplateGrid() {
                 <p className="mt-2 text-xs text-[#a8998d] leading-relaxed line-clamp-2">
                   {template.shortDescription}
                 </p>
+
+                <div className="mt-2 flex items-center justify-between">
+                  <Link
+                    href={`/templates/${template.id}`}
+                    className="text-[11px] text-[#ffbe53] hover:text-white transition-colors inline-flex items-center gap-1 font-medium"
+                    title={`Explore ${template.title} storyline and features`}
+                  >
+                    <span>Storyline Details & FAQs</span>
+                    <span>→</span>
+                  </Link>
+                  <span className="text-[10px] text-[#a8998d]">₹250 pass</span>
+                </div>
 
                 {/* 4-Act preview summary */}
                 <div className="mt-4 pt-4 border-t border-white/10 space-y-1.5">

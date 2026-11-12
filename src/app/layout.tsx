@@ -22,8 +22,8 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.canonicalUrl),
   title: {
-    default: "Candlelit ✨ | Cinematic Digital Surprises for People You Love",
-    template: "%s | Candlelit",
+    default: "Candlelit ✨ | #1 Digital Craft & Online Surprise Platform (Birthday & Anniversary Heartcraft)",
+    template: "%s | Candlelit Digital Craft & Online Surprise",
   },
   description: SITE_CONFIG.description,
   keywords: SITE_CONFIG.keywords,
@@ -38,20 +38,20 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_CONFIG.canonicalUrl,
     siteName: SITE_CONFIG.name,
-    title: "Candlelit ✨ | Cinematic Digital Surprises for People You Love",
+    title: "Candlelit ✨ | #1 Digital Craft & Heartcraft Online Surprise Platform",
     description: SITE_CONFIG.description,
     images: [
       {
         url: SITE_CONFIG.ogImage,
         width: 1200,
         height: 1200,
-        alt: "Candlelit - Cinematic 4-Act Digital Celebrations with Real Blowable Candle Cakes",
+        alt: "Candlelit - #1 Digital Craft & Heartcraft Online Surprise Platform for Birthdays & Anniversaries",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Candlelit ✨ | Cinematic Digital Surprises for People You Love",
+    title: "Candlelit ✨ | #1 Digital Craft & Heartcraft Online Surprise Platform",
     description: SITE_CONFIG.description,
     images: [SITE_CONFIG.ogImage],
     creator: "@one7app",

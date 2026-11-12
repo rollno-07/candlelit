@@ -8,20 +8,20 @@ export function HowItWorks() {
     {
       step: "01",
       icon: Palette,
-      title: "Pick Your Occasion",
-      desc: "Select from 11 cinematic templates—Birthdays, Anniversaries, Proposals, Valentine's week, Karwa Chauth, and more.",
+      title: "Pick Your Digital Craft Storyline",
+      desc: "Select from 11 cinematic storylines—Birthday Digital Surprise, Anniversary Celebration, The Dream Proposal, Valentine's week, Karwa Chauth, and more.",
     },
     {
       step: "02",
       icon: Heart,
-      title: "Personalize Moments",
-      desc: "Upload your photos, write your streaming love letter, customize rituals (like cake messages or ring boxes), and choose your song.",
+      title: "Personalize Your Heartcraft Moments",
+      desc: "Upload photos or your actual cake, write your streaming love letter (or let our AI Inspiration Studio write it), customize rituals, and choose your background music.",
     },
     {
       step: "03",
       icon: Share2,
-      title: "Share The Magic Link",
-      desc: "Generate your unique link (e.g. candleit.one7app.in/birthday-surprise-sophia), share directly on WhatsApp, or send via a QR code.",
+      title: "Share The Online Surprise Link",
+      desc: "Instantly receive a personalized WhatsApp link (candleit.one7app.in/{template}-{name}) that opens directly in any mobile browser with 0 app downloads.",
     },
   ];
 
@@ -33,10 +33,10 @@ export function HowItWorks() {
           <span className="uppercase tracking-widest text-[11px] font-medium">Simple 3-Step Process</span>
         </div>
         <h2 className="font-serif text-3xl sm:text-4xl text-gold-gradient font-light">
-          How Candlelit Works
+          How to Create an Online Surprise
         </h2>
         <p className="mt-2 text-sm text-[#d1c4b9] font-light">
-          No coding, no design skills needed. Just pure emotion crafted into interactive art.
+          No coding, no design skills needed. Just pure emotion crafted into a personalized digital heartcraft surprise in 60 seconds.
         </p>
       </div>
 

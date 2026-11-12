@@ -34,7 +34,7 @@ import { saveSurprise } from "@/lib/surprisesStore";
 import { useAuth } from "@/lib/authContext";
 import { processRazorpayPayment } from "@/utils/razorpayClient";
 import { soundManager } from "@/utils/audioSynthesizer";
-import { enhancePhotoCandlelight } from "@/utils/photoEnhancer";
+import { enhancePhotoSmart, BeautifyMode } from "@/utils/photoEnhancer";
 import { InspirationModal } from "@/components/inspiration/InspirationModal";
 import { ShareModal } from "./ShareModal";
 import { SurprisePreviewModal } from "./SurprisePreviewModal";
@@ -64,6 +64,8 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
   const [candleTop, setCandleTop] = useState<number>(42);
   const [candleSpread, setCandleSpread] = useState<number>(10);
   const [isEnhancingCake, setIsEnhancingCake] = useState(false);
+  const [cakeBeautifyReport, setCakeBeautifyReport] = useState<string | null>(null);
+  const [cakeBeautifyMode, setCakeBeautifyMode] = useState<BeautifyMode>("cake_glamour");
   const [enhancingPhotoIdx, setEnhancingPhotoIdx] = useState<number | null>(null);
 
   const [photos, setPhotos] = useState<{ url: string; caption: string }[]>(
@@ -283,13 +285,13 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
     reader.readAsDataURL(file);
   };
 
-  const handleBeautifyPhoto = async (idx: number) => {
+  const handleBeautifyPhoto = async (idx: number, selectedMode: BeautifyMode = "portrait_glow") => {
     const currentUrl = photos[idx]?.url;
     if (!currentUrl) return;
     setEnhancingPhotoIdx(idx);
     try {
-      const enhanced = await enhancePhotoCandlelight(currentUrl);
-      handleUpdatePhoto(idx, "url", enhanced);
+      const { enhancedUrl } = await enhancePhotoSmart(currentUrl, selectedMode);
+      handleUpdatePhoto(idx, "url", enhancedUrl);
     } catch (err) {
       console.error(err);
     } finally {
@@ -308,12 +310,20 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
     reader.readAsDataURL(file);
   };
 
-  const handleBeautifyCake = async () => {
+  const handleBeautifyCake = async (selectedMode: BeautifyMode = cakeBeautifyMode) => {
     if (!customCakeUrl) return;
     setIsEnhancingCake(true);
+    setCakeBeautifyMode(selectedMode);
     try {
-      const enhanced = await enhancePhotoCandlelight(customCakeUrl);
-      setCustomCakeUrl(enhanced);
+      const { enhancedUrl, analysis } = await enhancePhotoSmart(customCakeUrl, selectedMode);
+      setCustomCakeUrl(enhancedUrl);
+      const parts = [];
+      if (analysis.isUnderexposed) parts.push("Shadow exposure balanced");
+      if (analysis.isOverexposed) parts.push("Frosting highlights protected");
+      if (analysis.isColdTint) parts.push("Warm 3000K aligned");
+      parts.push("Confectionery clarity enhanced");
+      setCakeBeautifyReport(parts.join(" • "));
+      setTimeout(() => setCakeBeautifyReport(null), 5000);
     } catch (err) {
       console.error(err);
     } finally {
@@ -740,25 +750,51 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                           ))}
                         </div>
 
-                        {/* Alignment Sliders */}
+                        {/* Alignment Sliders & Intelligent Beautifier */}
                         <div className="flex-1 w-full space-y-3">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-semibold text-white flex items-center gap-1.5">
-                              <Sliders className="w-3.5 h-3.5 text-[#ffbe53]" />
-                              <span>Align Candles on Cake Surface</span>
-                            </span>
-                            <button
-                              type="button"
-                              onClick={handleBeautifyCake}
-                              disabled={isEnhancingCake}
-                              className="px-3 py-1.5 rounded-lg bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-semibold text-[#ffbe53] flex items-center gap-1.5 transition-colors cursor-pointer"
-                            >
-                              <Wand2 className="w-3.5 h-3.5" />
-                              <span>{isEnhancingCake ? "Enhancing..." : "✨ Beautify Cake Photo"}</span>
-                            </button>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-semibold text-white flex items-center gap-1.5">
+                                <Wand2 className="w-3.5 h-3.5 text-[#ffbe53]" />
+                                <span>AI Vision Beautifier Engine</span>
+                              </span>
+                              <span className="text-[10px] text-[#ffbe53] font-medium">Histogram & Tone Mapped</span>
+                            </div>
+
+                            {/* Preset Pills */}
+                            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                              {[
+                                { id: "cake_glamour", label: "🎂 Cake Studio" },
+                                { id: "candlelight", label: "✨ Candlelight" },
+                                { id: "portrait_glow", label: "🌟 Radiant Glow" },
+                                { id: "cinematic_warm", label: "🎞️ 35mm Film" },
+                              ].map((preset) => (
+                                <button
+                                  key={preset.id}
+                                  type="button"
+                                  onClick={() => handleBeautifyCake(preset.id as BeautifyMode)}
+                                  disabled={isEnhancingCake}
+                                  className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                                    cakeBeautifyMode === preset.id
+                                      ? "bg-[#ffbe53]/25 text-[#ffbe53] border border-[#ffbe53]/50 font-bold shadow-sm"
+                                      : "bg-white/5 hover:bg-white/10 text-[#d1c4b9] border border-white/10"
+                                  }`}
+                                >
+                                  {preset.label}
+                                </button>
+                              ))}
+                            </div>
+
+                            {/* Live AI Analysis Report Badge */}
+                            {cakeBeautifyReport && (
+                              <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-300 flex items-center gap-1.5 animate-in fade-in duration-300">
+                                <Sparkles className="w-3 h-3 text-emerald-400 shrink-0" />
+                                <span className="truncate">{cakeBeautifyReport}</span>
+                              </div>
+                            )}
                           </div>
 
-                          <div>
+                          <div className="pt-2 border-t border-white/10">
                             <div className="flex items-center justify-between text-[11px] text-[#a8998d] mb-1">
                               <span>Candle Height on Cake Tier:</span>
                               <span className="font-mono text-[#ffbe53]">{candleTop}%</span>
@@ -931,12 +967,13 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                         </label>
                         <button
                           type="button"
-                          onClick={() => handleBeautifyPhoto(idx)}
+                          onClick={() => handleBeautifyPhoto(idx, "portrait_glow")}
                           disabled={enhancingPhotoIdx === idx}
                           className="px-3 py-1.5 rounded-lg bg-[#ffbe53]/15 hover:bg-[#ffbe53]/25 border border-[#ffbe53]/30 text-xs text-[#ffbe53] flex items-center gap-1.5 cursor-pointer transition-colors"
+                          title="Apply AI Vision portrait & candlelight enhancement"
                         >
                           <Wand2 className="w-3 h-3" />
-                          <span>{enhancingPhotoIdx === idx ? "Enhancing..." : "✨ Beautify"}</span>
+                          <span>{enhancingPhotoIdx === idx ? "Enhancing..." : "✨ AI Beautify"}</span>
                         </button>
                       </div>
                     </div>
@@ -1346,6 +1383,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
           } else {
             setLetterParagraphs([...letterParagraphs, text]);
           }
+          setCurrentStep(3);
         }}
       />
 

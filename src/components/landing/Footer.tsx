@@ -122,30 +122,35 @@ export function Footer() {
               </ul>
             </div>
 
-            {/* Column 3: SURPRISES (2 cols) */}
+            {/* Column 3: DIGITAL CRAFTS & SURPRISES (2 cols) */}
             <div className="md:col-span-2">
               <h4 className="text-[11px] font-semibold tracking-widest uppercase text-white mb-4">
-                Surprises
+                Digital Crafts
               </h4>
               <ul className="space-y-2.5 text-xs text-[#a8998d]">
                 <li>
-                  <Link href="/create/propose" className="hover:text-[#ffbe53] transition-colors block">
-                    For Girlfriend
+                  <Link href="/templates/birthday-surprise" className="hover:text-[#ffbe53] transition-colors block">
+                    Birthday Digital Surprise
                   </Link>
                 </li>
                 <li>
-                  <Link href="/create/anniversary" className="hover:text-[#ffbe53] transition-colors block">
-                    For Boyfriend
+                  <Link href="/templates/anniversary" className="hover:text-[#ffbe53] transition-colors block">
+                    Anniversary Digital Surprise
                   </Link>
                 </li>
                 <li>
-                  <Link href="/create/anniversary" className="hover:text-[#ffbe53] transition-colors block">
-                    For Husband
+                  <Link href="/templates/propose" className="hover:text-[#ffbe53] transition-colors block">
+                    Heartcraft Proposal
                   </Link>
                 </li>
                 <li>
-                  <Link href="/create/birthday-surprise" className="hover:text-[#ffbe53] transition-colors block">
-                    For Best Friend
+                  <Link href="/templates/valentine" className="hover:text-[#ffbe53] transition-colors block">
+                    Valentine Digital Craft
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/templates" className="hover:text-[#ffbe53] transition-colors block">
+                    All 11 Online Surprises
                   </Link>
                 </li>
               </ul>
@@ -213,6 +218,63 @@ export function Footer() {
                   </a>
                 </li>
               </ul>
+            </div>
+          </div>
+
+          {/* Trending Searches & Digital Crafts Directory */}
+          <div className="py-6 border-t border-white/5">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-[#ffbe53] mb-3 flex items-center gap-2">
+              <Sparkles className="w-3 h-3 text-[#ffbe53] fill-current" />
+              <span>Trending Searches & Digital Crafts</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[11px] text-[#a8998d]">
+              <Link href="/templates/birthday-surprise" className="hover:text-[#ffbe53] transition-colors">
+                Birthday Digital Surprise
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates/anniversary" className="hover:text-[#ffbe53] transition-colors">
+                Anniversary Digital Surprise
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates" className="hover:text-[#ffbe53] transition-colors">
+                Digital Craft
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates" className="hover:text-[#ffbe53] transition-colors">
+                Heartcraft Digital Surprise
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates" className="hover:text-[#ffbe53] transition-colors">
+                Heart Craft Surprise
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates/birthday-surprise" className="hover:text-[#ffbe53] transition-colors">
+                Online Surprise for Birthday
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates/anniversary" className="hover:text-[#ffbe53] transition-colors">
+                Anversry Digital Surprise
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates/propose" className="hover:text-[#ffbe53] transition-colors">
+                Digital Love Craft
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates/birthday-surprise" className="hover:text-[#ffbe53] transition-colors">
+                Blow Candle Online Surprise
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates/birthday-surprise" className="hover:text-[#ffbe53] transition-colors">
+                Online Cake Cutting Surprise
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates" className="hover:text-[#ffbe53] transition-colors">
+                WhatsApp Digital Surprise Link
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/templates/valentine" className="hover:text-[#ffbe53] transition-colors">
+                Romantic Heartcraft Surprise
+              </Link>
             </div>
           </div>
 

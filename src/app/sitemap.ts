@@ -18,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/templates`,
       lastModified: now,
       changeFrequency: "daily",
-      priority: 0.9,
+      priority: 0.95,
     },
     {
       url: `${baseUrl}/auth`,
@@ -27,6 +27,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
   ];
+
+  // All 11 Dedicated Template SEO Landing Pages
+  const templateLandingPages: MetadataRoute.Sitemap = TEMPLATES.map((tmpl) => ({
+    url: `${baseUrl}/templates/${tmpl.id}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.9,
+  }));
 
   // All 11 Template Creation / Customizer URLs
   const createPages: MetadataRoute.Sitemap = TEMPLATES.map((tmpl) => ({
@@ -44,5 +52,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...createPages, ...previewPages];
+  return [...staticPages, ...templateLandingPages, ...createPages, ...previewPages];
 }

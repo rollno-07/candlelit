@@ -2,16 +2,28 @@ import { Metadata } from "next";
 import { TemplatesView } from "@/components/templates/TemplatesView";
 
 export const metadata: Metadata = {
-  title: "Occasion Templates Catalog (11 Storylines)",
+  title: "Digital Craft & Online Surprise Catalog (11 Storylines) | Candlelit",
   description:
-    "Explore 11 curated interactive celebration storylines with candle-blowing cakes, diamond ring reveals, and streaming love letters.",
+    "Explore 11 curated digital crafts and heartcraft online surprises. Featuring the #1 Birthday Digital Surprise with real candle-blowing cake, Anniversary milestones, Proposals, and Valentine journeys.",
+  keywords: [
+    "digital craft",
+    "heartcraft digital surprise",
+    "online surprise",
+    "birthday digital surprise",
+    "birthday digital suprise",
+    "anniversary digital surprise",
+    "anversry digital surprise",
+    "digital love craft",
+    "heart craft surprise",
+    "online celebration link",
+  ],
   alternates: {
     canonical: "https://candleit.one7app.in/templates",
   },
   openGraph: {
-    title: "Candlelit Templates Catalog | 11 Cinematic Digital Celebrations",
+    title: "Digital Craft & Online Surprise Catalog | 11 Cinematic Heartcraft Storylines",
     description:
-      "Explore 11 curated interactive celebration storylines with candle-blowing cakes, diamond ring reveals, and streaming love letters.",
+      "Explore 11 curated digital crafts and heartcraft online surprises. Featuring interactive candle-blowing cakes, champagne toasts, and streaming letters.",
     url: "https://candleit.one7app.in/templates",
   },
 };
