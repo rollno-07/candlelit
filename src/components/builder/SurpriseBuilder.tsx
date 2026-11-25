@@ -59,6 +59,9 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
   const [cakeOrObjectMessage, setCakeOrObjectMessage] = useState(template.defaultFields.cakeOrObjectMessage);
   const [subtype, setSubtype] = useState(template.options?.subtypes?.[0] || template.options?.days?.[0] || "");
 
+  // VIP Owner check for vivekrawat0107@gmail.com (free unlimited surprise creations)
+  const isOwnerAdmin = user?.email?.trim().toLowerCase() === "vivekrawat0107@gmail.com";
+
   // Custom cake photo & candle alignment state
   const [customCakeUrl, setCustomCakeUrl] = useState<string>("");
   const [candleTop, setCandleTop] = useState<number>(42);
@@ -244,6 +247,10 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
 
   // Photo handlers
   const handleAddPhoto = () => {
+    if (photos.length >= 10) {
+      alert("Maximum 10 photos and balloons allowed per surprise.");
+      return;
+    }
     setPhotos([...photos, { url: template.previewImage, caption: "A moment I cherish ✨" }]);
   };
 
@@ -331,7 +338,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
     }
   };
 
-  // Save / Create handler with Razorpay Payment (₹250)
+  // Save / Create handler with Razorpay Payment (₹250) or Free VIP Pass for Owner
   const handleCreate = async () => {
     if (!recipientName.trim()) {
       alert("Please enter the name of the recipient.");
@@ -341,21 +348,35 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
 
     setIsSaving(true);
     try {
-      // 1. Process payment via Razorpay for ₹250
-      const payment = await processRazorpayPayment({
-        amountInRupees: 250,
-        templateId: template.id,
-        recipientName: recipientName.trim(),
-        userEmail: user?.email,
-        userName: user?.name,
-      });
+      let paymentRecord = {
+        paymentId: "owner_pass_vivek",
+        orderId: "owner_free_pass",
+        amount: 0,
+      };
 
-      if (!payment.success) {
-        if (payment.error && !payment.error.includes("cancelled") && !payment.error.includes("closed")) {
-          alert(`Payment not completed: ${payment.error}`);
+      // If not the owner/admin (vivekrawat0107@gmail.com), process payment via Razorpay for ₹250
+      if (!isOwnerAdmin) {
+        const payment = await processRazorpayPayment({
+          amountInRupees: 250,
+          templateId: template.id,
+          recipientName: recipientName.trim(),
+          userEmail: user?.email,
+          userName: user?.name,
+        });
+
+        if (!payment.success) {
+          if (payment.error && !payment.error.includes("cancelled") && !payment.error.includes("closed")) {
+            alert(`Payment not completed: ${payment.error}`);
+          }
+          setIsSaving(false);
+          return;
         }
-        setIsSaving(false);
-        return;
+
+        paymentRecord = {
+          paymentId: payment.paymentId || "pay_razorpay",
+          orderId: payment.orderId || "order_razorpay",
+          amount: 250,
+        };
       }
 
       // 2. Prepare surprise data with verified payment records
@@ -378,9 +399,9 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
         createdAt: new Date().toISOString(),
         userId: user?.id,
         isPaid: true,
-        paymentId: payment.paymentId,
-        orderId: payment.orderId,
-        amountPaid: 250,
+        paymentId: paymentRecord.paymentId,
+        orderId: paymentRecord.orderId,
+        amountPaid: paymentRecord.amount,
       };
 
       const slug = await saveSurprise(surpriseData, user?.id);
@@ -851,19 +872,27 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
             <div className="space-y-5 sm:space-y-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
-                  <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-1">
-                    2. Cherished Memories & Photos
+                  <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-1 flex items-center gap-2">
+                    <span>2. Cherished Memories & Photos</span>
+                    <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#ffbe53]/20 text-[#ffbe53] border border-[#ffbe53]/30">
+                      {photos.length}/10
+                    </span>
                   </h3>
                   <p className="text-xs text-[#a8998d]">
-                    These will be revealed when popping the floating starlight balloons in Act II.
+                    Add up to 10 photos. Each photo will have its own floating starlight balloon to pop in Act II.
                   </p>
                 </div>
                 <button
                   onClick={handleAddPhoto}
-                  className="w-full sm:w-auto px-4 py-2 rounded-full bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border border-[#ffbe53]/40 text-xs font-semibold text-[#ffbe53] flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all shrink-0"
+                  disabled={photos.length >= 10}
+                  className={`w-full sm:w-auto px-4 py-2 rounded-full border text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shrink-0 ${
+                    photos.length >= 10
+                      ? "opacity-50 cursor-not-allowed bg-white/5 border-white/10 text-[#a8998d]"
+                      : "bg-[#ffbe53]/20 hover:bg-[#ffbe53]/30 border-[#ffbe53]/40 text-[#ffbe53] cursor-pointer active:scale-95"
+                  }`}
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Add Photo</span>
+                  <span>{photos.length >= 10 ? "Max 10 Added" : "Add Photo"}</span>
                 </button>
               </div>
 
@@ -1261,12 +1290,35 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                   </div>
 
                   <div className="flex items-center sm:flex-col justify-between sm:justify-start sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-white/5">
-                    <div className="text-[10px] text-[#a8998d] uppercase tracking-wider">Total Charge</div>
+                    <div className="text-[10px] text-[#a8998d] uppercase tracking-wider">
+                      {isOwnerAdmin ? "VIP Pass" : "Total Charge"}
+                    </div>
                     <div className="font-serif text-2xl sm:text-4xl font-bold text-gold-gradient">
-                      ₹250
+                      {isOwnerAdmin ? "FREE" : "₹250"}
                     </div>
                   </div>
                 </div>
+
+                {/* VIP Owner Access Banner for vivekrawat0107@gmail.com */}
+                {isOwnerAdmin && (
+                  <div className="p-3.5 rounded-2xl bg-gradient-to-r from-[#ffbe53]/20 via-[#e0a96d]/15 to-[#ff7b90]/15 border border-[#ffbe53]/40 flex items-center justify-between gap-3 text-xs shadow-md">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#ffbe53]/25 border border-[#ffbe53]/40 text-[#ffbe53] flex items-center justify-center font-bold text-sm shrink-0">
+                        👑
+                      </div>
+                      <div>
+                        <div className="font-semibold text-[#ffbe53] flex items-center gap-1.5">
+                          <span>VIP Owner Access</span>
+                          <span className="px-1.5 py-0.2 rounded text-[9px] bg-[#ffbe53]/30 text-white font-bold uppercase tracking-wider">Unlimited Free</span>
+                        </div>
+                        <p className="text-[11px] text-[#d1c4b9]">
+                          Signed in as <strong className="text-white">vivekrawat0107@gmail.com</strong>. You can create unlimited surprises completely free!
+                        </p>
+                      </div>
+                    </div>
+                    <CheckCircle2 className="w-4 h-4 text-[#ffbe53] shrink-0" />
+                  </div>
+                )}
 
                 {/* Included Features */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#d1c4b9]">
@@ -1276,7 +1328,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-[#ffbe53] shrink-0" />
-                    <span>Pop-the-Memories Polaroid Balloon Reveal</span>
+                    <span>Pop-the-Memories Polaroid Balloon Reveal (Up to 10)</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-[#ffbe53] shrink-0" />
@@ -1291,7 +1343,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                 <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 text-[11px] text-[#a8998d] border-t border-white/5">
                   <div className="flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>Secured by Razorpay • UPI, Cards, Netbanking</span>
+                    <span>{isOwnerAdmin ? "Verified VIP Creator Account" : "Secured by Razorpay • UPI, Cards, Netbanking"}</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-[10px] text-[#a8998d]/80">
                     <Lock className="w-3 h-3 text-[#ffbe53]" />
@@ -1308,8 +1360,17 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                   disabled={isSaving}
                   className="w-full py-4 px-6 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-sm font-bold tracking-wide shadow-[0_0_25px_rgba(255,190,83,0.4)] hover:shadow-[0_0_40px_rgba(255,190,83,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
                 >
-                  <CreditCard className="w-4 h-4" />
-                  <span>{isSaving ? "Processing Payment..." : "Pay ₹250 & Launch Surprise"}</span>
+                  {isOwnerAdmin ? (
+                    <>
+                      <Sparkles className="w-4 h-4 text-[#1c1208]" />
+                      <span>{isSaving ? "Creating Magic Link..." : "Launch Surprise (Free VIP Pass ✨)"}</span>
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="w-4 h-4" />
+                      <span>{isSaving ? "Processing Payment..." : "Pay ₹250 & Launch Surprise"}</span>
+                    </>
+                  )}
                 </button>
 
                 {/* Secondary Actions (Clean 50/50 split on mobile) */}
@@ -1352,6 +1413,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
         customCakeUrl={customCakeUrl}
         customCandlePosition={{ top: candleTop, arcSpread: candleSpread }}
         onProceedToPay={handleCreate}
+        isOwnerAdmin={isOwnerAdmin}
       />
 
       {/* AI Inspiration Studio Modal */}

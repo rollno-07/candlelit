@@ -80,6 +80,66 @@ const BALLOONS: BalloonData[] = [
     floatDelay: 0.9,
     floatDuration: 5.2,
   },
+  {
+    id: 6,
+    colorGradient: "linear-gradient(135deg, #a7f3d0 0%, #34d399 60%, #065f46 100%)",
+    stringColor: "#34d399",
+    photoUrl: "/images/polaroids/photo_rooftop.jpg",
+    title: "Purest Joy",
+    subtitle: "Cherished Little Moments",
+    note: "Every quiet coffee, every shared joke, every late-night conversation makes life infinitely sweeter with you.",
+    xOffset: 16,
+    floatDelay: 0.3,
+    floatDuration: 5.1,
+  },
+  {
+    id: 7,
+    colorGradient: "linear-gradient(135deg, #bae6fd 0%, #38bdf8 60%, #0369a1 100%)",
+    stringColor: "#38bdf8",
+    photoUrl: "/images/polaroids/photo_beach.jpg",
+    title: "Endless Laughter",
+    subtitle: "Unfiltered Smiles",
+    note: "The kind of laughter that hurts your stomach in the best way possible—you give that to me every single day.",
+    xOffset: 36,
+    floatDelay: 0.8,
+    floatDuration: 4.9,
+  },
+  {
+    id: 8,
+    colorGradient: "linear-gradient(135deg, #fecdd3 0%, #fb7185 60%, #9f1239 100%)",
+    stringColor: "#fb7185",
+    photoUrl: "/images/polaroids/photo_festive.jpg",
+    title: "Our Favorite Journey",
+    subtitle: "Chapters Written Together",
+    note: "From where we started to where we are now, every milestone with you feels like a dream I never want to wake up from.",
+    xOffset: 56,
+    floatDelay: 1.1,
+    floatDuration: 5.3,
+  },
+  {
+    id: 9,
+    colorGradient: "linear-gradient(135deg, #fef08a 0%, #facc15 60%, #854d0e 100%)",
+    stringColor: "#facc15",
+    photoUrl: "/images/polaroids/photo_roses.jpg",
+    title: "Heart of Pure Gold",
+    subtitle: "Kindness & Grace",
+    note: "Your heart is so gentle, so caring, and so full of compassion. Never forget how truly rare and precious you are.",
+    xOffset: 74,
+    floatDelay: 0.5,
+    floatDuration: 4.7,
+  },
+  {
+    id: 10,
+    colorGradient: "linear-gradient(135deg, #e9d5ff 0%, #c084fc 60%, #581c87 100%)",
+    stringColor: "#c084fc",
+    photoUrl: "/images/polaroids/photo_mountains.jpg",
+    title: "Forever & Always",
+    subtitle: "With All My Heart",
+    note: "Ten starlight memories are just the beginning of a lifetime of magic, romance, and adventures we will share.",
+    xOffset: 88,
+    floatDelay: 1.3,
+    floatDuration: 5.5,
+  },
 ];
 
 interface Scene2BalloonsProps {
@@ -172,37 +232,68 @@ export function Scene2Balloons({ onComplete, photos, templateId = "birthday-surp
   const balloonsList = React.useMemo(() => {
     const rawList =
       photos && photos.length > 0
-        ? BALLOONS.slice(0, Math.min(BALLOONS.length, photos.length)).map((b, i) => ({
-            ...b,
-            photoUrl: photos[i].url,
-            title: photos[i].caption || b.title,
-            note: photos[i].caption || b.note,
-          }))
+        ? photos.slice(0, 10).map((p, i) => {
+            const fallback = BALLOONS[i % BALLOONS.length];
+            return {
+              id: i + 1,
+              colorGradient: fallback.colorGradient,
+              stringColor: fallback.stringColor,
+              photoUrl: p.url || fallback.photoUrl,
+              title: p.caption?.trim() ? p.caption : `Memory ${i + 1}`,
+              subtitle: `Memory #${i + 1}`,
+              note: p.caption?.trim() ? p.caption : fallback.note,
+              floatDelay: (i * 0.35) % 2.5,
+              floatDuration: 4.5 + ((i * 0.3) % 1.5),
+            };
+          })
         : BALLOONS;
 
     const total = rawList.length;
 
     return rawList.map((b, i) => {
-      // Calculate balanced, symmetrical horizontal position across the full stage
       let xOffset = 50;
-      if (total === 1) {
-        xOffset = 50;
-      } else if (total === 2) {
-        xOffset = i === 0 ? 34 : 66;
-      } else if (total === 3) {
-        const positions = [22, 50, 78];
-        xOffset = positions[i] ?? 50;
-      } else if (total === 4) {
-        const positions = [18, 38, 62, 82];
-        xOffset = positions[i] ?? 50;
-      } else {
-        const step = 76 / Math.max(1, total - 1);
-        xOffset = 12 + i * step;
-      }
+      let yOffset = 25;
 
-      // Elegant vertical float heights in the center visual band of the sky
-      const yOffsets = [20, 34, 18, 32, 22];
-      const yOffset = yOffsets[i % yOffsets.length];
+      if (total <= 5) {
+        if (total === 1) {
+          xOffset = 50;
+          yOffset = 25;
+        } else if (total === 2) {
+          xOffset = i === 0 ? 32 : 68;
+          yOffset = i === 0 ? 22 : 28;
+        } else if (total === 3) {
+          const xs = [20, 50, 80];
+          const ys = [25, 18, 28];
+          xOffset = xs[i];
+          yOffset = ys[i];
+        } else if (total === 4) {
+          const xs = [16, 38, 62, 84];
+          const ys = [22, 30, 20, 28];
+          xOffset = xs[i];
+          yOffset = ys[i];
+        } else {
+          const xs = [12, 31, 50, 69, 88];
+          const ys = [24, 16, 30, 18, 26];
+          xOffset = xs[i];
+          yOffset = ys[i];
+        }
+      } else {
+        // 6 to 10 balloons: 2-Tier Organic Staggered Cloud
+        const isUpper = i % 2 === 0;
+        const tierIndex = Math.floor(i / 2);
+        const upperCount = Math.ceil(total / 2);
+        const lowerCount = Math.floor(total / 2);
+
+        if (isUpper) {
+          const step = upperCount > 1 ? 76 / (upperCount - 1) : 0;
+          xOffset = upperCount > 1 ? 12 + tierIndex * step : 50;
+          yOffset = tierIndex % 2 === 0 ? 10 : 20;
+        } else {
+          const step = lowerCount > 1 ? 72 / (lowerCount - 1) : 0;
+          xOffset = lowerCount > 1 ? 16 + tierIndex * step : 50;
+          yOffset = tierIndex % 2 === 0 ? 38 : 48;
+        }
+      }
 
       return {
         ...b,
@@ -310,7 +401,11 @@ export function Scene2Balloons({ onComplete, photos, templateId = "birthday-surp
                 >
                   {/* Balloon Body */}
                   <div
-                    className="relative w-16 h-20 md:w-20 md:h-24 rounded-[50%_50%_50%_50%_/_40%_40%_60%_60%] shadow-xl flex items-center justify-center transition-transform group-hover:brightness-110"
+                    className={`relative ${
+                      balloonsList.length > 5
+                        ? "w-14 h-18 sm:w-16 sm:h-20 md:w-20 md:h-24"
+                        : "w-16 h-20 md:w-20 md:h-24"
+                    } rounded-[50%_50%_50%_50%_/_40%_40%_60%_60%] shadow-xl flex items-center justify-center transition-transform group-hover:brightness-110`}
                     style={{
                       background: balloon.colorGradient,
                       boxShadow: `0 10px 25px -4px rgba(0,0,0,0.5), inset -4px -6px 12px rgba(0,0,0,0.35), inset 6px 8px 12px rgba(255,255,255,0.45)`,

@@ -40,6 +40,7 @@ interface SurprisePreviewModalProps {
   customCakeUrl?: string;
   customCandlePosition?: { top: number; arcSpread: number };
   onProceedToPay: () => void;
+  isOwnerAdmin?: boolean;
 }
 
 type ActNumber = 1 | 2 | 3 | 4;
@@ -58,6 +59,7 @@ export function SurprisePreviewModal({
   customCakeUrl,
   customCandlePosition,
   onProceedToPay,
+  isOwnerAdmin = false,
 }: SurprisePreviewModalProps) {
   const [mounted, setMounted] = useState(false);
   const [currentAct, setCurrentAct] = useState<ActNumber>(1);
@@ -193,8 +195,17 @@ export function SurprisePreviewModal({
                 }}
                 className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-bold shadow-[0_0_20px_rgba(255,190,83,0.35)] hover:shadow-[0_0_30px_rgba(255,190,83,0.5)] cursor-pointer active:scale-95 transition-all"
               >
-                <CreditCard className="w-3.5 h-3.5" />
-                <span>Pay ₹250</span>
+                {isOwnerAdmin ? (
+                  <>
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Launch Free VIP Pass ✨</span>
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="w-3.5 h-3.5" />
+                    <span>Pay ₹250</span>
+                  </>
+                )}
               </button>
 
               <button
@@ -386,8 +397,17 @@ export function SurprisePreviewModal({
                 }}
                 className="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs sm:text-sm font-bold shadow-[0_0_20px_rgba(255,190,83,0.4)] hover:shadow-[0_0_30px_rgba(255,190,83,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
               >
-                <CreditCard className="w-4 h-4" />
-                <span>Pay ₹250 & Launch Surprise</span>
+                {isOwnerAdmin ? (
+                  <>
+                    <Sparkles className="w-4 h-4 text-[#1c1208]" />
+                    <span>Launch Surprise (Free VIP Pass ✨)</span>
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="w-4 h-4" />
+                    <span>Pay ₹250 & Launch Surprise</span>
+                  </>
+                )}
               </button>
             </div>
           </div>
