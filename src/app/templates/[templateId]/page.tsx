@@ -39,19 +39,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ratingCount: 1100,
   };
 
-  const fullImageUrl = `https://candleit.one7app.in${template.previewImage}`;
+  const fullImageUrl = `https://candlelit.one7app.in${template.previewImage}`;
 
   return {
     title: seo.metaTitle,
     description: seo.metaDescription,
     keywords: seo.targetKeywords,
     alternates: {
-      canonical: `https://candleit.one7app.in/templates/${template.id}`,
+      canonical: `https://candlelit.one7app.in/templates/${template.id}`,
     },
     openGraph: {
       title: seo.metaTitle,
       description: seo.metaDescription,
-      url: `https://candleit.one7app.in/templates/${template.id}`,
+      url: `https://candlelit.one7app.in/templates/${template.id}`,
       siteName: "Candlelit",
       images: [
         {
@@ -105,7 +105,7 @@ export default async function TemplateDetailPage({ params }: PageProps) {
     ratingCount: 1100,
   };
 
-  const fullImageUrl = `https://candleit.one7app.in${template.previewImage}`;
+  const fullImageUrl = `https://candlelit.one7app.in${template.previewImage}`;
 
   // Structured Data 1: Product / Digital Application Schema
   const productSchema = {
@@ -120,7 +120,7 @@ export default async function TemplateDetailPage({ params }: PageProps) {
     },
     offers: {
       "@type": "Offer",
-      url: `https://candleit.one7app.in/templates/${template.id}`,
+      url: `https://candlelit.one7app.in/templates/${template.id}`,
       priceCurrency: "INR",
       price: "250",
       availability: "https://schema.org/InStock",
@@ -147,19 +147,19 @@ export default async function TemplateDetailPage({ params }: PageProps) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://candleit.one7app.in",
+        item: "https://candlelit.one7app.in",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Occasion Templates",
-        item: "https://candleit.one7app.in/templates",
+        item: "https://candlelit.one7app.in/templates",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: template.title,
-        item: `https://candleit.one7app.in/templates/${template.id}`,
+        item: `https://candlelit.one7app.in/templates/${template.id}`,
       },
     ],
   };

@@ -101,7 +101,7 @@ export async function processRazorpayPayment(
       currency: orderData.currency,
       name: "Candlelit ✨",
       description: `Single Surprise Creation for ${params.recipientName}`,
-      image: "https://candleit.one7app.in/cake-icon.svg",
+      image: "https://candlelit.one7app.in/cake-icon.svg",
       order_id: orderData.orderId,
       prefill: {
         name: params.userName || "",

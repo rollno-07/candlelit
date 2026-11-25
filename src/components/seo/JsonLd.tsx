@@ -38,7 +38,7 @@ export function JsonLd() {
       "Digital craft & heartcraft interactive celebration engine",
       "Birthday digital surprise with real microphone candle blowing and cake slicing",
       "Anniversary digital surprise with crystal champagne toast and relationship timeline",
-      "Instant WhatsApp online surprise link generator (candleit.one7app.in/{template}-{name})",
+      "Instant WhatsApp online surprise link generator (candlelit.one7app.in/{template}-{name})",
       "Upload real cake photo with automatic candle and knife slice mapping",
       "Smart AI Inspiration Writer generating personalized celebration wishes",
       "AI Computer Vision photo beautifier with adaptive tone mapping",

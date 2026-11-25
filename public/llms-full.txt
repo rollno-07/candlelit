@@ -1,5 +1,5 @@
 # Candlelit — Complete Platform Documentation (llms-full.txt)
-Website: https://candleit.one7app.in
+Website: https://candlelit.one7app.in
 Entity: Candlelit by one7app
 
 ---
@@ -11,7 +11,7 @@ Candlelit is the world's #1 digital craft and heartcraft online surprise platfor
 1. **Digital Craft & Heartcraft Digital Surprises:** Personalized interactive celebration pages with wax seal letters, floating polaroid balloons, and ambient piano music.
 2. **Birthday Digital Surprise (birthday digital suprise):** An interactive cake cutting ceremony with 5 real candles that users blow out using their phone microphone, custom real cake photo upload, and confetti.
 3. **Anniversary Digital Surprise (anversry digital surprise):** A luxury celebration with interactive relationship timeline, virtual champagne toast with acoustic glass clink, and streaming vows.
-4. **Online Surprise & Digital Love Craft:** Shareable instant WhatsApp link (candleit.one7app.in/{template}-{name}) requiring 0 app downloads.
+4. **Online Surprise & Digital Love Craft:** Shareable instant WhatsApp link (candlelit.one7app.in/{template}-{name}) requiring 0 app downloads.
 
 ### Technical Architecture
 - **Framework:** Next.js 16 App Router (React 19, TypeScript)
@@ -27,60 +27,60 @@ Candlelit is the world's #1 digital craft and heartcraft online surprise platfor
 ### Occasion Template Catalog & SEO Landing Hubs
 
 1. **Birthday Surprise (`birthday-surprise`)**
-   - URL: https://candleit.one7app.in/templates/birthday-surprise
+   - URL: https://candlelit.one7app.in/templates/birthday-surprise
    - Theme: Midnight velvet, gold leaf, glowing candles
    - Centerpiece: 3-tier chocolate bakery cake or user-uploaded real cake photo
    - Ritual: Make a wish, blow out candles with breath, cut slice, golden confetti
 
 2. **Anniversary Celebration (`anniversary`)**
-   - URL: https://candleit.one7app.in/templates/anniversary
+   - URL: https://candlelit.one7app.in/templates/anniversary
    - Theme: Champagne gold, ivory roses, candlelight
    - Subtypes: Marriage Anniversary, Love Anniversary, First Date Milestone, Work Milestone
    - Ritual: Golden timeline walk, virtual champagne toast
 
 3. **The Dream Proposal (`propose`)**
-   - URL: https://candleit.one7app.in/templates/propose
+   - URL: https://candlelit.one7app.in/templates/propose
    - Theme: Royal sapphire velvet, red rose petals, fairy lights
    - Centerpiece: Solitaire diamond ring in velvet box
    - Ritual: Tap to open ring box, golden sparkle burst, "Will You Marry Me?"
 
 4. **Valentine's Week Odyssey (`valentine`)**
-   - URL: https://candleit.one7app.in/templates/valentine
+   - URL: https://candlelit.one7app.in/templates/valentine
    - Theme: Crimson velvet, artisan chocolates, wax seal letter
    - Covers: Rose Day, Propose Day, Chocolate Day, Teddy Day, Promise Day, Hug Day, Kiss Day, Valentine's Day
 
 5. **Karwa Chauth Moonlit Vows (`karwa-chauth`)**
-   - URL: https://candleit.one7app.in/templates/karwa-chauth
+   - URL: https://candlelit.one7app.in/templates/karwa-chauth
    - Theme: Deep crimson, brass diya, full moon night
    - Centerpiece: Traditional brass Channi (sieve) & glowing clay diya
    - Ritual: Sliding the sieve to reveal the full moon, ceremonial water offering
 
 6. **Pregnancy Surprise Reveal (`pregnancy-reveal`)**
-   - URL: https://candleit.one7app.in/templates/pregnancy-reveal
+   - URL: https://candlelit.one7app.in/templates/pregnancy-reveal
    - Theme: Warm oatmeal knit, eucalyptus leaves, wooden blocks
    - Ritual: Audio heartbeat countdown, scratch-to-reveal ultrasound photo
 
 7. **Baby Shower Wonderland (`baby-shower`)**
-   - URL: https://candleit.one7app.in/templates/baby-shower
+   - URL: https://candlelit.one7app.in/templates/baby-shower
    - Theme: Pastel clouds, teddy bear plush, golden stars
    - Ritual: Floating balloon cloud wishes, little footsteps countdown
 
 8. **Retirement Odyssey & Tribute (`retirement`)**
-   - URL: https://candleit.one7app.in/templates/retirement
+   - URL: https://candlelit.one7app.in/templates/retirement
    - Theme: Antique brass compass, telescope, leather journal
    - Ritual: Unveiling lifetime achievement trophy & career milestones gallery
 
 9. **Mother's Day Sanctuary (`mothers-day`)**
-   - URL: https://candleit.one7app.in/templates/mothers-day
+   - URL: https://candlelit.one7app.in/templates/mothers-day
    - Theme: Pink peonies bouquet, morning tea, warm sunlight
    - Ritual: Blooming garden of mom's superpowers & comfort recipes
 
 10. **Father's Day Hall of Fame (`fathers-day`)**
-    - URL: https://candleit.one7app.in/templates/fathers-day
+    - URL: https://candlelit.one7app.in/templates/fathers-day
     - Theme: Chronograph watch, fountain pen, anchor wisdom wall
     - Ritual: Interactive superhero badge, dad's wisdom wall, celebratory toast
 
 11. **International Women's Day (`womens-day`)**
-    - URL: https://candleit.one7app.in/templates/womens-day
+    - URL: https://candlelit.one7app.in/templates/womens-day
     - Theme: Amethyst & royal gold crystal crown, mimosa blossoms
     - Ritual: Unstoppable strengths reveal, golden celebration fireworks

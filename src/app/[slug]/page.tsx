@@ -15,18 +15,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const recipientName = surprise?.recipientName || "Someone Special";
   const template = TEMPLATES.find((t) => t.id === surprise?.templateId) || TEMPLATES[0];
   const image = surprise?.photos?.[0]?.url || template.previewImage;
-  const fullImageUrl = image.startsWith("http") ? image : `https://candleit.one7app.in${image}`;
+  const fullImageUrl = image.startsWith("http") ? image : `https://candlelit.one7app.in${image}`;
 
   return {
     title: `A Special Surprise for ${recipientName} ✨`,
     description: `A cinematic 4-act digital celebration created especially for ${recipientName}. Open to experience candles, music, and love letters.`,
     alternates: {
-      canonical: `https://candleit.one7app.in/${decodedSlug}`,
+      canonical: `https://candlelit.one7app.in/${decodedSlug}`,
     },
     openGraph: {
       title: `A Special Surprise for ${recipientName} ✨`,
       description: `A cinematic 4-act digital celebration created especially for ${recipientName}. Open to experience candles, music, and love letters.`,
-      url: `https://candleit.one7app.in/${decodedSlug}`,
+      url: `https://candlelit.one7app.in/${decodedSlug}`,
       images: [
         {
           url: fullImageUrl,

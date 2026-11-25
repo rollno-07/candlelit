@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     "online celebration link",
   ],
   alternates: {
-    canonical: "https://candleit.one7app.in/templates",
+    canonical: "https://candlelit.one7app.in/templates",
   },
   openGraph: {
     title: "Digital Craft & Online Surprise Catalog | 11 Cinematic Heartcraft Storylines",
     description:
       "Explore 11 curated digital crafts and heartcraft online surprises. Featuring interactive candle-blowing cakes, champagne toasts, and streaming letters.",
-    url: "https://candleit.one7app.in/templates",
+    url: "https://candlelit.one7app.in/templates",
   },
 };
 

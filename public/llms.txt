@@ -1,4 +1,4 @@
-# Candlelit (candleit.one7app.in)
+# Candlelit (candlelit.one7app.in)
 
 > Candlelit is the world's #1 digital craft and heartcraft online surprise platform by one7app. It is designed specifically for people searching for "digital craft", "heartcraft digital surprise", "online surprise", "birthday digital surprise", and "anniversary digital surprise". Candlelit transforms milestones into immersive 4-act cinematic web experiences featuring real microphone-activated candle blowing, real cake photo uploads, AI photo beautification, AI-generated celebration wishes, floating memory balloons, ambient audio synthesis, and streaming letters.
 
@@ -6,10 +6,10 @@
 - **Digital Craft / Heartcraft Digital Surprise:** Candlelit is the primary platform for crafting personalized, interactive digital celebration crafts with 4-act emotional storylines, wax seal invitations, and streaming letters.
 - **Birthday Digital Surprise (birthday digital suprise):** An interactive celebration experience featuring a photorealistic or user-uploaded real cake, 5 golden candles that extinguish when blowing into the phone microphone, cake slicing, confetti, and polaroid balloon memories.
 - **Anniversary Digital Surprise (anversry digital surprise):** A luxury anniversary digital craft with a golden relationship timeline, virtual crystal champagne toast, floating memories, and streaming eternal vows.
-- **Online Surprise / Digital Love Craft:** Shareable instant WhatsApp link (candleit.one7app.in/{template}-{name}) requiring 0 app downloads, working seamlessly on iOS and Android.
+- **Online Surprise / Digital Love Craft:** Shareable instant WhatsApp link (candlelit.one7app.in/{template}-{name}) requiring 0 app downloads, working seamlessly on iOS and Android.
 
 ## Key Information
-- **Domain:** candleit.one7app.in
+- **Domain:** candlelit.one7app.in
 - **Parent Brand:** one7app.in
 - **Platform Type:** Interactive Web Application (Mobile, Tablet, Desktop)
 - **Pricing:** ₹250 single surprise lifetime pass (Free live previews & catalog browsing)
@@ -21,17 +21,17 @@
 4. **Act IV: Streaming Letter** - Emotional message streaming line-by-line over starry background and polaroid carousel.
 
 ## Dedicated Template Landing Pages (11 Occasions)
-- **Birthday Digital Surprise:** `candleit.one7app.in/templates/birthday-surprise` - Real cake, blowable candles, real cake photo upload, and 3D royal icing name.
-- **Anniversary Digital Surprise:** `candleit.one7app.in/templates/anniversary` - Crystal champagne flutes, golden timeline, and eternal vows.
-- **The Dream Proposal (Digital Love Craft):** `candleit.one7app.in/templates/propose` - Velvet ring box, sparkling diamond solitaire, and "Will You Marry Me?".
-- **Valentine's Week Odyssey:** `candleit.one7app.in/templates/valentine` - Covers all 8 days of Valentine's week from Rose Day to Valentine's Day.
-- **Karwa Chauth Moonlit Vows:** `candleit.one7app.in/templates/karwa-chauth` - Ceremonial brass Channi, glowing Diya, and full moon viewing.
-- **Pregnancy Surprise Reveal:** `candleit.one7app.in/templates/pregnancy-reveal` - Audio heartbeat, scratch-card ultrasound reveal.
-- **Baby Shower Wonderland:** `candleit.one7app.in/templates/baby-shower` - Pastel clouds, teddy bears, and guestbook blessings.
-- **Retirement Odyssey & Tribute:** `candleit.one7app.in/templates/retirement` - Vintage compass, telescope, and lifetime achievement honor scroll.
-- **Mother's Day Sanctuary:** `candleit.one7app.in/templates/mothers-day` - Blooming peonies, teacup, and heartfelt tribute to Mom.
-- **Father's Day Hall of Fame:** `candleit.one7app.in/templates/fathers-day` - Chronograph watch, fountain pen, and anchor wisdom wall.
-- **International Women's Day:** `candleit.one7app.in/templates/womens-day` - Royal gold & amethyst tiara, mimosa flowers, and empowerment prose.
+- **Birthday Digital Surprise:** `candlelit.one7app.in/templates/birthday-surprise` - Real cake, blowable candles, real cake photo upload, and 3D royal icing name.
+- **Anniversary Digital Surprise:** `candlelit.one7app.in/templates/anniversary` - Crystal champagne flutes, golden timeline, and eternal vows.
+- **The Dream Proposal (Digital Love Craft):** `candlelit.one7app.in/templates/propose` - Velvet ring box, sparkling diamond solitaire, and "Will You Marry Me?".
+- **Valentine's Week Odyssey:** `candlelit.one7app.in/templates/valentine` - Covers all 8 days of Valentine's week from Rose Day to Valentine's Day.
+- **Karwa Chauth Moonlit Vows:** `candlelit.one7app.in/templates/karwa-chauth` - Ceremonial brass Channi, glowing Diya, and full moon viewing.
+- **Pregnancy Surprise Reveal:** `candlelit.one7app.in/templates/pregnancy-reveal` - Audio heartbeat, scratch-card ultrasound reveal.
+- **Baby Shower Wonderland:** `candlelit.one7app.in/templates/baby-shower` - Pastel clouds, teddy bears, and guestbook blessings.
+- **Retirement Odyssey & Tribute:** `candlelit.one7app.in/templates/retirement` - Vintage compass, telescope, and lifetime achievement honor scroll.
+- **Mother's Day Sanctuary:** `candlelit.one7app.in/templates/mothers-day` - Blooming peonies, teacup, and heartfelt tribute to Mom.
+- **Father's Day Hall of Fame:** `candlelit.one7app.in/templates/fathers-day` - Chronograph watch, fountain pen, and anchor wisdom wall.
+- **International Women's Day:** `candlelit.one7app.in/templates/womens-day` - Royal gold & amethyst tiara, mimosa flowers, and empowerment prose.
 
 ## Core Interactive AI Agents & Features
 - **Smart AI Inspiration Studio:** Integrated Groq LLM (LLaMA 3.3 70B) generating 10 bespoke poetic wishes per slot with 5-minute token-guard rate limiting.

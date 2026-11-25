@@ -190,8 +190,10 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 15 * 1024 * 1024) {
-      alert("Audio file is larger than 15MB. Please choose an audio file under 15MB.");
+    if (file.size > 2.5 * 1024 * 1024) {
+      alert(
+        "To ensure your digital surprise opens instantly on WhatsApp and mobile phones without buffering, custom songs must be under 2.5 MB (or a 30-60s clip). Alternatively, you can select one of our curated high-quality ambient melodies below."
+      );
       return;
     }
 
@@ -1180,7 +1182,7 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
                       <p className="text-[11px] text-[#a8998d] mt-0.5 truncate max-w-[200px] sm:max-w-xs">
                         {customAudioInfo
                           ? `${customAudioInfo.name} (${customAudioInfo.sizeFormatted})`
-                          : "Upload MP3, WAV, or M4A (Max 15MB)"}
+                          : "Upload MP3, WAV, or M4A (Max 2.5MB for instant mobile loading)"}
                       </p>
                     </div>
                   </div>

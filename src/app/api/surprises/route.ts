@@ -121,13 +121,15 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Missing slug parameter" }, { status: 400 });
   }
 
+  const cleanSlug = decodeURIComponent(slug).toLowerCase().trim();
+
   // 1. Try Supabase
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
         .from("surprises")
         .select("data")
-        .eq("slug", slug)
+        .eq("slug", cleanSlug)
         .single();
 
       if (!error && data?.data) {
@@ -139,7 +141,7 @@ export async function GET(req: NextRequest) {
   }
 
   // 2. Try Server Backup file
-  const localBackup = getLocalServerBackup(slug);
+  const localBackup = getLocalServerBackup(cleanSlug);
   if (localBackup) {
     return NextResponse.json({ success: true, surprise: localBackup });
   }

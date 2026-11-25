@@ -237,15 +237,15 @@ export async function getUserSurprises(userId?: string): Promise<SurpriseData[]>
 }
 
 /**
- * Formats the public share link in the format: candleit.one7app.in/{template}-{name}
+ * Formats the public share link in the format: candlelit.one7app.in/{template}-{name}
  */
 export function formatSurpriseShareUrl(slug: string): string {
-  return `candleit.one7app.in/${slug}`;
+  return `candlelit.one7app.in/${slug}`;
 }
 
 export function formatSurpriseWebUrl(slug: string): string {
   if (typeof window !== "undefined") {
     return `${window.location.origin}/${slug}`;
   }
-  return `https://candleit.one7app.in/${slug}`;
+  return `https://candlelit.one7app.in/${slug}`;
 }

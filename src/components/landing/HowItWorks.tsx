@@ -21,7 +21,7 @@ export function HowItWorks() {
       step: "03",
       icon: Share2,
       title: "Share The Online Surprise Link",
-      desc: "Instantly receive a personalized WhatsApp link (candleit.one7app.in/{template}-{name}) that opens directly in any mobile browser with 0 app downloads.",
+      desc: "Instantly receive a personalized WhatsApp link (candlelit.one7app.in/{template}-{name}) that opens directly in any mobile browser with 0 app downloads.",
     },
   ];
 

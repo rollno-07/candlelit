@@ -7,8 +7,8 @@ export const SITE_CONFIG = {
   tagline: "The #1 Digital Craft & Heartcraft Online Surprise Platform",
   description:
     "Candlelit is the world's #1 digital craft and heartcraft online surprise platform. Create breathtaking birthday digital surprises, anniversary celebrations, and romantic online surprises with real microphone candle blowing, interactive cake cutting, memory balloons, and streaming letters.",
-  domain: "candleit.one7app.in",
-  canonicalUrl: "https://candleit.one7app.in",
+  domain: "candlelit.one7app.in",
+  canonicalUrl: "https://candlelit.one7app.in",
   creator: "one7app",
   author: "Candlelit Studios",
   keywords: [
@@ -42,13 +42,13 @@ export const SITE_CONFIG = {
     "interactive birthday celebration",
     "interactive digital surprise card",
     "candlelit",
-    "candleit one7app in",
+    "candlelit one7app in",
     "4 act digital greeting",
     "digital proposal card",
     "valentines week digital celebration",
     "long distance digital surprise",
   ],
-  ogImage: "https://candleit.one7app.in/images/og-candlelit.jpg",
+  ogImage: "https://candlelit.one7app.in/images/og-candlelit.jpg",
 };
 
 export interface FaqItem {
@@ -65,7 +65,7 @@ export const FAQS: FaqItem[] = [
   {
     question: "How do I create and send an online surprise for a birthday or anniversary?",
     answer:
-      "Creating an online surprise on Candlelit takes under 60 seconds: 1) Pick your occasion template (such as Birthday Digital Surprise or Anniversary Celebration), 2) Personalize your recipient's name, upload your photos or real cake picture, and write your letter (or use our Smart AI Inspiration Agent), and 3) Instantly generate your unique WhatsApp share link (candleit.one7app.in/{template}-{name}). The recipient simply taps the link to experience the surprise immediately without downloading any app.",
+      "Creating an online surprise on Candlelit takes under 60 seconds: 1) Pick your occasion template (such as Birthday Digital Surprise or Anniversary Celebration), 2) Personalize your recipient's name, upload your photos or real cake picture, and write your letter (or use our Smart AI Inspiration Agent), and 3) Instantly generate your unique WhatsApp share link (candlelit.one7app.in/{template}-{name}). The recipient simply taps the link to experience the surprise immediately without downloading any app.",
   },
   {
     question: "Why is Candlelit the #1 platform for birthday digital surprises and anniversary celebrations?",
@@ -85,7 +85,7 @@ export const FAQS: FaqItem[] = [
   {
     question: "What format are the custom surprise share links?",
     answer:
-      "Every surprise generates a clean, personalized link formatted as candleit.one7app.in/{template}-{name} (for example, candleit.one7app.in/birthday-surprise-sophia or candleit.one7app.in/anniversary-rohit). The link works instantly across iPhone, Android, iPads, and desktop browsers without requiring any app download.",
+      "Every surprise generates a clean, personalized link formatted as candlelit.one7app.in/{template}-{name} (for example, candlelit.one7app.in/birthday-surprise-sophia or candlelit.one7app.in/anniversary-rohit). The link works instantly across iPhone, Android, iPads, and desktop browsers without requiring any app download.",
   },
   {
     question: "What occasions and templates does Candlelit support?",
