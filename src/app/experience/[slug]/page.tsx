@@ -26,7 +26,8 @@ const ACTS_META = [
 
 function ExperienceContent() {
   const params = useParams();
-  const slug = (params?.slug as string) || "birthday-surprise";
+  const rawSlug = (params?.slug as string) || "birthday-surprise";
+  const slug = decodeURIComponent(rawSlug).trim();
 
   const [surprise, setSurprise] = useState<SurpriseData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -141,17 +142,15 @@ function ExperienceContent() {
       {/* Persistent Floating BGM Player in Bottom Right */}
       <MusicPlayer />
 
-      {/* Floating Back to Checkout button */}
+      {/* Discreet Brand Emblem in Top Left */}
       <div className="fixed top-[max(0.75rem,env(safe-area-inset-top))] left-3 sm:left-4 z-50">
         <Link
-          href={`/create/${surprise?.templateId || "birthday-surprise"}`}
-          onClick={() => {
-            soundManager.stopBGM();
-          }}
-          className="px-3 py-1.5 rounded-full glass-panel border border-[#e0a96d]/40 hover:border-[#ffbe53] text-[#ffe8d6] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-lg bg-black/75 backdrop-blur-md active:scale-95"
+          href="/"
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-panel border border-[#e0a96d]/20 hover:border-[#ffbe53]/50 text-[11px] text-[#ffe8d6]/80 hover:text-white transition-all bg-black/40 backdrop-blur-md"
+          title="Candlelit Celebrations"
         >
-          <ArrowLeft className="w-3.5 h-3.5 text-[#ffbe53]" />
-          <span>Back to Checkout</span>
+          <span>🕯️</span>
+          <span className="font-serif tracking-wide">Candlelit</span>
         </Link>
       </div>
 

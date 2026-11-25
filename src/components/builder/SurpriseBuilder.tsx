@@ -35,6 +35,7 @@ import { useAuth } from "@/lib/authContext";
 import { processRazorpayPayment } from "@/utils/razorpayClient";
 import { soundManager } from "@/utils/audioSynthesizer";
 import { enhancePhotoSmart, BeautifyMode } from "@/utils/photoEnhancer";
+import { compressImageFile } from "@/utils/imageCompressor";
 import { InspirationModal } from "@/components/inspiration/InspirationModal";
 import { ShareModal } from "./ShareModal";
 import { SurprisePreviewModal } from "./SurprisePreviewModal";
@@ -281,15 +282,21 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
     setLetterParagraphs(letterParagraphs.filter((_, i) => i !== idx));
   };
 
-  const handleUploadPhotoFile = (idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadPhotoFile = async (idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (uploadEvent) => {
-      const result = uploadEvent.target?.result as string;
-      handleUpdatePhoto(idx, "url", result);
-    };
-    reader.readAsDataURL(file);
+    try {
+      // Auto-compress large phone camera photos (10MB -> ~120KB) to prevent quota issues
+      const compressed = await compressImageFile(file, 1200, 1200, 0.82);
+      handleUpdatePhoto(idx, "url", compressed);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
+        const result = uploadEvent.target?.result as string;
+        handleUpdatePhoto(idx, "url", result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleBeautifyPhoto = async (idx: number, selectedMode: BeautifyMode = "portrait_glow") => {
@@ -306,15 +313,21 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
     }
   };
 
-  const handleUploadCakeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadCakeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (uploadEvent) => {
-      const result = uploadEvent.target?.result as string;
-      setCustomCakeUrl(result);
-    };
-    reader.readAsDataURL(file);
+    try {
+      // Auto-compress large cake photo (10MB -> ~140KB) for instant loading
+      const compressed = await compressImageFile(file, 1400, 1400, 0.85);
+      setCustomCakeUrl(compressed);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
+        const result = uploadEvent.target?.result as string;
+        setCustomCakeUrl(result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleBeautifyCake = async (selectedMode: BeautifyMode = cakeBeautifyMode) => {
@@ -379,7 +392,31 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
         };
       }
 
-      // 2. Prepare surprise data with verified payment records
+      // 2. Ensure all photos and custom cake images are optimized before persisting
+      const optimizedPhotos = await Promise.all(
+        photos.map(async (p) => {
+          if (p.url && p.url.startsWith("data:image") && p.url.length > 200000) {
+            try {
+              const compressed = await compressImageFile(p.url, 1200, 1200, 0.82);
+              return { ...p, url: compressed };
+            } catch {
+              return p;
+            }
+          }
+          return p;
+        })
+      );
+
+      let optimizedCakeUrl = customCakeUrl;
+      if (customCakeUrl && customCakeUrl.startsWith("data:image") && customCakeUrl.length > 200000) {
+        try {
+          optimizedCakeUrl = await compressImageFile(customCakeUrl, 1400, 1400, 0.85);
+        } catch {
+          // Keep original
+        }
+      }
+
+      // 3. Prepare surprise data with verified payment records
       const surpriseData: SurpriseData = {
         id: `surprise-${Date.now()}`,
         slug: currentSlug,
@@ -390,11 +427,11 @@ export function SurpriseBuilder({ template }: SurpriseBuilderProps) {
         occasionSubtitle,
         cakeOrObjectMessage: cakeOrObjectMessage || `Happy ${template.title}`,
         subtype,
-        photos,
+        photos: optimizedPhotos,
         letter: letterParagraphs.filter((p) => p.trim().length > 0),
         musicUrl,
         musicTitle,
-        customCakeUrl: customCakeUrl || undefined,
+        customCakeUrl: optimizedCakeUrl || undefined,
         customCandlePosition: { top: candleTop, arcSpread: candleSpread },
         createdAt: new Date().toISOString(),
         userId: user?.id,

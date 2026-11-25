@@ -55,7 +55,7 @@ function saveLocalSurprise(surprise: SurpriseData) {
   if (typeof window === "undefined") return;
   try {
     const list = getLocalSurprises();
-    const existingIndex = list.findIndex((s) => s.slug === surprise.slug);
+    const existingIndex = list.findIndex((s) => s.slug.toLowerCase() === surprise.slug.toLowerCase());
     if (existingIndex >= 0) {
       list[existingIndex] = surprise;
     } else {
@@ -63,14 +63,36 @@ function saveLocalSurprise(surprise: SurpriseData) {
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   } catch (e) {
-    console.error("Local storage error:", e);
+    console.warn("Local storage quota notice, saving to session and server:", e);
+    try {
+      sessionStorage.setItem(`surprise_${surprise.slug}`, JSON.stringify(surprise));
+    } catch {
+      // Ignored
+    }
   }
 }
 
 export async function saveSurprise(surprise: SurpriseData, userId?: string): Promise<string> {
-  // Always save to local storage as fallback and immediate cache
+  // 1. Save to local storage as immediate browser cache
   saveLocalSurprise(surprise);
 
+  // 2. Save via Server API to ensure resilient disk backup and server-side Supabase write
+  if (typeof window !== "undefined") {
+    try {
+      const res = await fetch("/api/surprises", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(surprise),
+      });
+      if (!res.ok) {
+        console.warn("Server API backup responded with status:", res.status);
+      }
+    } catch (apiErr) {
+      console.warn("Server API backup network warning:", apiErr);
+    }
+  }
+
+  // 3. Direct client-side Supabase upsert if configured
   if (isSupabaseConfigured && supabase) {
     try {
       let uid = userId;
@@ -79,7 +101,7 @@ export async function saveSurprise(surprise: SurpriseData, userId?: string): Pro
         uid = session?.user?.id;
       }
 
-      await supabase.from("surprises").upsert({
+      const { error } = await supabase.from("surprises").upsert({
         id: surprise.id,
         slug: surprise.slug,
         template_id: surprise.templateId,
@@ -89,8 +111,12 @@ export async function saveSurprise(surprise: SurpriseData, userId?: string): Pro
         data: surprise,
         created_at: surprise.createdAt,
       });
+
+      if (error) {
+        console.warn("Client Supabase upsert notice:", error.message);
+      }
     } catch (err) {
-      console.warn("Supabase save error, saved locally:", err);
+      console.warn("Client Supabase exception:", err);
     }
   }
 
@@ -98,19 +124,37 @@ export async function saveSurprise(surprise: SurpriseData, userId?: string): Pro
 }
 
 export async function getSurpriseBySlug(slug: string): Promise<SurpriseData | null> {
-  if (slug === "birthday-nidhi") {
+  const cleanSlug = slug.toLowerCase().trim();
+
+  if (cleanSlug === "birthday-nidhi") {
     return NIDHI_FLAGSHIP_SURPRISE;
   }
 
-  // 1. Check database if configured
+  // 1. Try fetching from Server API (which checks Supabase and server backup)
+  if (typeof window !== "undefined") {
+    try {
+      const res = await fetch(`/api/surprises?slug=${encodeURIComponent(cleanSlug)}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.surprise) {
+          saveLocalSurprise(json.surprise);
+          return json.surprise as SurpriseData;
+        }
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
+  // 2. Direct Supabase query (works on both Server and Client)
   if (isSupabaseConfigured && supabase) {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("surprises")
         .select("data")
-        .eq("slug", slug)
+        .eq("slug", cleanSlug)
         .single();
-      if (data?.data) {
+      if (!error && data?.data) {
         return data.data as SurpriseData;
       }
     } catch {
@@ -118,14 +162,31 @@ export async function getSurpriseBySlug(slug: string): Promise<SurpriseData | nu
     }
   }
 
-  // 2. Check local storage for customized saved surprises
+  // 3. Check local storage for customized saved surprises
   const locals = getLocalSurprises();
-  const match = locals.find((s) => s.slug.toLowerCase() === slug.toLowerCase());
+  const match = locals.find(
+    (s) =>
+      s.slug.toLowerCase() === cleanSlug ||
+      cleanSlug.includes(s.slug.toLowerCase()) ||
+      s.slug.toLowerCase().includes(cleanSlug)
+  );
   if (match) return match;
 
-  // 3. Check exact template match (e.g. "birthday-surprise", "propose", "anniversary")
+  // 4. Check sessionStorage fallback
+  if (typeof window !== "undefined") {
+    try {
+      const sessionData = sessionStorage.getItem(`surprise_${cleanSlug}`);
+      if (sessionData) {
+        return JSON.parse(sessionData) as SurpriseData;
+      }
+    } catch {
+      // Ignored
+    }
+  }
+
+  // 5. Check exact template match (e.g. "birthday-surprise", "propose", "anniversary")
   const templateMatch = TEMPLATES.find(
-    (t) => t.id === slug || `demo-${t.id}` === slug
+    (t) => t.id === cleanSlug || `demo-${t.id}` === cleanSlug
   );
   if (templateMatch) {
     return {
@@ -144,7 +205,6 @@ export async function getSurpriseBySlug(slug: string): Promise<SurpriseData | nu
     };
   }
 
-  // Note: Only paid/saved surprises or official demo templates can be resolved.
   return null;
 }
 

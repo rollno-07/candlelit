@@ -129,7 +129,7 @@ export function ShareModal({ isOpen, onClose, slug, recipientName }: ShareModalP
             </button>
 
             <Link
-              href={`/experience/${slug}`}
+              href={`/${slug}`}
               target="_blank"
               className="py-3 px-4 rounded-xl bg-gradient-to-r from-[#e0a96d] via-[#ffbe53] to-[#e0a96d] text-[#1c1208] text-xs font-semibold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,190,83,0.3)] hover:shadow-[0_0_30px_rgba(255,190,83,0.5)] transition-all active:scale-95 cursor-pointer"
             >

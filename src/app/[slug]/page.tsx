@@ -9,7 +9,8 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const surprise = await getSurpriseBySlug(slug);
+  const decodedSlug = decodeURIComponent(slug).trim();
+  const surprise = await getSurpriseBySlug(decodedSlug);
 
   const recipientName = surprise?.recipientName || "Someone Special";
   const template = TEMPLATES.find((t) => t.id === surprise?.templateId) || TEMPLATES[0];
@@ -20,12 +21,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `A Special Surprise for ${recipientName} ✨`,
     description: `A cinematic 4-act digital celebration created especially for ${recipientName}. Open to experience candles, music, and love letters.`,
     alternates: {
-      canonical: `https://candleit.one7app.in/${slug}`,
+      canonical: `https://candleit.one7app.in/${decodedSlug}`,
     },
     openGraph: {
       title: `A Special Surprise for ${recipientName} ✨`,
       description: `A cinematic 4-act digital celebration created especially for ${recipientName}. Open to experience candles, music, and love letters.`,
-      url: `https://candleit.one7app.in/${slug}`,
+      url: `https://candleit.one7app.in/${decodedSlug}`,
       images: [
         {
           url: fullImageUrl,
